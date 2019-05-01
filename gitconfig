@@ -1,0 +1,77 @@
+[core]
+    pager = delta
+    editor = vi
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    interactive = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+    file-decoration-style = none
+    syntax-theme = "gruvbox-dark"
+    ; minus-style = red "#59464c"
+    ; plus-style = green "#48584e"
+
+[user]
+    email = alfonso.ros@apex.ai
+    name = Alfonso Ros
+    signingkey = 430FAA1722048BC39F31DA53A40D1F1CB58EFD19
+
+[mergetool]
+    keepBackup = false
+    prompt = false
+
+[mergetool "merge3"]
+    cmd = nvim -d -c \"wincmd l\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\"
+
+[mergetool "fugitive"]
+    cmd = vi -f -c \"Gvdiffsplit!\" \"$MERGED\"
+
+[merge]
+    tool = fugitive
+
+[hub]
+    protocol = ssh
+
+[rerere]
+    enabled = false
+
+[pull]
+	rebase = true
+
+[rebase]
+    autosquash = true
+	autoStash = true
+	updateRefs = true
+	updateRefs = true
+
+[gpg]
+    program = gpg
+
+[commit]
+    gpgsign = true
+
+[color]
+    ui = auto
+
+[web]
+    browser = open
+
+[diff]
+    algorithm = patience
+
+[fetch]
+    prune = true
+
+[push]
+    autoSetupRemote = true
+    default = current
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
