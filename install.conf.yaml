@@ -1,0 +1,23 @@
+- link:
+    ~/.config/alacritty: alacritty
+    ~/.config/bat: bat
+    ~/.config/dunst: dunst
+    ~/.config/gdb-dashboard: gdb-dashboard
+    ~/.config/kitty: kitty
+    ~/.config/nvim: nvim
+    ~/.config/picom.conf: picom.conf
+    ~/.config/polybar: polybar
+    ~/.config/rofi: rofi
+    ~/.config/starship.toml: starship.toml
+    ~/.config/stylua: stylua
+    ~/.config/xmonad: xmonad
+    ~/.fonts: fonts
+    ~/.gitconfig: gitconfig
+    ~/.tmux.conf: tmux/tmux.conf
+    ~/.zshrc: zshrc
+    ~/.xsession:
+      mode: 0777
+      path: xsession
+    ~/.local/bin/polybar_cal:
+      mode: 0777
+      path: scripts/polybar_cal

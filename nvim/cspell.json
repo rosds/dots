@@ -1,0 +1,65 @@
+{
+  "flagWords": [],
+  "language": "en",
+  "languageSettings": [
+    {
+      "dictionaryDefinitions": [
+        {
+          "name": "bazel",
+          "path": "./cspell/bazel.txt",
+          "addWords": true
+        }
+      ],
+      "dictionaries": [
+        "python",
+        "bazel"
+      ],
+      "languageId": "bazel,bzl",
+      "locale": "*"
+    },
+    {
+      "dictionaryDefinitions": [
+        {
+          "name": "neovim-lua",
+          "path": "./cspell/neovim-lua.txt",
+          "addWords": true
+        }
+      ],
+      "dictionaries": [
+        "lua",
+        "neovim-lua"
+      ],
+      "languageId": "lua",
+      "locale": "*"
+    },
+    {
+      "dictionaryDefinitions": [
+        {
+          "name": "rust-words",
+          "path": "./cspell/rust.txt",
+          "addWords": true
+        }
+      ],
+      "dictionaries": [
+        "rust",
+        "rust-words"
+      ],
+      "languageId": "rust",
+      "locale": "*"
+    }
+  ],
+  "version": "0.2",
+  "words": [
+    "bazel",
+    "inode",
+    "nvim",
+    "statvfs",
+    "vsomeip"
+  ],
+  "overrides": [
+    {
+      "filename": "**/{*.bazel,*.bzl}",
+      "languageId": "bazel"
+    }
+  ]
+}

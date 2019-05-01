@@ -1,0 +1,11 @@
+fnamemodify
+keybinds
+norg
+luarocks
+neorg
+gruvbox
+mapleader
+keymap
+luafile
+MYVIMRC
+augroup

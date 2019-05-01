@@ -1,0 +1,19 @@
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
+[submodule "xmonad/xmonad"]
+	path = xmonad/xmonad
+	url = https://github.com/xmonad/xmonad
+[submodule "xmonad/xmonad-contrib"]
+	path = xmonad/xmonad-contrib
+	url = https://github.com/xmonad/xmonad-contrib
+[submodule "rofi/themes/gruvbox"]
+	path = rofi/themes/gruvbox
+	url = https://github.com/bardisty/gruvbox-rofi.git
+[submodule "kitty/kitty-themes"]
+	path = kitty/kitty-themes
+	url = https://github.com/dexpota/kitty-themes.git
+[submodule "alacritty/themes"]
+	path = alacritty/themes
+	url = https://github.com/alacritty/alacritty-theme
