@@ -1,0 +1,2 @@
+$ ghc --make xmonad.hs -i -ilib -fforce-recomp -main-is main -v0 -outputdir /home/alfonsoros/.xmonad/build-x86_64-linux -o /home/alfonsoros/.xmonad/xmonad-x86_64-linux
+Loaded package environment from /home/alfonsoros/.ghc/x86_64-linux-8.8.4/environments/default
