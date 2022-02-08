@@ -1,0 +1,8 @@
+- link:
+    ~/.config/bat: bat
+    ~/.config/nvim: nvim
+    ~/.config/polybar: polybar
+    ~/.config/rofi: rofi
+    ~/.config/xmonad: xmonad
+    ~/.tmux.conf: tmux/tmux.conf
+    ~/.gitconfig: gitconfig

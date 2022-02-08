@@ -1,15 +1,7 @@
 # Dot files
 
-Clone as bare
+Managed with [dotbot](https://github.com/anishathalye/dotbot)
 
 ```sh
-git clone --bare --branch dots git@github.com:alfonsoros88/dots.git $HOME/.dots.git
+gh repo clone alfonsoros88/dots && cd dots && ./install
 ```
-
-Setup alias
-
-```sh
-alias dots="/usr/bin/git --git-dir=$HOME/.dots.git/ --work-tree=$HOME"
-```
-
-

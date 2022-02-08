@@ -1,0 +1,38 @@
+[core]
+    pager = delta
+    editor = vi
+
+[interactive]
+    diffFilter = delta --color-only --features=interactive
+
+[delta]
+    features = side-by-side line-numbers decorations
+    whitespace-error-style = 22 reverse
+    syntax-theme = gruvbox-dark
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow ul
+    file-style = bold yellow ul
+    file-decoration-style = none
+[user]
+    email = alfonso.ros@esrlabs.com
+    name = Alfonso Ros
+    signingkey = 3C710F002B15656DF9AD906FA1D5590D9F34A054
+[mergetool "fugitive"]
+    cmd = vi -f -c \"Gvdiffsplit!\" \"$MERGED\"
+[merge]
+    tool = fugitive
+[hub]
+    protocol = ssh
+[rerere]
+    nabled = true
+[pull]
+    rebase = true
+[gpg]
+    program = gpg
+[commit]
+    gpgsign = true
+[color]
+    ui = auto
+[web]
+	browser = open
