@@ -1,19 +1,23 @@
-local ls = require 'luasnip';
-local cmp = require 'cmp';
+local ls = require 'luasnip'
 
 ls.config.set_config {
+    -- can jump to last snippet
     history = true,
+    -- This one is cool cause if you have dynamic snippets, it updates as you type!
+    updateevents = "TextChanged,TextChangedI"
 }
 
--- some shorthands...
-local s = ls.snippet
-local t = ls.text_node
-
 local snippets = {}
-snippets.all = R 'snippets.all'
-snippets.lua = R 'snippets.lua'
-snippets.rust = R 'snippets.rust'
+
+-- load snippets
+for _, ft_path in ipairs(vim.api.nvim_get_runtime_file("lua/snippets/*.lua",
+                                                       true)) do
+    local ft = vim.fn.fnamemodify(ft_path, ":t:r")
+    snippets[ft] = loadfile(ft_path)()
+end
+
 ls.snippets = snippets
 
-table.insert(snippets.all, s("foo", t("bar")))
-table.insert(snippets.all, s("pepe", t("juan")))
+Keymaps {
+    ['<leader><leader>s'] = '<cmd>source ~/.config/nvim/plugin/luasnip.lua<CR>'
+}

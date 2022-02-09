@@ -1,7 +1,9 @@
 require'nvim-treesitter.configs'.setup {
     playground = {enable = true},
+
     query_linter = {
         enable = true,
+
         use_virtual_text = true,
         lint_events = {"BufWrite", "CursorHold"}
     },
@@ -10,6 +12,8 @@ require'nvim-treesitter.configs'.setup {
     ignore_install = {"javascript", "zig"}, -- List of parsers to ignore installing
 
     highlight = {
+        enable = true,
+
         disable = {"c", "rust"}, -- list of language that will be disabled
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -20,6 +24,7 @@ require'nvim-treesitter.configs'.setup {
 
     incremental_selection = {
         enable = true,
+
         keymaps = {
             init_selection = "<cr>",
             node_incremental = "<cr>",
@@ -38,5 +43,5 @@ require'nvim-treesitter.configs'.setup {
                 ["ia"] = "@parameter.inner"
             }
         }
-    },
+    }
 }
