@@ -4,5 +4,6 @@
     ~/.config/polybar: polybar
     ~/.config/rofi: rofi
     ~/.config/xmonad: xmonad
+    ~/.config/kitty: kitty
     ~/.tmux.conf: tmux/tmux.conf
     ~/.gitconfig: gitconfig

@@ -2,7 +2,7 @@
 local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-    packer_bootstrap = fn.system({
+    PACKER_BOOTSTRAP = fn.system({
         'git', 'clone', '--depth', '1',
         'https://github.com/wbthomason/packer.nvim', install_path
     })
@@ -54,6 +54,7 @@ return require('packer').startup(function()
     }
     use {'tpope/vim-fugitive'}
     use {'tpope/vim-rhubarb'}
+    use {'tpope/vim-unimpaired'}
 
     use {
         'tpope/vim-dispatch',
@@ -70,7 +71,7 @@ return require('packer').startup(function()
     use {
         'christoomey/vim-tmux-navigator',
         setup = function()
-            -- vim.g.tmux_navigator_disable_when_zoomed = 1
+            vim.g.tmux_navigator_disable_when_zoomed = 1
             -- vim.g.tmux_navigator_preserve_zoom = 1
         end
     }
@@ -78,7 +79,13 @@ return require('packer').startup(function()
     -- color schemes
     use 'folke/tokyonight.nvim'
     -- use 'morhetz/gruvbox'
-    use {"ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+    use {
+        "ellisonleao/gruvbox.nvim",
+        requires = {"rktjmp/lush.nvim"},
+        config = function()
+            vim.cmd[[colorscheme gruvbox]]
+        end
+    }
 
     -- treesitter
     use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
@@ -154,4 +161,8 @@ return require('packer').startup(function()
             ]]
         end
     }
+
+    if PACKER_BOOTSTRAP then
+        require('packer').sync()
+    end
 end)

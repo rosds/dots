@@ -34,7 +34,6 @@ vim.o.inccommand = "split"
 
 -- color scheme
 vim.o.background = "dark"
-vim.cmd([[colorscheme gruvbox]])
 
 -- mark spaces
 vim.o.list = true

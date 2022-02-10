@@ -19,5 +19,5 @@ end
 ls.snippets = snippets
 
 Keymaps {
-    ['<leader><leader>s'] = '<cmd>source ~/.config/nvim/plugin/luasnip.lua<CR>'
+    ['<leader><leader>s'] = '<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>'
 }
