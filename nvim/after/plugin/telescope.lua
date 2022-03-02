@@ -11,19 +11,13 @@ require('telescope').setup{
 -------------------------------------------------------------------------------
 -- Mappings
 -------------------------------------------------------------------------------
+local t = require('telescope.builtin')
 
--- Keymaps {
---     ['<leader>p'] = require('telescope.builtin').fd,
---     ['<leader>o'] = require('telescope.builtin').buffers,
---     ['<leader><c-r>'] = require('telescope.builtin').command_history,
--- }
-nmap('<leader>p', '<cmd>lua require("telescope.builtin").fd()<cr>')
-nmap('<leader>o', '<cmd>lua require("telescope.builtin").buffers()<cr>')
-nmap('<leader><c-r>', '<cmd>lua require("telescope.builtin").command_history()<cr>')
-
--- lsp
-nmap('<leader>sc', [[<cmd>lua require('telescope.builtin').lsp_references()<cr>]])
-nmap('<leader>ss', [[<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>]])
+Keymaps {
+    ['<leader>p'] = t.fd,
+    ['<leader>o'] = t.buffers,
+    ['<leader><c-r>'] = t.command_history,
+}
 
 -- grep
 vim.cmd [[

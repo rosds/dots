@@ -9,12 +9,13 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- reload
-vim.cmd([[
-    augroup packer_user_config
-        autocmd!
-        autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-    augroup end
-]])
+vim.api.nvim_create_augroup("packer_user_config", {})
+vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "plugins.lua",
+    command = "source <afile> | PackerCompile",
+    group = "packer_user_config",
+    desc = "reload packer after modifications"
+})
 
 -- pluggins
 return require('packer').startup(function()
@@ -159,6 +160,18 @@ return require('packer').startup(function()
               map N  <Plug>(incsearch-nohl-N)
               map *  <Plug>(incsearch-nohl-*)
             ]]
+        end
+    }
+    use {
+        'vimwiki/vimwiki',
+        setup = function()
+            vim.g.vimwiki_list = {
+                {
+                    path = '~/vimwiki/',
+                    syntax = 'markdown',
+                    ext = 'md'
+                }
+            }
         end
     }
 
