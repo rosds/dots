@@ -9,23 +9,24 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- reload
-vim.api.nvim_create_augroup("packer_user_config", {})
+local packer = vim.api.nvim_create_augroup("packer_user_config", {})
 vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "plugins.lua",
     command = "source <afile> | PackerCompile",
-    group = "packer_user_config",
+    group = packer,
     desc = "reload packer after modifications"
 })
 
 -- pluggins
-return require('packer').startup(function()
+return require('packer').startup(function(use)
     -- plugin management
     use 'wbthomason/packer.nvim'
 
     -- status line
     use {
         'nvim-lualine/lualine.nvim',
-        requires = {'kyazdani42/nvim-web-devicons', opt = true}
+        requires = {'kyazdani42/nvim-web-devicons', opt = true},
+        config = function() require('lualine').setup{} end
     }
 
     -- lua conf
@@ -48,14 +49,12 @@ return require('packer').startup(function()
     use {'phaazon/hop.nvim'}
 
     -- git
-    use {
-        'lewis6991/gitsigns.nvim',
-        requires = {'nvim-lua/plenary.nvim'}
-        -- tag = 'release' -- To use the latest release
-    }
+    use {'lewis6991/gitsigns.nvim'}
     use {'tpope/vim-fugitive'}
     use {'tpope/vim-rhubarb'}
     use {'tpope/vim-unimpaired'}
+    use {'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim'}
+    use {'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim'}
 
     use {
         'tpope/vim-dispatch',
@@ -63,10 +62,7 @@ return require('packer').startup(function()
     }
 
     -- telescope
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = {{'nvim-lua/plenary.nvim'}}
-    }
+    use {'nvim-telescope/telescope.nvim', requires = 'nvim-lua/plenary.nvim'}
 
     -- tmux
     use {
@@ -79,13 +75,9 @@ return require('packer').startup(function()
 
     -- color schemes
     use 'folke/tokyonight.nvim'
-    -- use 'morhetz/gruvbox'
     use {
         "ellisonleao/gruvbox.nvim",
-        requires = {"rktjmp/lush.nvim"},
-        config = function()
-            vim.cmd[[colorscheme gruvbox]]
-        end
+        config = function() vim.cmd [[colorscheme gruvbox]] end
     }
 
     -- treesitter
@@ -95,9 +87,9 @@ return require('packer').startup(function()
 
     -- lsp & completion
     use 'neovim/nvim-lspconfig' -- collection of LSP configurations for neovim's LSP client
+    use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-nvim-lsp' -- LSP completion source for nvim-cmp
     use 'hrsh7th/cmp-nvim-lua' --
-    use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/nvim-cmp'
     use 'mfussenegger/nvim-dap'
@@ -166,16 +158,11 @@ return require('packer').startup(function()
         'vimwiki/vimwiki',
         setup = function()
             vim.g.vimwiki_list = {
-                {
-                    path = '~/vimwiki/',
-                    syntax = 'markdown',
-                    ext = 'md'
-                }
+                {path = '~/vimwiki/', syntax = 'markdown', ext = 'md'}
             }
         end
     }
+    use 'dhruvasagar/vim-table-mode'
 
-    if PACKER_BOOTSTRAP then
-        require('packer').sync()
-    end
+    if PACKER_BOOTSTRAP then require('packer').sync() end
 end)

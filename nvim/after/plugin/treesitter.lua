@@ -8,7 +8,7 @@ require'nvim-treesitter.configs'.setup {
         lint_events = {"BufWrite", "CursorHold"}
     },
 
-    ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = { "lua", "rust", "c" },
     ignore_install = {"javascript", "zig"}, -- List of parsers to ignore installing
 
     highlight = {

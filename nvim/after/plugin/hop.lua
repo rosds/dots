@@ -1,3 +1,8 @@
-require 'hop'.setup{}
+local km = require 'keymaps'
+local hop = require 'hop'
 
-nmap('<leader>j', ':HopChar1<cr>')
+hop.setup{}
+
+km.mode({'n', 'v'}) {
+    ['<leader>j'] = hop.hint_char1,
+}

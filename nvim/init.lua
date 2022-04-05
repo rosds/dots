@@ -1,9 +1,12 @@
 require 'globals'
 require 'settings'
 require 'plugins'
-require 'mappings'
 
-Keymaps {
+local v = require 'keymaps'.visual
+local n = require 'keymaps'.normal
+
+-- Keymaps
+n {
     -- find and replace
     ['<leader>rr'] = {'yiw:%s/<c-r>"//g<left><left>', silent = false},
 
@@ -24,14 +27,9 @@ Keymaps {
 
     -- open file with the system's default
     ['<leader>go'] = ':silent execute "!xdg-open " . shellescape("<cWORD>")<cr>',
-
-    -- visual mode
-    {
-        mode = 'v',
-        maps = {
-            ['<leader>rr'] = {'y:%s/<c-r>"//g<left><left>', silent = false},
-            ['<leader>go'] = 'y:silent execute "!xdg-open <c-r>""<cr>',
-        }
-    }
 }
 
+v {
+    ['<leader>rr'] = {'y:%s/<c-r>"//g<left><left>', silent = false},
+    ['<leader>go'] = 'y:silent execute "!xdg-open <c-r>""<cr>',
+}

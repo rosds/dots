@@ -36,3 +36,5 @@
     ui = auto
 [web]
 	browser = open
+[diff]
+	algorithm = patience

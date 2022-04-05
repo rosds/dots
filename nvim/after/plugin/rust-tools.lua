@@ -36,5 +36,3 @@ local opts = {
 }
 
 require('rust-tools').setup(opts)
-
-nmap('<leader>sm', '<cmd>lua require"rust-tools.hover_actions".hover_actions()<cr>')

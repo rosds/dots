@@ -1,15 +1,16 @@
--- set breakpoints
-nmap('<leader>db', '<cmd>lua require"dap".toggle_breakpoint()<cr>')
-nmap('<leader>di', '<cmd>lua require"dap".step_into()<cr>')
-nmap('<leader>do', '<cmd>lua require"dap".step_out()<cr>')
-nmap('<leader>dj', '<cmd>lua require"dap".step_over()<cr>')
-nmap('<leader>dc', '<cmd>lua require"dap".continue()<cr>')
+local n = require 'keymaps'.normal
 
-
-nmap('<leader>dp', '<cmd>lua require"dap.ui.widgets".hover()<cr>')
-
+local dap = require 'dap'
 local widgets = require('dap.ui.widgets')
-local my_sidebar = widgets.sidebar(widgets.scopes)
-_G.dap_sidebar = my_sidebar
 
-nmap('<leader>dn', '<cmd>lua dap_sidebar.open()<cr>')
+n {
+    ['<leader>db'] = dap.toggle_breakpoint,
+    ['<leader>di'] = dap.step_into,
+    ['<leader>do'] = dap.step_out,
+    ['<leader>dj'] = dap.step_over,
+    ['<leader>dc'] = dap.continue,
+
+    ['<leader>dp'] = widgets.hover,
+
+    ['<leader>dn'] = widgets.sidebar(widgets.scopes).open,
+}

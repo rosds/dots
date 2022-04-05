@@ -1,5 +1,7 @@
+local n = require 'keymaps'.normal
+
 -- venn.nvim: enable or disable keymappings
-function _G.Toggle_venn()
+local function toggle_venn()
     local venn_enabled = vim.inspect(vim.b.venn_enabled)
     if venn_enabled == "nil" then
         vim.b.venn_enabled = true
@@ -18,4 +20,6 @@ function _G.Toggle_venn()
     end
 end
 
-vim.api.nvim_set_keymap('n', '<leader>ve', ":lua Toggle_venn()<CR>", { noremap = true})
+n {
+    ['<leader>ve'] = toggle_venn,
+}

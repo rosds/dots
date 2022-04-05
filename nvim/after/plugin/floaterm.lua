@@ -1,4 +1,8 @@
-nmap('<F1>', ':FloatermToggle<cr>')
+local n = require 'keymaps'.normal
+
+n {
+    ['<F1>'] = ':FloatermToggle<cr>',
+}
 
 vim.cmd [[
 augroup NVIM_FLOATERM

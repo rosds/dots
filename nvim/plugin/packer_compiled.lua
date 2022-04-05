@@ -105,12 +105,18 @@ _G.packer_plugins = {
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/opt/copilot.vim",
     url = "https://github.com/github/copilot.vim"
   },
+  ["diffview.nvim"] = {
+    loaded = true,
+    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/diffview.nvim",
+    url = "https://github.com/sindrets/diffview.nvim"
+  },
   ["gitsigns.nvim"] = {
     loaded = true,
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
   ["gruvbox.nvim"] = {
+    config = { "\27LJ\2\n7\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\24colorscheme gruvbox\bcmd\bvim\0" },
     loaded = true,
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/gruvbox.nvim",
     url = "https://github.com/ellisonleao/gruvbox.nvim"
@@ -132,14 +138,15 @@ _G.packer_plugins = {
     url = "https://github.com/tami5/lspsaga.nvim"
   },
   ["lualine.nvim"] = {
+    config = { "\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\flualine\frequire\0" },
     loaded = true,
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
   },
-  ["lush.nvim"] = {
+  neogit = {
     loaded = true,
-    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/lush.nvim",
-    url = "https://github.com/rktjmp/lush.nvim"
+    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/neogit",
+    url = "https://github.com/TimUntersberger/neogit"
   },
   ["nvim-autopairs"] = {
     config = { "\27LJ\2\n@\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0" },
@@ -281,11 +288,27 @@ _G.packer_plugins = {
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/opt/vim-sandwich",
     url = "https://github.com/machakann/vim-sandwich"
   },
+  ["vim-table-mode"] = {
+    loaded = true,
+    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/vim-table-mode",
+    url = "https://github.com/dhruvasagar/vim-table-mode"
+  },
   ["vim-tmux-navigator"] = {
     loaded = true,
     needs_bufread = false,
     path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/opt/vim-tmux-navigator",
     url = "https://github.com/christoomey/vim-tmux-navigator"
+  },
+  ["vim-unimpaired"] = {
+    loaded = true,
+    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/start/vim-unimpaired",
+    url = "https://github.com/tpope/vim-unimpaired"
+  },
+  vimwiki = {
+    loaded = true,
+    needs_bufread = true,
+    path = "/home/alfonsoros/.local/share/nvim/site/pack/packer/opt/vimwiki",
+    url = "https://github.com/vimwiki/vimwiki"
   },
   ["zig.vim"] = {
     loaded = true,
@@ -301,20 +324,6 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Setup for: vim-sandwich
-time([[Setup for vim-sandwich]], true)
-try_loadstring("\27LJ\2\n|\0\0\2\0\4\0\t6\0\0\0009\0\1\0)\1\1\0=\1\2\0006\0\0\0009\0\1\0)\1\1\0=\1\3\0K\0\1\0.operator_sandwich_no_default_key_mappings%sandwich_no_default_key_mappings\6g\bvim\0", "setup", "vim-sandwich")
-time([[Setup for vim-sandwich]], false)
-time([[packadd for vim-sandwich]], true)
-vim.cmd [[packadd vim-sandwich]]
-time([[packadd for vim-sandwich]], false)
--- Setup for: copilot.vim
-time([[Setup for copilot.vim]], true)
-try_loadstring("\27LJ\2\n€\1\0\0\2\0\6\0\r6\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0+\1\2\0=\1\3\0006\0\0\0009\0\1\0'\1\5\0=\1\4\0K\0\1\0\5\25copilot_tab_fallback\26copilot_assume_mapped\23copilot_no_tab_map\6g\bvim\0", "setup", "copilot.vim")
-time([[Setup for copilot.vim]], false)
-time([[packadd for copilot.vim]], true)
-vim.cmd [[packadd copilot.vim]]
-time([[packadd for copilot.vim]], false)
 -- Setup for: vim-mark
 time([[Setup for vim-mark]], true)
 try_loadstring("\27LJ\2\n0\0\0\2\0\3\0\0056\0\0\0009\0\1\0)\1\1\0=\1\2\0K\0\1\0\19mw_no_mappings\6g\bvim\0", "setup", "vim-mark")
@@ -322,13 +331,27 @@ time([[Setup for vim-mark]], false)
 time([[packadd for vim-mark]], true)
 vim.cmd [[packadd vim-mark]]
 time([[packadd for vim-mark]], false)
+-- Setup for: vimwiki
+time([[Setup for vimwiki]], true)
+try_loadstring("\27LJ\2\n`\0\0\3\0\4\0\a6\0\0\0009\0\1\0004\1\3\0005\2\3\0>\2\1\1=\1\2\0K\0\1\0\1\0\3\vsyntax\rmarkdown\tpath\15~/vimwiki/\bext\amd\17vimwiki_list\6g\bvim\0", "setup", "vimwiki")
+time([[Setup for vimwiki]], false)
+time([[packadd for vimwiki]], true)
+vim.cmd [[packadd vimwiki]]
+time([[packadd for vimwiki]], false)
 -- Setup for: vim-tmux-navigator
 time([[Setup for vim-tmux-navigator]], true)
-try_loadstring("\27LJ\2\n\v\0\0\1\0\0\0\1K\0\1\0\0", "setup", "vim-tmux-navigator")
+try_loadstring("\27LJ\2\nD\0\0\2\0\3\0\0056\0\0\0009\0\1\0)\1\1\0=\1\2\0K\0\1\0'tmux_navigator_disable_when_zoomed\6g\bvim\0", "setup", "vim-tmux-navigator")
 time([[Setup for vim-tmux-navigator]], false)
 time([[packadd for vim-tmux-navigator]], true)
 vim.cmd [[packadd vim-tmux-navigator]]
 time([[packadd for vim-tmux-navigator]], false)
+-- Setup for: copilot.vim
+time([[Setup for copilot.vim]], true)
+try_loadstring("\27LJ\2\n€\1\0\0\2\0\6\0\r6\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0+\1\2\0=\1\3\0006\0\0\0009\0\1\0'\1\5\0=\1\4\0K\0\1\0\5\25copilot_tab_fallback\26copilot_assume_mapped\23copilot_no_tab_map\6g\bvim\0", "setup", "copilot.vim")
+time([[Setup for copilot.vim]], false)
+time([[packadd for copilot.vim]], true)
+vim.cmd [[packadd copilot.vim]]
+time([[packadd for copilot.vim]], false)
 -- Setup for: rust.vim
 time([[Setup for rust.vim]], true)
 try_loadstring("\27LJ\2\n2\0\0\2\0\3\0\0056\0\0\0009\0\1\0)\1\1\0=\1\2\0K\0\1\0\21rustfmt_autosave\6g\bvim\0", "setup", "rust.vim")
@@ -336,6 +359,13 @@ time([[Setup for rust.vim]], false)
 time([[packadd for rust.vim]], true)
 vim.cmd [[packadd rust.vim]]
 time([[packadd for rust.vim]], false)
+-- Setup for: vim-sandwich
+time([[Setup for vim-sandwich]], true)
+try_loadstring("\27LJ\2\n|\0\0\2\0\4\0\t6\0\0\0009\0\1\0)\1\1\0=\1\2\0006\0\0\0009\0\1\0)\1\1\0=\1\3\0K\0\1\0.operator_sandwich_no_default_key_mappings%sandwich_no_default_key_mappings\6g\bvim\0", "setup", "vim-sandwich")
+time([[Setup for vim-sandwich]], false)
+time([[packadd for vim-sandwich]], true)
+vim.cmd [[packadd vim-sandwich]]
+time([[packadd for vim-sandwich]], false)
 -- Setup for: vim-dispatch
 time([[Setup for vim-dispatch]], true)
 try_loadstring("\27LJ\2\n2\0\0\2\0\3\0\0056\0\0\0009\0\1\0)\1\1\0=\1\2\0K\0\1\0\21dispatch_no_maps\6g\bvim\0", "setup", "vim-dispatch")
@@ -343,22 +373,31 @@ time([[Setup for vim-dispatch]], false)
 time([[packadd for vim-dispatch]], true)
 vim.cmd [[packadd vim-dispatch]]
 time([[packadd for vim-dispatch]], false)
--- Config for: nvim-autopairs
-time([[Config for nvim-autopairs]], true)
-try_loadstring("\27LJ\2\n@\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0", "config", "nvim-autopairs")
-time([[Config for nvim-autopairs]], false)
 -- Config for: zoxide.vim
 time([[Config for zoxide.vim]], true)
 try_loadstring("\27LJ\2\n1\0\0\2\0\4\0\0056\0\0\0009\0\1\0'\1\3\0=\1\2\0K\0\1\0\6j\18zoxide_prefix\6g\bvim\0", "config", "zoxide.vim")
 time([[Config for zoxide.vim]], false)
+-- Config for: nvim-autopairs
+time([[Config for nvim-autopairs]], true)
+try_loadstring("\27LJ\2\n@\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0", "config", "nvim-autopairs")
+time([[Config for nvim-autopairs]], false)
+-- Config for: lualine.nvim
+time([[Config for lualine.nvim]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\flualine\frequire\0", "config", "lualine.nvim")
+time([[Config for lualine.nvim]], false)
 -- Config for: incsearch.vim
 time([[Config for incsearch.vim]], true)
 try_loadstring("\27LJ\2\nò\2\0\0\3\0\5\0\t6\0\0\0009\0\1\0)\1\1\0=\1\2\0006\0\0\0009\0\3\0'\2\4\0B\0\2\1K\0\1\0¦\2              map /  <Plug>(incsearch-forward)\n              map ?  <Plug>(incsearch-backward)\n              map g/ <Plug>(incsearch-stay)\n              map n  <Plug>(incsearch-nohl-n)\n              map N  <Plug>(incsearch-nohl-N)\n              map *  <Plug>(incsearch-nohl-*)\n            \bcmd\30incsearch#auto_nohlsearch\6g\bvim\0", "config", "incsearch.vim")
 time([[Config for incsearch.vim]], false)
+-- Config for: gruvbox.nvim
+time([[Config for gruvbox.nvim]], true)
+try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\24colorscheme gruvbox\bcmd\bvim\0", "config", "gruvbox.nvim")
+time([[Config for gruvbox.nvim]], false)
 if should_profile then save_profiles() end
 
 end)
 
 if not no_errors then
+  error_msg = error_msg:gsub('"', '\\"')
   vim.api.nvim_command('echohl ErrorMsg | echom "Error in packer_compiled: '..error_msg..'" | echom "Please check your config for correctness" | echohl None')
 end

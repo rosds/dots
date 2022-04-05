@@ -25,6 +25,7 @@ vim.o.fo = vim.o.fo .. "t"
 vim.o.smartcase = true
 vim.o.ignorecase = true
 
+vim.o.scroll = 10
 vim.o.scrolloff = 8
 
 vim.o.termguicolors = true

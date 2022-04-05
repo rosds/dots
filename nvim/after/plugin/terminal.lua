@@ -1,8 +1,12 @@
-tmap('<c-h>', '<c-\\><c-n>:TmuxNavigateLeft<cr>')
-tmap('<c-j>', '<c-\\><c-n>:TmuxNavigateDown<cr>')
-tmap('<c-k>', '<c-\\><c-n>:TmuxNavigateUp<cr>')
-tmap('<c-l>', '<c-\\><c-n>:TmuxNavigateRight<cr>')
-tmap('<esc>', '<c-\\><c-n>')
+local t = require 'keymaps'.terminal
+
+t {
+    ['<c-h>'] = '<c-\\><c-n>:TmuxNavigateLeft<cr>',
+    ['<c-j>'] = '<c-\\><c-n>:TmuxNavigateDown<cr>',
+    ['<c-k>'] = '<c-\\><c-n>:TmuxNavigateUp<cr>',
+    ['<c-l>'] = '<c-\\><c-n>:TmuxNavigateRight<cr>',
+    ['<esc>'] = '<c-\\><c-n>',
+}
 
 vim.cmd[[
 augroup terminal

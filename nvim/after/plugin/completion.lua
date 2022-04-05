@@ -1,50 +1,60 @@
 local cmp = require 'cmp'
 local ls = require 'luasnip'
 
-local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and
-               vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col)
-                   :match("%s") == nil
+local select_next = function(fallback)
+    if cmp.visible() then
+        cmp.select_next_item()
+    elseif ls and ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    else
+        fallback()
+    end
+end
+
+local select_prev = function(fallback)
+    if cmp.visible() then
+        cmp.select_prev_item()
+    elseif ls.jumpable(-1) then
+        ls.jump(-1)
+    else
+        fallback()
+    end
 end
 
 cmp.setup {
-    snippet = {expand = function(args) ls.lsp_expand(args.body) end},
+    snippet = {
+        expand = function(args)
+            ls.lsp_expand(args.body)
+        end
+    },
 
     mapping = {
-        ['<c-p>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif ls.jumpable(-1) then
-                ls.jump(-1)
+        ['<c-p>'] = cmp.mapping(select_prev, {"i", "s"}),
+        ['<c-k>'] = cmp.mapping(select_prev, {"i", "s"}),
+        ['<c-n>'] = cmp.mapping(select_next, {"i", "s"}),
+        ['<c-j>'] = cmp.mapping(select_next, {"i", "s"}),
+        ['<c-h>'] = cmp.mapping(function(fallback)
+            if ls.choice_active() then
+                require 'luasnip.extras.select_choice'()
             else
                 fallback()
             end
-        end, {"i", "s"}),
-        ['<c-n>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif ls and ls.expand_or_jumpable() then
-                ls.expand_or_jump()
-            elseif has_words_before() then
-                cmp.complete()
-            else
-                fallback()
-            end
-        end, {"i", "s"}),
+        end, {"i"}),
         ['<c-u>'] = cmp.mapping.scroll_docs(-4),
         ['<c-d>'] = cmp.mapping.scroll_docs(4),
         ['<c-e>'] = cmp.mapping.close(),
-        ['<c-y>'] = function(fallback)
+        ['<c-y>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.confirm({
                     behavior = cmp.ConfirmBehavior.Insert,
                     select = true
                 })
+            elseif ls and ls.expand_or_jumpable() then
+                ls.expand_or_jump()
             else
                 fallback()
             end
-        end,
+        end, {"i", "s"}),
         -- Take copilot completion
         ['<c-f>'] = function(fallback)
             cmp.mapping.abort()
@@ -55,15 +65,31 @@ cmp.setup {
                 fallback()
             end
         end,
-        ['<cr>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true
-        })
+        -- snippets
+        ['<c-l>'] = cmp.mapping(function(fallback)
+            if ls and ls.expandable() then
+                ls.expand()
+            elseif ls.choice_active() then
+                ls.change_choice(1)
+            else
+                fallback()
+            end
+        end, {"i", "s"}),
+        ['<c-o>'] = cmp.mapping(function(fallback)
+            if ls.choice_active() then
+                ls.change_choice(-1)
+            else
+                fallback()
+            end
+        end, {"i", "s"}),
     },
 
     sources = {
-        {name = 'nvim_lsp'}, {name = 'nvim_lua'}, {name = 'luasnip'},
-        {name = 'path'}, {name = 'buffer', keyword_length = 5}
+        {name = 'nvim_lsp'},
+        {name = 'nvim_lua'},
+        {name = 'luasnip'},
+        {name = 'path'},
+        {name = 'buffer', keyword_length = 5},
     },
 
     experimental = {native_menu = false, ghost_text = false}
