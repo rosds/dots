@@ -1,14 +1,11 @@
 -- packer bootstrapping
 local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-    PACKER_BOOTSTRAP = fn.system({
-        'git', 'clone', '--depth', '1',
-        'https://github.com/wbthomason/packer.nvim', install_path
-    })
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
--- reload
+-- reload after safe
 local packer = vim.api.nvim_create_augroup("packer_user_config", {})
 vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "plugins.lua",
@@ -17,24 +14,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     desc = "reload packer after modifications"
 })
 
--- pluggins
 return require('packer').startup(function(use)
     -- plugin management
     use 'wbthomason/packer.nvim'
 
-    -- status line
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = {'kyazdani42/nvim-web-devicons', opt = true},
-        config = function() require('lualine').setup{} end
-    }
-
-    -- lua conf
+    -- lua
     use 'nvim-lua/plenary.nvim'
-    use 'nvim-lua/popup.nvim'
-
-    -- comments
-    use 'terrortylor/nvim-comment'
 
     -- surroundings
     use {
@@ -45,24 +30,58 @@ return require('packer').startup(function(use)
         end
     }
 
-    -- easymotion
-    use {'phaazon/hop.nvim'}
-
-    -- git
-    use {'lewis6991/gitsigns.nvim'}
-    use {'tpope/vim-fugitive'}
-    use {'tpope/vim-rhubarb'}
-    use {'tpope/vim-unimpaired'}
-    use {'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim'}
-    use {'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim'}
-
+    -- comments
     use {
-        'tpope/vim-dispatch',
-        setup = function() vim.g.dispatch_no_maps = 1 end
+        'terrortylor/nvim-comment',
+        config = function()
+            require 'nvim_comment'.setup({
+                line_mapping = '<leader>cl',
+                operator_mapping = '<leader>c',
+            })
+        end,
     }
 
+    -- explorer
+    use {
+        'kyazdani42/nvim-tree.lua',
+        requires = 'kyazdani42/nvim-web-devicons'
+    }
+
+    -- easymotion
+    use 'phaazon/hop.nvim'
+
     -- telescope
-    use {'nvim-telescope/telescope.nvim', requires = 'nvim-lua/plenary.nvim'}
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = 'nvim-lua/plenary.nvim'
+    }
+
+    -- lsp & completion
+    use 'neovim/nvim-lspconfig'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-nvim-lua'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/nvim-cmp'
+
+    -- snippets
+    use 'L3MON4D3/LuaSnip'
+    use 'saadparwaiz1/cmp_luasnip'
+
+    -- treesitter
+    use 'nvim-treesitter/nvim-treesitter'
+    use 'nvim-treesitter/playground'
+    use 'nvim-treesitter/nvim-treesitter-textobjects'
+
+    -- color
+    use 'ellisonleao/gruvbox.nvim'
+
+    -- git
+    use 'lewis6991/gitsigns.nvim'
+    use 'tpope/vim-fugitive'
+    use 'tpope/vim-rhubarb'
+    use 'tpope/vim-unimpaired'
+    use {'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim'}
 
     -- tmux
     use {
@@ -73,45 +92,12 @@ return require('packer').startup(function(use)
         end
     }
 
-    -- color schemes
-    use 'folke/tokyonight.nvim'
-    use {
-        "ellisonleao/gruvbox.nvim",
-        config = function() vim.cmd [[colorscheme gruvbox]] end
-    }
-
-    -- treesitter
-    use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-    use {'nvim-treesitter/playground'}
-    use {'nvim-treesitter/nvim-treesitter-textobjects'}
-
-    -- lsp & completion
-    use 'neovim/nvim-lspconfig' -- collection of LSP configurations for neovim's LSP client
-    use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/cmp-nvim-lsp' -- LSP completion source for nvim-cmp
-    use 'hrsh7th/cmp-nvim-lua' --
-    use 'hrsh7th/cmp-path'
-    use 'hrsh7th/nvim-cmp'
-    use 'mfussenegger/nvim-dap'
-    use {'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons'}
-    use 'tami5/lspsaga.nvim'
-
     -- rust
     use 'simrat39/rust-tools.nvim'
     use {
         'rust-lang/rust.vim',
         setup = function() vim.g.rustfmt_autosave = 1 end
     }
-
-    -- snippets
-    use 'L3MON4D3/LuaSnip'
-    use 'saadparwaiz1/cmp_luasnip'
-
-    -- sidebar explorer
-    use {'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons'}
-
-    -- zig
-    use 'ziglang/zig.vim'
 
     -- 666
     use {
@@ -124,8 +110,11 @@ return require('packer').startup(function(use)
     }
 
     -- misc
-    use 'jbyuki/venn.nvim'
-    use 'AndrewRadev/splitjoin.vim'
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+        config = function() require 'lualine'.setup() end
+    }
     use {
         'inkarkat/vim-mark',
         requires = 'inkarkat/vim-ingo-library',
@@ -136,24 +125,12 @@ return require('packer').startup(function(use)
         config = function() require'nvim-autopairs'.setup {} end
     }
     use {
-        'nanotee/zoxide.vim',
-        config = function() vim.g.zoxide_prefix = 'j' end
+        'tpope/vim-dispatch',
+        setup = function() vim.g.dispatch_no_maps = 1 end
     }
-    use 'voldikss/vim-floaterm'
-    use {
-        'haya14busa/incsearch.vim',
-        config = function()
-            vim.g['incsearch#auto_nohlsearch'] = 1
-            vim.cmd [[
-              map /  <Plug>(incsearch-forward)
-              map ?  <Plug>(incsearch-backward)
-              map g/ <Plug>(incsearch-stay)
-              map n  <Plug>(incsearch-nohl-n)
-              map N  <Plug>(incsearch-nohl-N)
-              map *  <Plug>(incsearch-nohl-*)
-            ]]
-        end
-    }
+    use 'jbyuki/venn.nvim'
+    use 'AndrewRadev/splitjoin.vim'
+    use 'dhruvasagar/vim-table-mode'
     use {
         'vimwiki/vimwiki',
         setup = function()
@@ -162,7 +139,4 @@ return require('packer').startup(function(use)
             }
         end
     }
-    use 'dhruvasagar/vim-table-mode'
-
-    if PACKER_BOOTSTRAP then require('packer').sync() end
 end)

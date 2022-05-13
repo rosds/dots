@@ -1,4 +1,6 @@
-vim.cmd [[
-    nnoremap <silent><expr> <leader>m ':Mark ' . expand('<cword>') . '<cr>'
-    nnoremap <silent> <leader>M :MarkClear<cr>
-]]
+local n = require 'keymaps'.normal
+
+n {
+    ['<leader>m'] = 'yiw:Mark <c-r>"<cr>',
+    ['<leader>M'] = ':MarkClear<cr>',
+}

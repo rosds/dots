@@ -8,11 +8,20 @@ t {
     ['<esc>'] = '<c-\\><c-n>',
 }
 
-vim.cmd[[
-augroup terminal
-    autocmd!
-    autocmd TermOpen * startinsert
-    autocmd TermOpen * setlocal nonumber norelativenumber
-    autocmd BufWinEnter,WinEnter term://* startinsert
-augroup END
-]]
+-- terminal
+local terminal = vim.api.nvim_create_augroup('terminal', {})
+vim.api.nvim_create_autocmd('TermOpen', {
+    pattern = '*',
+    command = 'startinsert',
+    group = terminal,
+})
+vim.api.nvim_create_autocmd('TermOpen', {
+    pattern = '*',
+    command = 'setlocal nonumber norelativenumber',
+    group = terminal,
+})
+vim.api.nvim_create_autocmd({'BufWinEnter', 'WinEnter'}, {
+    pattern = 'term://*',
+    command = 'startinsert',
+    group = terminal,
+})

@@ -1,7 +1,3 @@
--------------------------------------------------------------------------------
--- general config
--------------------------------------------------------------------------------
-
 vim.g.mapleader = " "
 
 -- spaces instead of tabs
@@ -15,8 +11,9 @@ vim.o.updatetime = 100
 vim.o.completeopt = "menu,menuone,noselect"
 vim.o.shortmess = vim.o.shortmess .. "c"
 
-vim.o.splitbelow = true -- when splitting horizontally, put the new window below
-vim.o.splitright = true -- when splitting vertically, put the new window to the right
+-- splitting
+vim.o.splitbelow = true 
+vim.o.splitright = true
 
 -- max column width to 80
 vim.o.tw = 80

@@ -1,10 +1,9 @@
 -- vscode lldb extension
-local extension_path = '/home/alfonsoros/.vscode/extensions/vadimcn.vscode-lldb-1.6.10/'
-local codelldb_path = extension_path .. 'adapter/codelldb'
-local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+-- local extension_path = '/home/alfonsoros/.vscode/extensions/vadimcn.vscode-lldb-1.6.10/'
+-- local codelldb_path = extension_path .. 'adapter/codelldb'
+-- local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 
-
-local opts = {
+require('rust-tools').setup({
     server = {
         settings = {
             ["rust-analyzer"] = {
@@ -28,11 +27,9 @@ local opts = {
             },
         }
     },
-    dap = {
-        adapter = require('rust-tools.dap')
-        .get_codelldb_adapter(codelldb_path, liblldb_path)
-    }
+    -- dap = {
+    --     adapter = require('rust-tools.dap')
+    --     .get_codelldb_adapter(codelldb_path, liblldb_path)
+    -- }
 
-}
-
-require('rust-tools').setup(opts)
+})

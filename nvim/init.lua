@@ -1,11 +1,12 @@
-require 'globals'
 require 'settings'
 require 'plugins'
+require 'globals'
+
+vim.cmd [[colorscheme gruvbox]]
 
 local v = require 'keymaps'.visual
 local n = require 'keymaps'.normal
 
--- Keymaps
 n {
     -- find and replace
     ['<leader>rr'] = {'yiw:%s/<c-r>"//g<left><left>', silent = false},
