@@ -7,3 +7,7 @@
     ~/.config/kitty: kitty
     ~/.tmux.conf: tmux/tmux.conf
     ~/.gitconfig: gitconfig
+    ~/.zshrc: zshrc
+    ~/.xsession:
+      mode: 0777
+      path: xsession

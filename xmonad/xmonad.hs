@@ -1,3 +1,4 @@
+import Control.Monad (forM_)
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Hooks.DynamicLog
@@ -5,8 +6,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Layout
 import XMonad.Layout.Spacing
 import XMonad.Util.EZConfig
-import qualified XMonad.DBus as D
-import qualified DBus.Client as DB
+import XMonad.Util.Run (safeSpawn)
 
 myManageHook =
   composeAll
@@ -21,29 +21,32 @@ myLayoutHook =
 
 -- some gruvbox colors
 green = "#b8bb26"
-
 yellow = "#fabd2f"
-
 blue = "#83a598"
-
+purple = "#d3869b"
 aqua = "#8ec07c"
+black = "#282828"
+gray = "#928374"
 
-myLogHook :: DB.Client -> PP
-myLogHook dbus =
-  let color c = wrap ("%{F" <> c <> "}") "%{F-}"
-      big = wrap ("%{T2} ") " %{T-}"
-      prefix = ((big $ color blue "λ") ++)
+myLogHook :: PP
+myLogHook =
+  let fg c = wrap ("%{F" <> c <> "}") "%{F-}"
+      bg c =  wrap ("%{B" <> c <> "}") "%{B-}"
+      pad n =  wrap (replicate n ' ') (replicate n ' ')
    in def
-        { ppOutput = D.send dbus . prefix
-        , ppCurrent = color yellow
-        , ppTitle = color aqua
+        { ppOutput = \s -> appendFile "/tmp/.xmonad-workspace-log" (s ++ "\n")
+        , ppCurrent = fg black . bg yellow . pad 1
+        , ppVisible = bg gray . pad 1
+        , ppTitle = fg aqua
         , ppLayout = const ""
+        , ppHiddenNoWindows = id
         }
 
 main :: IO ()
 main = do
-  dbus <- D.connect
-  D.requestAccess dbus
+  -- log workspace string for polybar
+  safeSpawn "mkfifo" ["/tmp/.xmonad-workspace-log"]
+
   xmonad $
     docks
       def
@@ -52,7 +55,7 @@ main = do
         , terminal = "kitty"
         , manageHook = myManageHook <+> manageHook def <+> manageDocks
         , layoutHook = avoidStruts $ myLayoutHook
-        , logHook = dynamicLogWithPP (myLogHook dbus)
+        , logHook = dynamicLogWithPP myLogHook
         , modMask = mod4Mask
         } `additionalKeysP`
     [ ("M-p", spawn "rofi -show run")

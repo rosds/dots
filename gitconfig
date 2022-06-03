@@ -35,6 +35,6 @@
 [color]
     ui = auto
 [web]
-	browser = open
+    browser = open
 [diff]
-	algorithm = patience
+    algorithm = patience
