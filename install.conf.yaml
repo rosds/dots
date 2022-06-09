@@ -1,13 +1,20 @@
 - link:
     ~/.config/bat: bat
+    ~/.config/compton.conf: compton.conf
+    ~/.config/dunst: dunst
+    ~/.config/gdb-dashboard: gdb-dashboard
+    ~/.config/kitty: kitty
     ~/.config/nvim: nvim
     ~/.config/polybar: polybar
     ~/.config/rofi: rofi
+    ~/.config/starship.toml: starship.toml
     ~/.config/xmonad: xmonad
-    ~/.config/kitty: kitty
     ~/.tmux.conf: tmux/tmux.conf
     ~/.gitconfig: gitconfig
     ~/.zshrc: zshrc
     ~/.xsession:
       mode: 0777
       path: xsession
+    ~/.local/bin/polybar_cal:
+      mode: 0777
+      path: scripts/polybar_cal

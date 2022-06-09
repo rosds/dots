@@ -9,6 +9,7 @@ local f = ls.function_node
 local d = ls.dynamic_node
 local sn = ls.snippet_node
 local fmt = require("luasnip.extras.fmt").fmt
+local camel2snake = require("utils.string").camel2snake
 
 local utils = R 'snip_util'
 local node_msg = utils.node_msg
@@ -29,9 +30,9 @@ local function query_structs()
         local name = {}
         for id, node in pairs(match) do
             if query.captures[id] == "st-name" then
-                table.insert(name, 1,tsquery.get_node_text(node, 0))
+                table.insert(name, 1, tsquery.get_node_text(node, 0))
             elseif query.captures[id] == "st-type-parameters" then
-                table.insert(name, 2,tsquery.get_node_text(node, 0))
+                table.insert(name, 2, tsquery.get_node_text(node, 0))
             end
         end
         if name then
@@ -62,7 +63,7 @@ return {
                 c(1,
                     {
                         t "",
-                        fmt("#[derive({})]\n\n",  i(1, "Debug"))
+                        fmt("#[derive({})]\n\n", i(1, "Debug"))
                     },
                     node_msg(" <- #[derive(...)]")
                 ),
@@ -85,11 +86,11 @@ return {
                         local _, _, generics = string.find(args[1][1], "%a+(<.+>)")
                         return generics or ""
                     end,
-                    {1}
+                    { 1 }
                 ),
                 d(1,
                     function()
-                        local structs =  query_structs()
+                        local structs = query_structs()
                         if #(structs) == 0 then
                             return sn(nil, i(1, "NewType"))
                         end
@@ -106,21 +107,13 @@ return {
             }
         )
     ),
-    s(
-        "a",
-        fmt(
-            "{}: {}",
-            {
-                d(
-                    2,
-                    function(arg)
-                        local camel = utils.camel2snake(arg[1][1])
-                        return sn(nil, i(1, camel:match('%a+') or "arg"))
-                    end,
-                    {1}
-                ),
-                i(1, "Arg")
-            }
-        )
-    )
+    s("a", fmt("{}: {}", {
+        d(2,
+            function(arg)
+                local camel = camel2snake(arg[1][1]:match('%a+'))
+                return sn(nil, i(1, camel or "arg"))
+            end,
+            { 1 }),
+        i(1, "Arg")
+    }))
 }

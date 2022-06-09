@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -105,9 +105,58 @@ source $ZSH/oh-my-zsh.sh
 
 alias ls=exa
 alias ps=procs
-alias cat=bat
 
+# cat & man
+alias cat=bat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+
+source $HOME/.cargo/env
 eval "$(zoxide init --cmd j zsh)"
+
+# fasd
+eval "$(fasd --init auto)"
+alias v="f -e vi"
+unalias sd
 
 # starship prompt
 eval "$(starship init zsh)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f "~/.ghcup/env" ] && source "~/.ghcup/env" # ghcup-env
+
+# ccache
+# export CC=/usr/lib/ccache/gcc
+# export CXX=/usr/lib/ccache/g++
+# export PATH="$PATH:/usr/lib/ccache"
+
+export CXXFLAGS="-B/usr/local/libexec/mold"
+
+# Go
+export PATH="$PATH:/usr/local/go/bin"
+export GOPATH="$HOME/go"
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# node
+export PATH="$PATH:$HOME/.deno/bin"
+
+# git hook
+export ENABLE_GIT_COMMIT_MSG_HOOK_INTERACTIVE=auto
+
+alias grbi="git rebase -i --autosquash"
+
+# ade
+alias sos="source /opt/ApexOS/setup.zsh"
+
+function caps() {
+    setxkbmap -option ctrl:nocaps
+    xcape -e 'Caps_Lock=Escape'
+}
+
+# lua
+export LUA_PATH='/home/alfonso.ros/.luarocks/share/lua/5.3/?.lua;/home/alfonso.ros/.luarocks/share/lua/5.3/?/init.lua;/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;$HOME/.luarocks/share/lua/5.3/?.lua;$HOME/.luarocks/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;/usr/share/lua/5.3/?.lua;/usr/share/lua/5.3/?/init.lua;./?.lua;./?/init.lua'
+export LUA_CPATH='/home/alfonso.ros/.luarocks/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?.so;$HOME/.luarocks/lib/lua/5.3/?.so;/usr/lib/x86_64-linux-gnu/lua/5.3/?.so;/usr/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so'
+export PATH="$PATH:$HOME/.luarocks/bin"

@@ -41,6 +41,7 @@ local function make_mode_mapper(mode)
 end
 
 M.map = make_mode_mapper('')
+M.insert = make_mode_mapper('i')
 M.normal = make_mode_mapper('n')
 M.visual = make_mode_mapper('v')
 M.operator = make_mode_mapper('o')

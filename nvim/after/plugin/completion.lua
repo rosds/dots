@@ -1,3 +1,7 @@
+--------------------------------------------------------------------------------
+-- nvim-cmp
+--------------------------------------------------------------------------------
+
 local cmp = require 'cmp'
 local ls = require 'luasnip'
 
@@ -6,6 +10,16 @@ local select_next = function(fallback)
         cmp.select_next_item()
     elseif ls and ls.expand_or_jumpable() then
         ls.expand_or_jump()
+    else
+        fallback()
+    end
+end
+
+local jump_first_then_select_next = function(fallback)
+    if ls and ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    elseif cmp.visible() then
+        cmp.select_next_item()
     else
         fallback()
     end
@@ -21,28 +35,40 @@ local select_prev = function(fallback)
     end
 end
 
+local jump_first_then_select_prev = function(fallback)
+    if ls.jumpable(-1) then
+        ls.jump(-1)
+    elseif cmp.visible() then
+        cmp.select_prev_item()
+    else
+        fallback()
+    end
+end
+
 cmp.setup {
     snippet = {
         expand = function(args)
-            ls.lsp_expand(args.body)
+            require('luasnip').lsp_expand(args.body)
         end
     },
 
     mapping = {
-        ['<c-p>'] = cmp.mapping(select_prev, {"i", "s"}),
-        ['<c-k>'] = cmp.mapping(select_prev, {"i", "s"}),
-        ['<c-n>'] = cmp.mapping(select_next, {"i", "s"}),
-        ['<c-j>'] = cmp.mapping(select_next, {"i", "s"}),
-        ['<c-h>'] = cmp.mapping(function(fallback)
-            if ls.choice_active() then
-                require 'luasnip.extras.select_choice'()
-            else
-                fallback()
-            end
-        end, {"i"}),
+        -- select_pref
+        ['<c-p>'] = cmp.mapping(jump_first_then_select_prev, { "i", "s" }),
+        ['<c-k>'] = cmp.mapping(select_prev, { "i", "s" }),
+
+        -- select_next
+        ['<c-n>'] = cmp.mapping(jump_first_then_select_next, { "i", "s" }),
+        ['<c-j>'] = cmp.mapping(select_next, { "i", "s" }),
+
+        -- scroll docs
         ['<c-u>'] = cmp.mapping.scroll_docs(-4),
         ['<c-d>'] = cmp.mapping.scroll_docs(4),
+
+        -- abort completion
         ['<c-e>'] = cmp.mapping.close(),
+
+        -- take suggestion or exmand snippet
         ['<c-y>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.confirm({
@@ -54,7 +80,8 @@ cmp.setup {
             else
                 fallback()
             end
-        end, {"i", "s"}),
+        end, { "i", "s" }),
+
         -- Take copilot completion
         ['<c-f>'] = function(fallback)
             cmp.mapping.abort()
@@ -65,32 +92,51 @@ cmp.setup {
                 fallback()
             end
         end,
-        -- snippets
+
+        -- luasnip choices
+        ['<c-h>'] = cmp.mapping(function(fallback)
+            if ls.choice_active() then
+                require('luasnip.extras.select_choice')()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
         ['<c-l>'] = cmp.mapping(function(fallback)
             if ls and ls.expandable() then
-                ls.expand()
+                ls.expand {}
             elseif ls.choice_active() then
                 ls.change_choice(1)
             else
                 fallback()
             end
-        end, {"i", "s"}),
+        end, { "i", "s" }),
         ['<c-o>'] = cmp.mapping(function(fallback)
             if ls.choice_active() then
                 ls.change_choice(-1)
             else
                 fallback()
             end
-        end, {"i", "s"}),
+        end, { "i", "s" }),
     },
 
     sources = {
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
-        {name = 'luasnip'},
-        {name = 'path'},
-        {name = 'buffer', keyword_length = 5},
+        { name = 'nvim_lsp' },
+        { name = 'nvim_lua' },
+        { name = 'luasnip' },
+        { name = 'path' },
+        { name = 'buffer', keyword_length = 5 },
+        { name = 'orgmode' },
+        { name = 'emoji' },
     },
 
-    experimental = {native_menu = false, ghost_text = false}
+    matching = {
+        disallow_prefix_unmatching = false,
+    },
+
+    window = {
+        -- documentation = cmp.config.window.bordered(),
+        -- completion = cmp.config.window.bordered(),
+    },
+
+    experimental = { native_menu = false, ghost_text = false }
 }

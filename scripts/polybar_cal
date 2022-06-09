@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+events=$(gcalcli --calendar="alfonso" agenda --tsv --details url)
+
+upcoming=""
+
+# filter past events
+while IFS="" read -r event || [ -n "$event" ]; do
+    read -r bdate btime edate etime url name < <(echo "$event")
+    ending_datetime=$(date -d "$edate $etime" +"%s")
+    now=$(date +"%s")
+    if [ $ending_datetime -gt $now ]; then
+        upcoming="$event"
+        break
+    fi
+done <<< "$events"
+
+if [ -z "$upcoming" ]; then
+    echo "No upcoming events"
+    exit 0
+fi
+
+read -r bdate btime edate etime url name < <(echo "$upcoming")
+
+begin_time=$(date -d "$bdate $btime" +%s)
+end_time=$(date -d "$edate $etime" +%s)
+
+minutes_till_start=$((($begin_time - $(date +%s)) / 60))
+
+# gruvbox colors
+white="#ebdbb2"
+black="#282828"
+blue="#83a598"
+yellow="#fabd2f"
+red="#fb4934"
+green="#b8bb26"
+
+fg_color() {
+    echo "%{F$1}$2%{F-}"
+}
+
+bg_color() {
+    echo "%{B$1}$2%{B-}"
+}
+
+color() {
+    echo "%{F$1}%{B$2}$3%{F- B-}"
+}
+
+# add link for google meet if present
+meet_link="$(echo $name | rg "^https://meet.google.com/\\S+" -o)"
+if [[ -n $meet_link ]]; then
+    meet_link=$(echo $meet_link | sed "s/:/\\\\:/g")
+    meet_button="%{T2}   %{T-}"
+    meet_button="$(color "$black" "$green" "$meet_button")"
+    meet_button="%{A1:xdg-open $meet_link:}$meet_button%{A}"
+    name="$meet_button$(echo $name | awk '{$1=""; print $0}')"
+fi
+
+# build polybar text
+if [[ $minutes_till_start -le 0 ]]; then
+    event_text="$(color "$white" "$red" " %{T2}%{T-} in progress ") : $name"
+elif [[ $minutes_till_start -le 3 ]]; then
+    minutes="$(color "$white" "$red" " in $minutes_till_start min ")"
+    event_text="$minutes : $name"
+elif [[ $minutes_till_start -le 30 ]]; then
+    minutes="$(color "$black" "$yellow" " in $minutes_till_start min ")"
+    event_text="$minutes : $name"
+else
+    if [[ "$(date +%Y-%m-%d)" == "$(date -d $bdate +%Y-%m-%d)" ]]; then
+        event_text="$(fg_color "$blue" "$btime - $etime") : $name"
+    else
+        event_text="$bdate $btime : $name"
+    fi
+fi
+
+# make it clickable
+url=$(echo $url | sed "s/:/\\\\:/g")
+event_text="%{A1:xdg-open $url:}$event_text%{A}"
+
+echo "$event_text"
+
+# send notifications
+gcalcli --calendar="alfonso" remind 1

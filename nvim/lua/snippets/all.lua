@@ -5,8 +5,8 @@ local t = ls.text_node
 local f = ls.function_node
 
 return {
-    s("idk", {t("¯\\_(ツ)_/¯")}),
-    s("crab", {t("🦀")}),
+    s("idk", t("¯\\_(ツ)_/¯")),
+    s("lambda", t("λ")),
     s(
         "date",
         {
@@ -18,5 +18,5 @@ return {
             ),
         }
     ),
-    s("me", t "Alfonso Ros <alfonso.ros@esrlabs.com>"),
+    s("me", t "Alfonso Ros <alfonso.ros@apex.ai>"),
 }

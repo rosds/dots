@@ -1,17 +1,19 @@
-local n = require 'keymaps'.normal
-local ls = require 'luasnip'
+local status, ls = pcall(require, 'luasnip')
+if not status then return end
+
 local types = require 'luasnip.util.types'
 
 ls.config.set_config {
     -- can jump to last snippet
-    history = true,
+    history = false,
+
     -- This one is cool cause if you have dynamic snippets, it updates as you type!
     updateevents = "TextChanged,TextChangedI",
 
     ext_opts = {
         [types.choiceNode] = {
             active = {
-                virt_text = {{"<- choice!", "GruvboxYellowBold"}}
+                virt_text = {{"", "GruvboxYellowBold"}}
             }
         }
     }
@@ -26,6 +28,10 @@ for _, ft_path in ipairs(snippet_files) do
     ls.add_snippets(ft, loadfile(ft_path)())
 end
 
+local n = require 'keymaps'.normal
 n {
-    ['<leader><leader>s'] = '<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>'
+    ['<leader><leader>s'] = function()
+        ls.cleanup()
+        vim.cmd.source('~/.config/nvim/after/plugin/luasnip.lua')
+    end,
 }

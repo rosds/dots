@@ -1,0 +1,11 @@
+[shell]
+zsh_indicator = ""
+format = "[$indicator]($style)"
+disabled = false
+
+[container]
+symbol = "🐋"
+format = "[$symbol]($style)"
+
+[env_var.COLCON_PREFIX_PATH]
+format = "[ env dirty ](yellow bold)"

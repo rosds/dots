@@ -15,9 +15,9 @@
     file-style = bold yellow ul
     file-decoration-style = none
 [user]
-    email = alfonso.ros@esrlabs.com
+    email = alfonso.ros@apex.ai
     name = Alfonso Ros
-    signingkey = 3C710F002B15656DF9AD906FA1D5590D9F34A054
+	signingkey = 430FAA1722048BC39F31DA53A40D1F1CB58EFD19
 [mergetool "fugitive"]
     cmd = vi -f -c \"Gvdiffsplit!\" \"$MERGED\"
 [merge]
@@ -27,9 +27,11 @@
 [rerere]
     nabled = true
 [pull]
-    rebase = true
+	rebase = true
+[rebase]
+    autosquash = true
 [gpg]
-    program = gpg
+	program = gpg
 [commit]
     gpgsign = true
 [color]
@@ -38,3 +40,10 @@
     browser = open
 [diff]
     algorithm = patience
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[fetch]
+	prune = true
