@@ -8,4 +8,5 @@ symbol = "🐋"
 format = "[$symbol]($style)"
 
 [env_var.COLCON_PREFIX_PATH]
-format = "[ env dirty ](yellow bold)"
+format = "[ env! ](yellow bold)"
+# format = "[ colcon 💩 ](yellow bold)"

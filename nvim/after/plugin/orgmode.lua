@@ -17,7 +17,7 @@ require'nvim-treesitter.configs'.setup {
 orgmode.setup({
     mappings = {
         global = {
-            org_agenda = '<leader>wa',
+            org_agenda = '<leader>wo',
             org_capture = '<leader>wc',
         }
     },

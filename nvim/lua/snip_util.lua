@@ -1,6 +1,4 @@
-local M = {}
-
-M.node_msg = function(text)
+local node_msg = function(text)
     return {
         node_ext_opts = {
             active = {
@@ -12,4 +10,6 @@ M.node_msg = function(text)
     }
 end
 
-return M
+return {
+    node_msg = node_msg,
+}

@@ -11,7 +11,7 @@ local sn = ls.snippet_node
 local fmt = require("luasnip.extras.fmt").fmt
 local camel2snake = require("utils.string").camel2snake
 
-local utils = R 'snip_util'
+local utils = require('snip_util')
 local node_msg = utils.node_msg
 
 local function query_structs()

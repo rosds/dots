@@ -126,7 +126,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-[ -f "~/.ghcup/env" ] && source "~/.ghcup/env" # ghcup-env
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 
 # ccache
 # export CC=/usr/lib/ccache/gcc
@@ -146,7 +146,7 @@ export PATH="$PATH:$HOME/.deno/bin"
 # git hook
 export ENABLE_GIT_COMMIT_MSG_HOOK_INTERACTIVE=auto
 
-alias grbi="git rebase -i --autosquash"
+alias grbi="git rebase -i --autosquash --autostash"
 
 # ade
 alias sos="source /opt/ApexOS/setup.zsh"
@@ -160,3 +160,10 @@ function caps() {
 export LUA_PATH='/home/alfonso.ros/.luarocks/share/lua/5.3/?.lua;/home/alfonso.ros/.luarocks/share/lua/5.3/?/init.lua;/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;$HOME/.luarocks/share/lua/5.3/?.lua;$HOME/.luarocks/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;/usr/share/lua/5.3/?.lua;/usr/share/lua/5.3/?/init.lua;./?.lua;./?/init.lua'
 export LUA_CPATH='/home/alfonso.ros/.luarocks/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?.so;$HOME/.luarocks/lib/lua/5.3/?.so;/usr/lib/x86_64-linux-gnu/lua/5.3/?.so;/usr/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so'
 export PATH="$PATH:$HOME/.luarocks/bin"
+alias luamake=/home/alfonso.ros/gh/lua-language-server/3rd/luamake/luamake
+
+# apex repo
+alias repo.check='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.check --'
+alias repo.fix='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.fix --'
+alias repo.sca='bazel run --noshow_progress --ui_event_filters=-info //apex_internal/tools/sca_check --'
+alias identify_test_uid='bazel run --noshow_progress --ui_event_filters=-info  --run_under="cd $(pwd) &&"  //tools/identify_test_uid:main --'

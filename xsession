@@ -12,18 +12,20 @@ xautolock -time 3 -detectsleep -corners +00- -locker "i3lock-fancy --pixelate" -
 dunst &
 
 # background
-feh --image-bg black --bg-scale ~/Pictures/eldenring.png
+feh --image-bg black --bg-fill ~/Pictures/cthulhu.jpg
+# feh --image-bg black --bg-scale ~/Pictures/eldenring.png
 
 # screen annotations
-# gromit-mpx &
+gromit-mpx &
 
 # compositor
-compton -c &
+compton &
 
 # polybar
 polybar -r &
 
-# apps
+# chrome & google chat
 google-chrome --restore-last-session &
+google-chrome --app=http://chat.google.com &
 
 exec $HOME/.local/bin/xmonad

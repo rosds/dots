@@ -1,94 +1,88 @@
 -------------------------------------------------------------------------------
 -- Mappings
 -------------------------------------------------------------------------------
-local n = require 'keymaps'.normal
-local mode = require 'keymaps'.mode
-local t = require 'telescope.builtin'
+local n = require("keymaps").normal
+local mode = require("keymaps").mode
 
-local ag = require 'augroup'.augroup
-ag "LspAttach" {
+local ag = require("augroup").augroup
+ag("LspAttach")({
     {
         "LspAttach",
         desc = "LSP actions",
         callback = function()
-            n {
-                ['<leader>sd'] = vim.lsp.buf.definition,
-                ['<leader>sg'] = vim.lsp.buf.declaration,
-                ['<leader>si'] = vim.lsp.buf.implementation,
-                ['<leader>st'] = vim.lsp.buf.type_definition,
-                ['<c-w>]'] = function()
+            n({
+                ["<leader>sd"] = vim.lsp.buf.definition,
+                ["<leader>sg"] = vim.lsp.buf.declaration,
+                ["<leader>si"] = vim.lsp.buf.implementation,
+                ["<leader>st"] = vim.lsp.buf.type_definition,
+                ["<c-w>]"] = function()
                     vim.cmd.vsplit()
                     vim.lsp.buf.definition()
                 end,
-
                 -- Rename
-                ['<leader>sr'] = vim.lsp.buf.rename,
-
+                ["<leader>sr"] = vim.lsp.buf.rename,
                 -- Code action
-                ['<leader>sa'] = vim.lsp.buf.code_action,
-
+                ["<leader>sa"] = vim.lsp.buf.code_action,
                 -- References
-                ['<leader>sc'] = t.lsp_references,
-                ['<leader>ss'] = t.lsp_dynamic_workspace_symbols,
-
+                ["<leader>so"] = ":SymbolsOutline<cr>",
                 -- Doc
                 K = vim.lsp.buf.hover,
-
                 -- Diagnostics
-                ['<leader>se'] = vim.diagnostic.open_float,
-                [']e'] = vim.diagnostic.goto_next,
-                ['[e'] = vim.diagnostic.goto_prev,
-            }
+                ["<leader>se"] = vim.diagnostic.open_float,
+                ["]e"] = vim.diagnostic.goto_next,
+                ["[e"] = vim.diagnostic.goto_prev,
+            })
 
             -- Formatting
-            mode {'v', 'n'} {
-                ['<leader>sf'] = function() vim.lsp.buf.format({ async = false }) end,
-            }
-        end
-    }
-}
+            mode({ "v", "n" })({
+                ["<leader>sf"] = function()
+                    vim.lsp.buf.format({ async = false })
+                end,
+            })
+        end,
+    },
+})
 
 -------------------------------------------------------------------------------
 -- LSP Servers
 -------------------------------------------------------------------------------
 
-require('mason').setup({})
-require('mason-lspconfig').setup({})
-require('fidget').setup({})
+require("mason").setup({})
+require("mason-lspconfig").setup({})
+require("fidget").setup({})
 
-local lspconfig = require('lspconfig')
+local lspconfig = require("lspconfig")
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- capabilities.offsetEncoding = "utf-8"
 
 -- haskell
-lspconfig.hls.setup { capabilities = capabilities }
+lspconfig.hls.setup({ capabilities = capabilities })
 
 -- zig
-lspconfig.zls.setup { capabilities = capabilities }
+lspconfig.zls.setup({ capabilities = capabilities })
 
 -- python
-lspconfig.pyright.setup { capabilities = capabilities }
+lspconfig.pyright.setup({ capabilities = capabilities })
 
 -- cpp
-lspconfig.clangd.setup {
+lspconfig.clangd.setup({
     cmd = { "clangd", "--background-index", "--clang-tidy" },
     capabilities = vim.tbl_extend("force", capabilities, { offsetEncoding = "utf-8" }),
-}
+})
 
 -- lua
-require('neodev').setup({})
-lspconfig.sumneko_lua.setup {
-    capabilities = capabilities,
+require("neodev").setup({})
+require("lspconfig").lua_ls.setup({
     settings = {
         Lua = {
             runtime = {
                 -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
+                version = "LuaJIT",
             },
             diagnostics = {
                 -- Get the language server to recognize the `vim` global
-                globals = { 'vim' },
+                globals = { "vim" },
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files
@@ -99,33 +93,29 @@ lspconfig.sumneko_lua.setup {
             telemetry = {
                 enable = false,
             },
+            -- neodev
+            completion = {
+                callSnippet = "Replace",
+            },
         },
     },
-}
+})
 
--- cmake
-if vim.fn.executable('cmake-language-server') then
-    lspconfig.cmake.setup {
-        cmd = { 'cmake-language-server' },
-        capabilities = capabilities,
-        buildDirectory = "build",
-    }
-end
+-- -- cmake
+-- if vim.fn.executable("cmake-language-server") then
+--     lspconfig.cmake.setup({
+--         cmd = { "cmake-language-server" },
+--         capabilities = capabilities,
+--         buildDirectory = "build",
+--     })
+-- end
 
 -- go
-if vim.fn.executable('gopls') then
-    lspconfig.gopls.setup {
+if vim.fn.executable("gopls") then
+    lspconfig.gopls.setup({
         capabilities = capabilities,
-    }
+    })
 end
-
--- bazel
-if vim.fn.executable('starlark') then
-    lspconfig['starlark-rust'].setup {
-        capabilities = capabilities,
-    }
-end
-
 
 -- rust
 -- vscode lldb extension
@@ -133,33 +123,57 @@ end
 -- local codelldb_path = extension_path .. 'adapter/codelldb'
 -- local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 --
-require('rust-tools').setup({
-    server = {
-        settings = {
-            ["rust-analyzer"] = {
-                checkOnSave = {
-                    allTargets = true,
-                    command = "clippy",
-                },
-                cargo = {
-                    allFeatures = true,
-                },
-                diagnostics = {
-                    -- this is pretty annoying with log macros, don't know why
-                    disabled = { "missing-unsafe" },
-                },
-                updates = {
-                    channel = "nightly",
-                },
-                procMacro = {
-                    enable = true,
-                },
-            },
-        },
+
+if vim.fn.executable("rust-analyzer") then
+    lspconfig.rust_analyzer.setup({
         capabilities = capabilities,
+    })
+end
+
+-- grammarly
+require("lspconfig").grammarly.setup({
+    init_options = {
+        clientId = "client_REwND5XbXKmu1qCq6fsGms",
     },
-    -- dap = {
-    --     adapter = require('rust-tools.dap')
-    --     .get_codelldb_adapter(codelldb_path, liblldb_path)
-    -- }
+    filetypes = { "markdown", "text" },
+    handlers = {
+        ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+            virtual_text = true,
+            signs = true,
+            underline = true,
+            update_in_insert = false,
+        }),
+    },
+    capabilities = capabilities,
 })
+
+-- require('rust-tools').setup({
+--     server = {
+--         settings = {
+--             ["rust-analyzer"] = {
+--                 checkOnSave = {
+--                     allTargets = true,
+--                     command = "clippy",
+--                 },
+--                 cargo = {
+--                     allFeatures = true,
+--                 },
+--                 diagnostics = {
+--                     -- this is pretty annoying with log macros, don't know why
+--                     disabled = { "missing-unsafe" },
+--                 },
+--                 updates = {
+--                     channel = "nightly",
+--                 },
+--                 procMacro = {
+--                     enable = true,
+--                 },
+--             },
+--         },
+--         capabilities = capabilities,
+--     },
+--     -- dap = {
+--     --     adapter = require('rust-tools.dap')
+--     --     .get_codelldb_adapter(codelldb_path, liblldb_path)
+--     -- }
+-- })

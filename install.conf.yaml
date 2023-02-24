@@ -8,6 +8,7 @@
     ~/.config/polybar: polybar
     ~/.config/rofi: rofi
     ~/.config/starship.toml: starship.toml
+    ~/.config/stylua/stylua.toml: stylua.toml
     ~/.config/xmonad: xmonad
     ~/.tmux.conf: tmux/tmux.conf
     ~/.gitconfig: gitconfig

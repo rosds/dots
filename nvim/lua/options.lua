@@ -49,6 +49,7 @@ vim.opt.list = true
 vim.opt.listchars = "eol:¬,tab:>-" -- ,tab:»·,trail:·,nbsp:·,extends:>,precedes:<"
 
 -- use system clipboard
+-- vim.opt.clipboard = "unnamed"
 vim.opt.clipboard = "unnamedplus"
 
 -- show the sign in the number column if it is not present
@@ -63,3 +64,14 @@ vim.opt.laststatus = 2
 
 -- hide the command line
 vim.opt.cmdheight = 1
+
+vim.diagnostic.config({
+    float = {
+        source = "if_many",
+    },
+})
+
+-- folding
+vim.opt.foldlevel = 4
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"

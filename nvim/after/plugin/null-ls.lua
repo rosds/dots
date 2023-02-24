@@ -1,141 +1,82 @@
 local status, null_ls = pcall(require, "null-ls")
-if not status then return end
-
---------------------------------------------------------------------------------
--- Text linters
---------------------------------------------------------------------------------
-
-local offset_to_row_col = function(offset)
-    local row = vim.fn.byte2line(offset)
-    local row_offset = vim.fn.line2byte(row)
-    return row, offset - row_offset + 2 -- 1-indexed
+if not status then
+    return
 end
 
-local helpers = require("null-ls.helpers")
-local languagetool = {
-    name = "languagetool",
-    method = null_ls.methods.DIAGNOSTICS,
-    filetypes = { "markdown", "text" },
-    generator = null_ls.generator({
-        command = "languagetool",
-        args = { "$FILENAME" },
-        to_stdin = false,
-        from_stderr = false,
-        format = "json",
-        check_exit_code = function(code)
-            return code <= 1
-        end,
-        condition = function()
-            return vim.fn.executable("languagetool") == 1
-        end,
-        on_output = helpers.diagnostics.from_json({
-            attributes = {
-                offset = "offset",
-                length = "length",
-                rule = "rule",
-            },
-            adapters = {
-                {
-                    row = function(entries)
-                        local row, _ = offset_to_row_col(entries["offset"])
-                        return row
-                    end,
-                    col = function(entries)
-                        local _, col = offset_to_row_col(entries["offset"])
-                        return col
-                    end,
-                    end_row = function(entries)
-                        local row, _ = offset_to_row_col(entries["offset"] + entries["length"])
-                        return row
-                    end,
-                    end_col = function(entries)
-                        local _, col = offset_to_row_col(entries["offset"] + entries["length"])
-                        return col
-                    end,
-                    code = function(entries)
-                        return entries["rule"]["id"]
-                    end,
-                },
-            },
-        }),
-    }),
-}
+local function is_executable_available(exec)
+    return function()
+        return vim.fn.executable(exec) == 1
+    end
+end
+
+--- Selects the first existing configuration from the input table
+--- the first existing file path is returned
+local function select_configuration(configurations)
+    -- for every string type, check if it is a valid path to an existing file
+    for _, path in ipairs(configurations) do
+        if vim.fn.exists(path) then
+            return path
+        end
+    end
+    error("failed to select configuration")
+end
 
 --------------------------------------------------------------------------------
 -- Python linters
 --------------------------------------------------------------------------------
 
--- ament_flake8
-local ament_flake8_path = "/opt/ApexTools/bin/ament_flake8"
-local ament_pep257_path = "/opt/ApexTools/bin/ament_pep257"
-
-local ament_flake8 = null_ls.builtins.diagnostics.flake8.with({
-    command = ament_flake8_path,
-    args = { "$FILENAME" },
-    condition = function()
-        return vim.fn.executable(ament_flake8_path) == 1
-    end,
-    env = {
-        PYTHONPATH = "/opt/ApexTools/lib/python3.8/site-packages",
-    },
-})
-
-local ament_pep257 = {
-    name = "ament_pep257",
+local pep257 = {
+    name = "pep257",
     method = null_ls.methods.DIAGNOSTICS,
     filetypes = { "python" },
     generator = null_ls.generator({
-        command = ament_pep257_path,
-        env = {
-            PYTHONPATH = "/opt/ApexTools/lib/python3.8/site-packages",
-        },
+        command = "pep257",
         args = { "$FILENAME" },
         to_stdin = false,
-        from_stderr = false,
-        format = "line",
-        check_exit_code = function(code)
-            return code <= 1
+        from_stderr = true,
+        to_temp_file = true,
+        format = "raw",
+        on_output = function(params, done)
+            local output = params.output
+            if not output then
+                return done()
+            end
+            local diagnostics = {}
+            for row, code, message in output:gmatch("[^:]+:(%d+)[^D]+(D%d+): ([^\n]+)") do
+                table.insert(diagnostics, {
+                    row = row,
+                    code = code,
+                    message = message,
+                })
+            end
+            return done(diagnostics)
         end,
-        condition = function()
-            return vim.fn.executable(ament_pep257_path) == 1
-        end,
-        on_output = helpers.diagnostics.from_pattern(
-            [[:(%d+)[^:]+: (%w+): (.+)]],
-            { 'row', 'code', 'message' }
-        ),
     }),
 }
 
+local flake8 = null_ls.builtins.diagnostics.flake8.with({
+    extra_args = {
+        "--config",
+        select_configuration({
+            "/home/alfonso.ros/ade-home/gc/master/apex_ws/src/apex_tools/ament/ament_lint/ament_flake8/ament_flake8/configuration/ament_flake8.ini",
+        }),
+    },
+})
+
+local black = null_ls.builtins.formatting.black.with({
+    extra_args = {
+        "--config",
+        select_configuration({
+            "/home/alfonso.ros/ade-home/gc/17495-add-vsomip-bazel-repository/apex_ws/src/apex_tools/repo/file-format/black-config.toml",
+        }),
+    },
+})
 
 --------------------------------------------------------------------------------
 -- C++ linters
 --------------------------------------------------------------------------------
 
--- ament_cpplint
-local ament_cpplint_path = "/opt/ApexTools/bin/ament_cpplint"
-local ament_clang_format_path = "/opt/ApexTools/bin/ament_clang_format"
-
-local ament_clang_format = null_ls.builtins.formatting.clang_format.with({
-    name = "ament_clang_format",
-    command = ament_clang_format_path,
-    condition = function()
-        return vim.fn.executable(ament_clang_format_path) == 1
-    end,
-    env = {
-        PYTHONPATH = "/opt/ApexTools/lib/python3.8/site-packages",
-    },
-})
-
-local ament_cpplint = null_ls.builtins.diagnostics.cpplint.with({
-    name = "ament_cpplint",
-    command = ament_cpplint_path,
-    condition = function()
-        return vim.fn.executable(ament_cpplint_path) == 1
-    end,
-    env = {
-        PYTHONPATH = "/opt/ApexTools/lib/python3.8/site-packages",
-    },
-})
+local helpers = require("null-ls.helpers")
 
 local uncrustify = {
     name = "uncrustify",
@@ -156,40 +97,46 @@ local uncrustify = {
     }),
 }
 
-local clang_format = null_ls.builtins.formatting.clang_format.with({
-    extra_args = { '-style=file' },
-})
-
 --------------------------------------------------------------------------------
 -- Null-ls setup
 --------------------------------------------------------------------------------
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-null_ls.setup {
-    debug = true,
+null_ls.setup({
+    debug = false,
     sources = {
         -- c++
-        ament_cpplint,
-        ament_clang_format,
+        null_ls.builtins.formatting.clang_format.with({
+            extra_args = { "--style", "file" },
+        }),
         uncrustify,
 
         -- python
-        ament_flake8,
-        ament_pep257,
-        null_ls.builtins.formatting.autopep8,
+        -- flake8,
+        -- pep257,
+        -- null_ls.builtins.formatting.autopep8,
         -- null_ls.builtins.formatting.isort,
-        -- null_ls.builtins.formatting.black,
-
-        -- markdown, text
-        languagetool,
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.diagnostics.ruff,
 
         -- fennel
         null_ls.builtins.formatting.fnlfmt,
 
         -- bazel
         null_ls.builtins.formatting.buildifier,
-    },
 
+        -- rust
+        null_ls.builtins.formatting.rustfmt,
+
+        -- haskell
+        null_ls.builtins.formatting.stylish_haskell,
+
+        --json
+        null_ls.builtins.formatting.jq,
+
+        --lua
+        null_ls.builtins.formatting.stylua,
+    },
     -- formatting on save
     on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
@@ -209,46 +156,56 @@ null_ls.setup {
             })
         end
     end,
-}
+})
 
 --------------------------------------------------------------------------------
 -- Null-ls commands
 --------------------------------------------------------------------------------
 
-local function sources_prompt()
-    -- writes the list of sources to the buffer
-    local function load_sources(bufnr)
-        local sources = null_ls.get_sources()
-        local source_names = {}
-        for _, source in ipairs(sources) do
-            if source.filetypes[vim.bo.filetype] then
-                if source["_disabled"] then
-                    table.insert(source_names, "🔴 " .. source.name)
-                else
-                    table.insert(source_names, "🟢 " .. source.name)
-                end
+--- List sources in the target buffer
+-- @param bufnr number: the target buffer where to list the sources
+-- @param filter_ft string: the filetype to filter the sources
+local function load_sources(bufnr, filter_ft)
+    local sources = null_ls.get_sources()
+    local source_names = {}
+    for _, source in ipairs(sources) do
+        if source.filetypes[filter_ft] then
+            if source["_disabled"] then
+                table.insert(source_names, "🔴 " .. source.name)
+            else
+                table.insert(source_names, "🟢 " .. source.name)
             end
-
         end
-        vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, source_names)
-        return #source_names
     end
+    vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, source_names)
+    vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+    return #source_names
+end
+
+local function sources_prompt()
+    -- get current buffer filetype
+    local buf_ft = vim.bo.filetype
 
     -- take the name of the source in the current line and call toggle_source
     local toogle_selection = function()
-        local line = vim.fn.line('.')
+        local line = vim.fn.line(".")
         local name = vim.fn.getline(line):match("%w+$")
-        print(name)
         local query = { name = name }
         null_ls.toggle(query)
-        load_sources(0)
+
+        -- 0 works here because this function is exec inside the widget
+        load_sources(0, buf_ft)
     end
 
     local buf = vim.api.nvim_create_buf(false, true)
-    local sources_count = load_sources(buf)
 
-    vim.keymap.set('n', '<CR>', toogle_selection, { buffer = buf })
-    vim.keymap.set('n', 'q', function() vim.api.nvim_win_close(0, false) end, { buffer = buf })
+    local sources_count = load_sources(buf, buf_ft)
+
+    vim.keymap.set("n", "<CR>", toogle_selection, { buffer = buf })
+    vim.keymap.set("n", "q", function()
+        vim.api.nvim_win_close(0, false)
+    end, { buffer = buf })
 
     local gwidth = vim.api.nvim_list_uis()[1].width
     local gheight = vim.api.nvim_list_uis()[1].height
@@ -257,21 +214,22 @@ local function sources_prompt()
     local height = sources_count
 
     local opts = {
-        relative = 'editor',
-        anchor = 'NW',
-        style = 'minimal',
+        relative = "editor",
+        anchor = "NW",
+        style = "minimal",
         width = width,
         height = height,
         row = (gheight - height) * 0.4,
         col = (gwidth - width) * 0.5,
-        border = 'single',
+        border = "single",
     }
     local win = vim.api.nvim_open_win(buf, true, opts)
-    vim.api.nvim_win_set_option(win, 'winhl', 'FloatBorder:Pmenu')
+    vim.api.nvim_win_set_option(win, "winhl", "FloatBorder:Pmenu")
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
 
 vim.api.nvim_create_user_command("NullLsSources", sources_prompt, {})
-local n = require 'keymaps'.normal
-n {
+local n = require("keymaps").normal
+n({
     ["<leader>ns"] = ":NullLsSources<CR>",
-}
+})
