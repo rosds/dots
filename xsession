@@ -12,8 +12,7 @@ xautolock -time 3 -detectsleep -corners +00- -locker "i3lock-fancy --pixelate" -
 dunst &
 
 # background
-feh --image-bg black --bg-fill ~/Pictures/cthulhu.jpg
-# feh --image-bg black --bg-scale ~/Pictures/eldenring.png
+feh --image-bg black --bg-fill ~/Pictures/bg
 
 # screen annotations
 gromit-mpx &

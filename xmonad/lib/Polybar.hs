@@ -21,15 +21,15 @@ data Gruvbox = Gruvbox
 data EverForest = EverForest
 
 instance ColorScheme Gruvbox where
-  code _ Aqua       = "#8ec07c"
+  code _ Aqua       = "#689d6a"
   code _ Black      = "#282828"
-  code _ Blue       = "#83a598"
+  code _ Blue       = "#458588"
   code _ Gray       = "#3c3836"
-  code _ Green      = "#b8bb26"
-  code _ LightGray  = "#928374"
+  code _ Green      = "#98971a"
+  code _ LightGray  = "#a89984"
   code _ Orange     = "#fe8019"
   code _ Purple     = "#d3869b"
-  code _ Yellow     = "#fabd2f"
+  code _ Yellow     = "#d79921"
   code _ (Custom s) = s
 
 instance ColorScheme EverForest where

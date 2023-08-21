@@ -12,7 +12,7 @@ ag("LspAttach")({
         callback = function()
             n({
                 ["<leader>sd"] = vim.lsp.buf.definition,
-                ["<leader>sg"] = vim.lsp.buf.declaration,
+                ["<leader>sD"] = vim.lsp.buf.declaration,
                 ["<leader>si"] = vim.lsp.buf.implementation,
                 ["<leader>st"] = vim.lsp.buf.type_definition,
                 ["<c-w>]"] = function()
@@ -23,8 +23,6 @@ ag("LspAttach")({
                 ["<leader>sr"] = vim.lsp.buf.rename,
                 -- Code action
                 ["<leader>sa"] = vim.lsp.buf.code_action,
-                -- References
-                ["<leader>so"] = ":SymbolsOutline<cr>",
                 -- Doc
                 K = vim.lsp.buf.hover,
                 -- Diagnostics
@@ -63,7 +61,14 @@ lspconfig.hls.setup({ capabilities = capabilities })
 lspconfig.zls.setup({ capabilities = capabilities })
 
 -- python
-lspconfig.pyright.setup({ capabilities = capabilities })
+lspconfig.pyright.setup({
+    capabilities = capabilities,
+    root_dir = function(...)
+        local fallback = require("lspconfig.server_configurations.pyright").default_config.root_dir
+        local bazel_root_dir = require("lspconfig").util.root_pattern("WORKSPACE")
+        return bazel_root_dir(...) or fallback(...)
+    end,
+})
 
 -- cpp
 lspconfig.clangd.setup({

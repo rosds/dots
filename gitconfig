@@ -13,13 +13,20 @@
     line-numbers = true
     file-decoration-style = none
     syntax-theme = "gruvbox-dark"
-    minus-style = red "#59464c"
-    plus-style = green "#48584e"
+    ; minus-style = red "#59464c"
+    ; plus-style = green "#48584e"
 
 [user]
     email = alfonso.ros@apex.ai
     name = Alfonso Ros
     signingkey = 430FAA1722048BC39F31DA53A40D1F1CB58EFD19
+
+[mergetool]
+    keepBackup = false
+    prompt = false
+
+[mergetool "merge3"]
+    cmd = nvim -d -c \"wincmd l\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\"
 
 [mergetool "fugitive"]
     cmd = vi -f -c \"Gvdiffsplit!\" \"$MERGED\"

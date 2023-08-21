@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 
 require("options")
 require("globals")
+require("terminal")
 
 -- lazy bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -22,13 +23,9 @@ require("lazy").setup("plugins")
 local v = require("keymaps").visual
 local n = require("keymaps").normal
 
-local function edit_symlink_origin()
-    local symlink = vim.fn.fnamemodify(vim.fn.expand("%"), ":p")
-    local origin = vim.fn.resolve(vim.fn.fnamemodify(symlink, ":h"))
-    vim.cmd("edit " .. origin)
-end
+local follow_symlink = require("utils.fs").follow_symlink
 
-vim.api.nvim_create_user_command("EditSymlinkOrigin", edit_symlink_origin, { nargs = 0 })
+vim.api.nvim_create_user_command("FollowSymlink", follow_symlink, { nargs = 0 })
 
 n({
     -- find and replace
@@ -46,10 +43,14 @@ n({
     ["[q"] = ":cprev<cr>",
     ["]Q"] = ":cfirst<cr>",
     ["[Q"] = ":clast<cr>",
+    -- follow symlink
+    ["<leader>ff"] = follow_symlink,
     -- open file with the system's default
     ["<leader>go"] = ':silent execute "!xdg-open " . shellescape("<cWORD>")<cr>',
     -- set current buffer file directory as local working directory
     ["<leader>lcd"] = ":lcd %:p:h<cr>",
+    -- yank path w/o line number
+    ["<leader>yf"] = ":let @+ = expand('%:p')<cr>",
     -- yank path with line number
     ["<leader>yF"] = ":let @+ = join([expand('%:p'), line('.')],':')<cr>",
     -- disable ighlight
@@ -58,11 +59,10 @@ n({
     ["<leader>td"] = function()
         if not vim.b.diagnostic_disabled then
             vim.diagnostic.disable()
-            vim.b.diagnostic_disabled = true
         else
             vim.diagnostic.enable()
-            vim.b.diagnostic_disabled = false
         end
+        vim.b.diagnostic_disabled = not vim.b.diagnostic_disabled
     end,
     -- zoom in/out
     Zi = "<c-w>_|<c-w>|",
@@ -75,11 +75,11 @@ v({
 })
 
 local ag = require("augroup").augroup
-ag("AllFile")({
+ag("AllFiles")({
     {
         "BufWritePre",
         command = "silent! %s/\\s\\+$//e",
     },
 })
 
-vim.cmd([[colorscheme everforest]])
+vim.cmd([[colorscheme gruvbox]])

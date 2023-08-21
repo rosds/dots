@@ -1,10 +1,8 @@
-local M = {}
-
 -- Return the mapping options table
 -- By default `noremap` and `silent `are set to true
 local function getopts(o)
-    local options = {noremap = true, silent = true}
-    return vim.tbl_extend('force', options, o or {})
+    local options = { noremap = true, silent = true }
+    return vim.tbl_extend("force", options, o or {})
 end
 
 -- Returns the rhs and opts out of the map value
@@ -19,7 +17,7 @@ end
 --  string or a function. The rest of the entries are taken as options.
 --
 local function mapspec(t)
-    if type(t) == 'string' or type(t) == 'function' then
+    if type(t) == "string" or type(t) == "function" then
         return t, getopts({})
     end
 
@@ -31,21 +29,21 @@ end
 
 local function make_mode_mapper(mode)
     return function(ls)
-        assert(type(ls) == 'table', 'Expects a mappings pairs')
+        assert(type(ls) == "table", "Expects a mappings pairs")
         for lhs, value in pairs(ls) do
-            assert(type(lhs) == 'string', "Error on mapping without key")
+            assert(type(lhs) == "string", "Error on mapping without key")
             local rhs, opts = mapspec(value)
             vim.keymap.set(mode, lhs, rhs, opts)
         end
     end
 end
 
-M.map = make_mode_mapper('')
-M.insert = make_mode_mapper('i')
-M.normal = make_mode_mapper('n')
-M.visual = make_mode_mapper('v')
-M.operator = make_mode_mapper('o')
-M.terminal = make_mode_mapper('t')
-M.mode = make_mode_mapper
-
-return M
+return {
+    map = make_mode_mapper(""),
+    insert = make_mode_mapper("i"),
+    normal = make_mode_mapper("n"),
+    visual = make_mode_mapper("v"),
+    operator = make_mode_mapper("o"),
+    terminal = make_mode_mapper("t"),
+    mode = make_mode_mapper,
+}

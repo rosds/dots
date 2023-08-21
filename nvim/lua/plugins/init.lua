@@ -1,30 +1,11 @@
-vim.g.firenvim_config = {
-    globalSettings = {
-        cmdlineTimeout = 3000,
-    },
-    localSettings = {
-        ["https?://gitlab\\.apex\\.ai/"] = {
-            takeover = "nonempty",
-            priority = 1,
-            content = "text",
-            renderer = "html",
-            selector = "textarea[id=issue-description]",
-        },
-        [".*"] = {
-            takeover = "never",
-            priority = 0,
-        },
-    },
-}
-
 return {
     -- telescope
-    { "nvim-telescope/telescope.nvim",            dependencies = "nvim-lua/plenary.nvim" },
+    { "nvim-telescope/telescope.nvim", dependencies = "nvim-lua/plenary.nvim" },
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 
     -- LSP
-    { "williamboman/mason.nvim",                  lazy = true },
-    { "williamboman/mason-lspconfig.nvim",        lazy = true },
+    { "williamboman/mason.nvim", lazy = true },
+    { "williamboman/mason-lspconfig.nvim", lazy = true },
     "neovim/nvim-lspconfig",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-emoji",
@@ -32,16 +13,21 @@ return {
     "hrsh7th/cmp-nvim-lua",
     "hrsh7th/cmp-path",
     "hrsh7th/nvim-cmp",
-    { "j-hui/fidget.nvim",        tag = "legacy" },
-    {
-        "simrat39/symbols-outline.nvim",
-        config = function()
-            require("symbols-outline").setup()
-        end,
-    },
 
     -- linting & formatting
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
+
+    -- better ui
+    {
+        "stevearc/dressing.nvim",
+        opts = {},
+    },
+    {
+        "rcarriga/nvim-notify",
+        config = function()
+            vim.notify = require("notify")
+        end,
+    },
 
     -- snippets
     "L3MON4D3/LuaSnip",
@@ -57,9 +43,8 @@ return {
     },
     {
         "windwp/nvim-autopairs",
-        config = function()
-            require("nvim-autopairs").setup({})
-        end,
+        event = "InsertEnter",
+        opts = {},
     },
     {
         "machakann/vim-sandwich",
@@ -70,13 +55,12 @@ return {
     },
 
     -- git
-    "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
     "tpope/vim-unimpaired",
 
     -- lua
-    { "rafcamlet/nvim-luapad", lazy = true },
-    "folke/neodev.nvim",
+    { "rafcamlet/nvim-luapad", cmd = "Luapad" },
+    { "folke/neodev.nvim", opts = {} },
 
     -- tmux
     {
@@ -90,7 +74,6 @@ return {
     -- copilot
     {
         "github/copilot.vim",
-        enabed = true,
         init = function()
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_assume_mapped = true
@@ -111,15 +94,21 @@ return {
             vim.g.mkdp_filetypes = { "markdown" }
         end,
     },
-
-    -- Org Mode
-    { "nvim-orgmode/orgmode",  ft = "org" },
+    {
+        "dhruvasagar/vim-table-mode",
+        init = function()
+            vim.g.table_mode_default_mappings = 1
+        end,
+        cmd = {
+            "TableModeEnable",
+        },
+    },
 
     -- dap
     { "mfussenegger/nvim-dap", lazy = true },
 
     -- fennel
-    { "rktjmp/hotpot.nvim",    lazy = true },
+    { "rktjmp/hotpot.nvim", lazy = true },
 
     -- rust
     {
@@ -131,25 +120,31 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",             ft = "zig" },
-
-    -- bazel
-    {
-        "bazelbuild/vim-bazel",
-        dependencies = "google/vim-maktaba",
-    },
+    { "ziglang/zig.vim", ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim",    config = true },
+    { dir = "~/apex/gitlab.nvim", config = true },
     {
         dir = "~/apex/bazel.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "stevearc/overseer.nvim",
+            "nvim-telescope/telescope.nvim",
+        },
         config = function()
-            require("bazel").setup()
+            local bazel = require("bazel")
+            bazel.setup()
             local n = require("keymaps").normal
             n({
-                ["<leader>bb"] = { "<cmd>BazelBuild<cr>", desc = "BazelBuild" },
+                ["<leader>bb"] = {
+                    function()
+                        bazel.bazel_build()
+                    end,
+                    desc = "BazelBuild",
+                },
+                -- ["<leader>bb"] = { "<cmd>BazelBuild<cr>", desc = "BazelBuild" },
                 ["<leader>bt"] = { "<cmd>BazelTest<cr>", desc = "BazelTest" },
                 ["<leader>br"] = { "<cmd>BazelRun<cr>", desc = "BazelRun" },
             })
@@ -157,20 +152,6 @@ return {
     },
 
     -- misc
-    {
-        "tpope/vim-dispatch",
-        init = function()
-            vim.g.dispatch_no_maps = 1
-        end,
-    },
     "jbyuki/venn.nvim",
-    "dhruvasagar/vim-table-mode",
-    {
-        "glacambre/firenvim",
-        cond = not not vim.g.started_by_firenvim,
-        build = function()
-            vim.fn["firenvim#install"](0)
-        end,
-    },
-    { "norcalli/nvim-colorizer.lua" },
+    { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
 }

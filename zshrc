@@ -103,16 +103,21 @@ source $ZSH/oh-my-zsh.sh
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-alias ls=exa
+alias ls=eza
 alias ps=procs
 
 # cat & man
 alias cat=bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-
+# rust
 source $HOME/.cargo/env
 eval "$(zoxide init --cmd j zsh)"
+
+# jj
+autoload -U compinit
+compinit
+source <(jj util completion --zsh)
 
 # fasd
 eval "$(fasd --init auto)"
@@ -125,7 +130,6 @@ eval "$(starship init zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 
 # ccache
@@ -146,15 +150,11 @@ export PATH="$PATH:$HOME/.deno/bin"
 # git hook
 export ENABLE_GIT_COMMIT_MSG_HOOK_INTERACTIVE=auto
 
-alias grbi="git rebase -i --autosquash --autostash"
+alias grbi="git rebase -i --autosquash --update-refs"
+alias gwl="git worktree list"
+alias gwrm="git worktree remove "
 
-# ade
-alias sos="source /opt/ApexOS/setup.zsh"
-
-function caps() {
-    setxkbmap -option ctrl:nocaps
-    xcape -e 'Caps_Lock=Escape'
-}
+alias caps="setxkbmap -option ctrl:nocaps && xcape -e 'Control_L=Escape'"
 
 # lua
 export LUA_PATH='/home/alfonso.ros/.luarocks/share/lua/5.3/?.lua;/home/alfonso.ros/.luarocks/share/lua/5.3/?/init.lua;/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;$HOME/.luarocks/share/lua/5.3/?.lua;$HOME/.luarocks/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;/usr/share/lua/5.3/?.lua;/usr/share/lua/5.3/?/init.lua;./?.lua;./?/init.lua'
@@ -167,3 +167,6 @@ alias repo.check='bazel run --noshow_progress --ui_event_filters=-info --run_und
 alias repo.fix='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.fix --'
 alias repo.sca='bazel run --noshow_progress --ui_event_filters=-info //apex_internal/tools/sca_check --'
 alias identify_test_uid='bazel run --noshow_progress --ui_event_filters=-info  --run_under="cd $(pwd) &&"  //tools/identify_test_uid:main --'
+alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //apex_internal/tools/apex_doc_tools:apex_doc --'
+
+alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'

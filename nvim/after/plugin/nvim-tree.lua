@@ -14,7 +14,8 @@ local function to_dir(path)
 end
 
 --- A noop function in case plugins are not available
-local function noop(...) end
+local function noop(...)
+end
 
 local custom_actions = {}
 setmetatable(custom_actions, {
@@ -32,6 +33,14 @@ local function open_tree_node()
         api.node.open.replace_tree_buffer()
     else
         api.node.open.edit()
+    end
+end
+
+local function close_tree()
+    if not not vim.w.open_replacing_current_buffer then
+        vim.cmd.edit("#")
+    else
+        api.tree.close()
     end
 end
 
@@ -90,6 +99,9 @@ local n = require("keymaps").normal
 tree.setup({
     renderer = {
         highlight_opened_files = "name",
+        indent_markers = {
+            enable = true,
+        },
     },
     prefer_startup_root = true,
     update_focused_file = {
@@ -107,7 +119,7 @@ tree.setup({
         end
 
         n({
-            q = with_help(api.tree.close, "Close"),
+            q = with_help(close_tree, "Close"),
             a = with_help(api.fs.create, "Create"),
             r = with_help(api.fs.rename, "Rename"),
             x = with_help(api.fs.cut, "Cut"),
@@ -135,7 +147,7 @@ tree.setup({
     },
 })
 
-local vinager = function()
+local vinegar = function()
     if api.tree.is_visible() then
         api.tree.close()
     end
@@ -149,15 +161,15 @@ end
 n({
     ["<leader>nf"] = ":NvimTreeFindFile<cr>",
     ["<leader>nq"] = ":NvimTreeClose<cr>",
-    ["<leader>nn"] = vinager,
-    ["<leader>."] = vinager,
+    ["<leader>nn"] = vinegar,
+    ["<leader>."] = vinegar,
     ["<leader><c-v>"] = function()
         vim.cmd.vsplit()
-        vinager()
+        vinegar()
     end,
     ["<leader><c-s>"] = function()
         vim.cmd.split()
-        vinager()
+        vinegar()
     end,
 })
 

@@ -27,6 +27,8 @@ vim.opt.formatoptions:remove("t")
 vim.opt.formatoptions:append("t")
 vim.opt.formatoptions:remove("o") -- no wrap comments on 'o' or 'O'
 
+vim.opt.autochdir = false
+
 vim.opt.smartcase = true
 vim.opt.ignorecase = true
 
@@ -72,6 +74,9 @@ vim.diagnostic.config({
 })
 
 -- folding
-vim.opt.foldlevel = 4
+vim.opt.foldlevel = 8
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+-- Re-enable for debugging
+-- vim.lsp.set_log_level("off")

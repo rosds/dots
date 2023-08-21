@@ -1,4 +1,5 @@
 local ls = require("luasnip")
+local fs = require("utils.fs")
 
 local s = ls.snippet
 local i = ls.insert_node
@@ -12,18 +13,29 @@ local fmt = require("luasnip.extras.fmt").fmt
 local extras = require("luasnip.extras")
 
 local function inc_guard_name()
-    local fname = vim.fn.expand("%:t")
-    return fname:gsub("%.", "_"):upper()
+    local path = fs.buffer_path()
+    local maybe_workspace = path:find_upwards("WORKSPACE")
+
+    local fname = ""
+    if maybe_workspace == "" then
+        fname = path.filename
+    else
+        fname = path:make_relative(maybe_workspace:parent().filename)
+    end
+
+    return fname:gsub("%/", "_"):gsub("%.", "_"):upper()
 end
 
 local function copy_right()
     return t({
         "/// \\copyright Copyright 2023 Apex.AI, Inc.",
         "/// All rights reserved.",
-        "/// \\file",
-        "/// \\brief ",
         "",
     })
+end
+
+local function uuidgen()
+    return vim.fn.trim(vim.fn.system("uuidgen"))
 end
 
 local function include_guard()
@@ -134,7 +146,7 @@ return {
             }
         )
     ),
-    s("ifndef", include_guard()),
+    s("once", include_guard()),
 
     -- apex snippets
     s("cr", copy_right()),
@@ -224,5 +236,50 @@ return {
                 extras.rep(1),
             }
         )
+    ),
+    s(
+        "test",
+        fmt(
+            [[
+            TEST({}, {})
+            {{
+              ::testing::Test::RecordProperty("TEST_ID", "{}");
+              {}
+            }}
+        ]],
+            {
+                i(1, "Foo"),
+                i(2, "Bar"),
+                f(uuidgen, {}),
+                i(3, "// TODO: implement test"),
+            }
+        )
+    ),
+    s(
+        "uuid",
+        fmt('::testing::Test::RecordProperty("TEST_ID", "{}");', {
+            f(uuidgen, {}),
+        })
+    ),
+    s(
+        "result",
+        fmt(
+            [[
+        if (auto result = {expr}; result.has_error()) {{
+            return art::err(art::move(result.error()));
+        }}
+        ]],
+            {
+                expr = i(1, "expr()"),
+            }
+        )
+    ),
+    s("unimpl", t('return art::err(art::error("unimplemented"));')),
+    s(
+        "axivion",
+        fmt("// AXIVION Next Construct {}: {}", {
+            i(1, "AutosarC++19_03-M5.0.2"),
+            i(2, "TODO reason"),
+        })
     ),
 }

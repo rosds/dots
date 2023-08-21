@@ -17,3 +17,7 @@ end
 define hook-thread
   dashboard
 end
+
+dashboard -layout source stack variables
+dashboard source -style height 30
+dashboard -style syntax_highlighting 'gruvbox-dark'

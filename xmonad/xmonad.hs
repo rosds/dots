@@ -24,8 +24,8 @@ myLogHook :: PP
 myLogHook =
   def
     { ppOutput = \s -> appendFile "/tmp/.xmonad-workspace-log" (s ++ "\n"),
-      ppCurrent = underline Green . pad 1,
-      ppVisible = underline Blue . pad 1,
+      ppCurrent = underline Yellow . pad 1,
+      ppVisible = underline Green . pad 1,
       ppTitle = const "",
       ppLayout = const "",
       ppHidden = underline LightGray . pad 1,
@@ -99,7 +99,8 @@ main = do
           handleEventHook = myHandleEventHook <> handleEventHook def,
           logHook = dynamicLogWithPP myLogHook,
           modMask = mod4Mask,
-          focusedBorderColor = "#a7c080"
+          -- focusedBorderColor = "#a7c080"
+          focusedBorderColor = "#98971a"
         }
       `additionalKeysP`
       -- keybinings
