@@ -1,16 +1,26 @@
 -- use pattern to find file
-local Path = require("plenary.path")
-
 local function fd(pattern)
     local fd_command = string.format('fd -1 -H -a -p -g "%s"', pattern)
     return vim.trim(vim.fn.system(fd_command))
 end
 
---- Return a plenary Path of the current buffer
----@return Path path of the current buffer
+---Return a plenary Path of the current buffer
+---@return string|nil path of the current buffer
 local function buffer_path()
     local bufnr = vim.api.nvim_get_current_buf()
-    return Path:new(vim.api.nvim_buf_get_name(bufnr))
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    if name == "" then
+        return nil
+    else
+        return name
+    end
+end
+
+---Return the directory of the given path.
+---@param path string a path to a file or directory.
+---@return string path
+local function file_dir(path)
+    return vim.fn.fnamemodify(path, ":p:h")
 end
 
 local function follow_symlink()
@@ -32,6 +42,7 @@ end
 
 return {
     fd = fd,
+    file_dir = file_dir,
     follow_symlink = follow_symlink,
     buffer_path = buffer_path,
 }

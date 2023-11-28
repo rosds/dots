@@ -106,15 +106,6 @@ require("lspconfig").lua_ls.setup({
     },
 })
 
--- -- cmake
--- if vim.fn.executable("cmake-language-server") then
---     lspconfig.cmake.setup({
---         cmd = { "cmake-language-server" },
---         capabilities = capabilities,
---         buildDirectory = "build",
---     })
--- end
-
 -- go
 if vim.fn.executable("gopls") then
     lspconfig.gopls.setup({

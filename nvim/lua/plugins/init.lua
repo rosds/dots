@@ -1,8 +1,4 @@
 return {
-    -- telescope
-    { "nvim-telescope/telescope.nvim", dependencies = "nvim-lua/plenary.nvim" },
-    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-
     -- LSP
     { "williamboman/mason.nvim", lazy = true },
     { "williamboman/mason-lspconfig.nvim", lazy = true },
@@ -135,6 +131,7 @@ return {
         },
         config = function()
             local bazel = require("bazel")
+            local themes = require("telescope.themes")
             bazel.setup()
             local n = require("keymaps").normal
             n({
@@ -144,8 +141,13 @@ return {
                     end,
                     desc = "BazelBuild",
                 },
+                ["<leader>bt"] = {
+                    function()
+                        bazel.bazel_test_package(themes.get_ivy())
+                    end,
+                    desc = "BazelTest",
+                },
                 -- ["<leader>bb"] = { "<cmd>BazelBuild<cr>", desc = "BazelBuild" },
-                ["<leader>bt"] = { "<cmd>BazelTest<cr>", desc = "BazelTest" },
                 ["<leader>br"] = { "<cmd>BazelRun<cr>", desc = "BazelRun" },
             })
         end,

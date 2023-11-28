@@ -4,6 +4,7 @@ if not status then
 end
 
 local api = require("nvim-tree.api")
+local view = require("nvim-tree.view")
 
 local function to_dir(path)
     if vim.fn.isdirectory(path) == 0 then
@@ -92,6 +93,18 @@ if has_telescope then
         })
     end
 end
+
+function custom_actions.open_term_in_file_dir()
+    local node = api.tree.get_node_under_cursor()
+    local working_dir = to_dir(node.absolute_path)
+    view.abandon_current_window()
+
+    local win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_create_buf(true, true)
+    vim.api.nvim_win_set_buf(win, buf)
+    vim.fn.termopen("zsh", { cwd = working_dir })
+end
+
 --------------------------------------------------------------------------------
 
 local n = require("keymaps").normal
@@ -137,6 +150,7 @@ tree.setup({
             ["<c-x>"] = with_help(api.node.open.horizontal, "Vertical Split"),
             ["<c-f>"] = with_help(custom_actions.live_grep_bellow_node, "live grep bellow node"),
             ["<c-p>"] = with_help(custom_actions.find_file_bellow_node, "find file bellow node"),
+            ["<c-t>"] = with_help(custom_actions.open_term_in_file_dir, "open term this dir"),
         })
     end,
     view = {

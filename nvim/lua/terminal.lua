@@ -32,6 +32,7 @@ ag("TerminalAG")({
         "TermOpen",
         pattern = "term://*",
         callback = function()
+            vim.cmd.startinsert()
             term_keymaps()
         end,
     },

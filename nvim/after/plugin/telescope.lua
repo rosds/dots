@@ -5,6 +5,8 @@ end
 
 local actions = require("telescope.actions")
 local actions_layout = require("telescope.actions.layout")
+local themes = require("telescope.themes")
+local git = require("utils.git")
 
 telescope.setup({
     defaults = {
@@ -69,28 +71,23 @@ local function super_rg(opts)
     t.live_grep(opts)
 end
 
-local function cwd_inside_git_repository()
-    local result = vim.fn.system("git rev-parse --is-inside-work-tree")
-    return result == 0
-end
-
 n({
     ["<leader>f"] = function()
         t.fd({ follow = true })
     end,
     ["<leader>p"] = function()
-        if cwd_inside_git_repository() then
-            t.git_files({ use_git_root = true })
+        if git.is_inside_git_worktree() then
+            t.git_files(themes.get_ivy({ use_git_root = true }))
         else
-            t.fd()
+            t.fd(themes.get_ivy())
         end
     end,
     ["<leader>o"] = function()
-        t.buffers({ sort_mru = true, ignore_current_buffer = true })
+        t.buffers(themes.get_ivy({ sort_mru = true, ignore_current_buffer = true }))
     end,
     ["<leader><c-f>"] = t.current_buffer_fuzzy_find,
     ["<leader><c-r>"] = function()
-        t.command_history(require("telescope.themes").get_ivy())
+        t.command_history(themes.get_ivy())
     end,
     ["<leader>rg"] = t.grep_string,
     ["<leader>rl"] = super_rg,
@@ -106,7 +103,7 @@ n({
     ["<leader>va"] = t.autocommands,
     ["<leader>co"] = t.colorscheme,
     ["z="] = function()
-        t.spell_suggest(require("telescope.themes").get_cursor())
+        t.spell_suggest(themes.get_cursor())
     end,
 })
 

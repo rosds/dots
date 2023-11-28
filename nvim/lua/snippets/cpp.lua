@@ -1,5 +1,6 @@
 local ls = require("luasnip")
 local fs = require("utils.fs")
+local Path = require("plenary.path")
 
 local s = ls.snippet
 local i = ls.insert_node
@@ -13,7 +14,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 local extras = require("luasnip.extras")
 
 local function inc_guard_name()
-    local path = fs.buffer_path()
+    local path = Path:new(fs.buffer_path())
     local maybe_workspace = path:find_upwards("WORKSPACE")
 
     local fname = ""
