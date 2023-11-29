@@ -5,7 +5,7 @@ local function path_or_default(path)
 end
 
 ---Returns the root of the git repository containing the given path.
----@param string path a path to a file or directory.
+---@param path string a path to a file or directory.
 ---@return string|nil path The absolut path to the root of the git repository.
 local function file_git_root(path)
     local path = path_or_default(path)
