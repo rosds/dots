@@ -3,6 +3,7 @@ local function cursor_word()
     return vim.fn.escape(vim.fn.expand("<cword>"), [[\/]])
 end
 
+---Returns the lines in the current visual selection.
 local function visual_lines()
     local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
     local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))

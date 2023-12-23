@@ -1,8 +1,5 @@
 return {
-    -- LSP
-    { "williamboman/mason.nvim", lazy = true },
-    { "williamboman/mason-lspconfig.nvim", lazy = true },
-    "neovim/nvim-lspconfig",
+    -- autocomplete
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-emoji",
     "hrsh7th/cmp-nvim-lsp",
@@ -55,8 +52,8 @@ return {
     "tpope/vim-unimpaired",
 
     -- lua
-    { "rafcamlet/nvim-luapad", cmd = "Luapad" },
-    { "folke/neodev.nvim", opts = {} },
+    { "rafcamlet/nvim-luapad",    cmd = "Luapad" },
+    { "folke/neodev.nvim",        opts = {} },
 
     -- tmux
     {
@@ -104,7 +101,7 @@ return {
     { "mfussenegger/nvim-dap", lazy = true },
 
     -- fennel
-    { "rktjmp/hotpot.nvim", lazy = true },
+    { "rktjmp/hotpot.nvim",    lazy = true },
 
     -- rust
     {
@@ -116,12 +113,12 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim", ft = "zig" },
+    { "ziglang/zig.vim",             ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim", config = true },
+    { dir = "~/apex/gitlab.nvim",    config = true },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {
@@ -135,15 +132,21 @@ return {
             bazel.setup()
             local n = require("keymaps").normal
             n({
+                ["<leader>ba"] = {
+                    function()
+                        bazel.build(themes.get_ivy())
+                    end,
+                    desc = "BazelBuild",
+                },
                 ["<leader>bb"] = {
                     function()
-                        bazel.bazel_build()
+                        bazel.build_package(themes.get_ivy())
                     end,
                     desc = "BazelBuild",
                 },
                 ["<leader>bt"] = {
                     function()
-                        bazel.bazel_test_package(themes.get_ivy())
+                        bazel.test_package(themes.get_ivy())
                     end,
                     desc = "BazelTest",
                 },

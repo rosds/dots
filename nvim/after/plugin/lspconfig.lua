@@ -1,54 +1,3 @@
--------------------------------------------------------------------------------
--- Mappings
--------------------------------------------------------------------------------
-local n = require("keymaps").normal
-local mode = require("keymaps").mode
-
-local ag = require("augroup").augroup
-ag("LspAttach")({
-    {
-        "LspAttach",
-        desc = "LSP actions",
-        callback = function()
-            n({
-                ["<leader>sd"] = vim.lsp.buf.definition,
-                ["<leader>sD"] = vim.lsp.buf.declaration,
-                ["<leader>si"] = vim.lsp.buf.implementation,
-                ["<leader>st"] = vim.lsp.buf.type_definition,
-                ["<c-w>]"] = function()
-                    vim.cmd.vsplit()
-                    vim.lsp.buf.definition()
-                end,
-                -- Rename
-                ["<leader>sr"] = vim.lsp.buf.rename,
-                -- Code action
-                ["<leader>sa"] = vim.lsp.buf.code_action,
-                -- Doc
-                K = vim.lsp.buf.hover,
-                -- Diagnostics
-                ["<leader>se"] = vim.diagnostic.open_float,
-                ["]e"] = vim.diagnostic.goto_next,
-                ["[e"] = vim.diagnostic.goto_prev,
-            })
-
-            -- Formatting
-            mode({ "v", "n" })({
-                ["<leader>sf"] = function()
-                    vim.lsp.buf.format({ async = false })
-                end,
-            })
-        end,
-    },
-})
-
--------------------------------------------------------------------------------
--- LSP Servers
--------------------------------------------------------------------------------
-
-require("mason").setup({})
-require("mason-lspconfig").setup({})
-require("fidget").setup({})
-
 local lspconfig = require("lspconfig")
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -127,7 +76,7 @@ if vim.fn.executable("rust-analyzer") then
 end
 
 -- grammarly
-require("lspconfig").grammarly.setup({
+lspconfig.grammarly.setup({
     init_options = {
         clientId = "client_REwND5XbXKmu1qCq6fsGms",
     },

@@ -101,6 +101,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # fzf
+export FZF_DEFAULT_SORT=1000000
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias ls=eza
@@ -121,7 +122,7 @@ source <(jj util completion --zsh)
 
 # fasd
 eval "$(fasd --init auto)"
-alias v="f -e vi"
+alias v="f -e nvr"
 unalias sd
 
 # starship prompt
@@ -161,6 +162,9 @@ export LUA_PATH='/home/alfonso.ros/.luarocks/share/lua/5.3/?.lua;/home/alfonso.r
 export LUA_CPATH='/home/alfonso.ros/.luarocks/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?.so;$HOME/.luarocks/lib/lua/5.3/?.so;/usr/lib/x86_64-linux-gnu/lua/5.3/?.so;/usr/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so'
 export PATH="$PATH:$HOME/.luarocks/bin"
 alias luamake=/home/alfonso.ros/gh/lua-language-server/3rd/luamake/luamake
+
+# zig
+export PATH="$PATH:$HOME/zig/0.12.0/"
 
 # apex repo
 alias repo.check='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.check --'

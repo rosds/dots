@@ -1,20 +1,28 @@
-vim.api.nvim_create_user_command("OverseerRestartLast", function()
-    local overseer = require("overseer")
+local overseer = require("overseer")
+
+local get_last_task = function()
     local tasks = overseer.list_tasks({ recent_first = true })
     if vim.tbl_isempty(tasks) then
+        return nil
+    end
+    return tasks[1]
+end
+
+vim.api.nvim_create_user_command("OverseerRestartLast", function()
+    local task = get_last_task()
+    if task == nil then
         vim.notify("No tasks found", vim.log.levels.WARN)
     else
-        overseer.run_action(tasks[1], "restart")
+        overseer.run_action(task, "restart")
     end
 end, {})
 
 vim.api.nvim_create_user_command("OverseerOpenVSplitLast", function()
-    local overseer = require("overseer")
-    local tasks = overseer.list_tasks({ recent_first = true })
-    if vim.tbl_isempty(tasks) then
+    local task = get_last_task()
+    if task == nil then
         vim.notify("No tasks found", vim.log.levels.WARN)
     else
-        overseer.run_action(tasks[1], "open vsplit")
+        overseer.run_action(task, "open vsplit")
     end
 end, {})
 
@@ -30,9 +38,9 @@ return {
             },
         },
         keys = {
-            { "<leader>tt", "<cmd>OverseerRun<cr>",            desc = "" },
-            { "<leader>to", "<cmd>OverseerToggle<cr>",         desc = "" },
-            { "<leader>tr", "<cmd>OverseerRestartLast<cr>",    desc = "" },
+            { "<leader>tt", "<cmd>OverseerRun<cr>", desc = "" },
+            { "<leader>to", "<cmd>OverseerToggle<cr>", desc = "" },
+            { "<leader>tr", "<cmd>OverseerRestartLast<cr>", desc = "" },
             { "<leader>tv", "<cmd>OverseerOpenVSplitLast<cr>", desc = "" },
         },
     },

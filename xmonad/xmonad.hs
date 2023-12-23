@@ -48,7 +48,7 @@ myScratchpads =
       myFloating,
     NS
       "scratchterm"
-      "kitty --class=scratchterm"
+      "alacritty --class=scratchterm"
       (className =? "scratchterm")
       myFloating,
     NS
@@ -70,6 +70,7 @@ myManageHook =
     <+> composeAll
       [ className =? "Spotify" --> doFloat,
         className =? "zoom" --> doFloat,
+        className =? "1password" --> doFloat,
         title =? "Zoom Cloud Meetings" --> doFloat,
         className =? "Google-chrome" --> doShift (myWorkspaces !! 1),
         title ^= "join?action" --> doFloat
@@ -82,6 +83,7 @@ myHandleEventHook =
     ( composeAll
         [ title =? "Spotify" --> doFloat,
           className =? "zoom" --> doFloat,
+          className =? "1password" --> doFloat,
           resource =? "chat.google.com" --> doShift (myWorkspaces !! 2)
         ]
     )
@@ -93,7 +95,7 @@ main = do
     docks
       def
         { workspaces = myWorkspaces,
-          terminal = "kitty",
+          terminal = "alacritty",
           manageHook = myManageHook,
           layoutHook = avoidStruts myLayoutHook,
           handleEventHook = myHandleEventHook <> handleEventHook def,

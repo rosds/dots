@@ -94,7 +94,14 @@ local config = function()
             end
         end,
         ["<leader>o"] = function()
-            builtin_ivy.buffers({ sort_mru = true, ignore_current_buffer = true })
+            builtin_ivy.buffers({
+                sort_mru = true,
+                ignore_current_buffer = true,
+                attach_mappings = function(_, map)
+                    map({ "i", "n" }, "<c-x>", actions.delete_buffer)
+                    return true
+                end,
+            })
         end,
         ["<leader><c-f>"] = builtin.current_buffer_fuzzy_find,
         ["<leader><c-r>"] = builtin_ivy.command_history,
@@ -105,8 +112,8 @@ local config = function()
                 show_line = false,
             })
         end,
-        ["<leader>ss"] = builtin.lsp_dynamic_workspace_symbols,
-        ["<leader>s."] = builtin.lsp_document_symbols,
+        ["<leader>ss"] = builtin_ivy.lsp_dynamic_workspace_symbols,
+        ["<leader>s."] = builtin_ivy.lsp_document_symbols,
         ["<leader>vh"] = builtin.help_tags,
         ["<leader>gb"] = builtin.git_branches,
         ["<leader>va"] = builtin.autocommands,

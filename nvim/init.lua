@@ -18,7 +18,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {})
 
 local v = require("keymaps").visual
 local n = require("keymaps").normal

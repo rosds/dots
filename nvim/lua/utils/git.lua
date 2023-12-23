@@ -5,15 +5,16 @@ local function path_or_default(path)
 end
 
 ---Returns the root of the git repository containing the given path.
----@param path string a path to a file or directory.
+---@param path string|nil a path to a file or directory.
 ---@return string|nil path The absolut path to the root of the git repository.
 local function file_git_root(path)
     local path = path_or_default(path)
-    local dot_git = vim.fn.finddir(".git", path .. ";")
-    if dot_git == "" then
+    local git_cmd = "git -C " .. fs.file_dir(path)
+    local output = vim.fn.system(git_cmd .. " rev-parse --show-toplevel")
+    if vim.v.shell_error ~= 0 then
         return nil
     end
-    return vim.fn.fnamemodify(dot_git, ":h")
+    return vim.fn.trim(output)
 end
 
 ---@param path string|nil a path to a file or directory otherwise the current buffer path.
@@ -30,10 +31,14 @@ end
 
 ---Returns the last non-fixup commit hash of the given file or directory.
 ---@param path string|nil a path to a file or directory otherwise the current buffer path.
----@return string| nil commit The last commit hash of the given file or directory.
+---@return string|nil commit The last commit hash of the given file or directory.
 local function file_last_commit(path)
     local path = path_or_default(path)
-    local git_cmd = "git -C " .. file_git_root(path)
+    local git_root = file_git_root(path)
+    if git_root == nil then
+        return nil
+    end
+    local git_cmd = "git -C " .. git_root
     local output = vim.fn.system(git_cmd .. ' log -1 --format=%H --invert-grep --grep="^fixup! " ' .. path)
     if vim.v.shell_error ~= 0 then
         return nil
