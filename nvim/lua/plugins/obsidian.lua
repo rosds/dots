@@ -1,6 +1,7 @@
 return {
     "epwalsh/obsidian.nvim",
     lazy = true,
+    enable = false,
     event = { "BufReadPre " .. vim.fn.expand("~") .. "/my-vault/**.md" },
     opts = {
         dir = "~/my-vault", -- no need to call 'vim.fn.expand' here

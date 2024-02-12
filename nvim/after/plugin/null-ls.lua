@@ -54,15 +54,6 @@ local pep257 = {
     }),
 }
 
-local flake8 = null_ls.builtins.diagnostics.flake8.with({
-    extra_args = {
-        "--config",
-        select_configuration({
-            "/home/alfonso.ros/ade-home/gc/master/apex_ws/src/apex_tools/ament/ament_lint/ament_flake8/ament_flake8/configuration/ament_flake8.ini",
-        }),
-    },
-})
-
 local black = null_ls.builtins.formatting.black.with({
     extra_args = {
         "--config",
@@ -117,7 +108,6 @@ null_ls.setup({
         -- null_ls.builtins.formatting.autopep8,
         -- null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.black,
-        null_ls.builtins.diagnostics.ruff,
         null_ls.builtins.diagnostics.mypy,
 
         -- fennel
@@ -125,15 +115,6 @@ null_ls.setup({
 
         -- bazel
         null_ls.builtins.formatting.buildifier,
-
-        -- rust
-        null_ls.builtins.formatting.rustfmt,
-
-        -- haskell
-        null_ls.builtins.formatting.stylish_haskell,
-
-        --json
-        null_ls.builtins.formatting.jq,
 
         --lua
         null_ls.builtins.formatting.stylua,

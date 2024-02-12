@@ -52,8 +52,8 @@ return {
     "tpope/vim-unimpaired",
 
     -- lua
-    { "rafcamlet/nvim-luapad",    cmd = "Luapad" },
-    { "folke/neodev.nvim",        opts = {} },
+    { "rafcamlet/nvim-luapad", cmd = "Luapad" },
+    { "folke/neodev.nvim", opts = {} },
 
     -- tmux
     {
@@ -81,7 +81,7 @@ return {
     -- markdown
     {
         "iamcco/markdown-preview.nvim",
-        ft = { "markdown" },
+        ft = "markdown",
         build = "cd app && npm install",
         config = function()
             vim.g.mkdp_filetypes = { "markdown" }
@@ -97,28 +97,25 @@ return {
         },
     },
 
-    -- dap
-    { "mfussenegger/nvim-dap", lazy = true },
-
     -- fennel
-    { "rktjmp/hotpot.nvim",    lazy = true },
+    { "rktjmp/hotpot.nvim", ft = "fennel" },
 
     -- rust
     {
         "rust-lang/rust.vim",
-        lazy = true,
+        ft = "rust",
         init = function()
             vim.g.rustfmt_autosave = 1
         end,
     },
 
     -- zig
-    { "ziglang/zig.vim",             ft = "zig" },
+    { "ziglang/zig.vim", ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim",    config = true },
+    { dir = "~/apex/gitlab.nvim", config = true },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {

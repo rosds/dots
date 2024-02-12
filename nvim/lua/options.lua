@@ -79,4 +79,4 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- Re-enable for debugging
-vim.lsp.set_log_level("off")
+-- vim.lsp.set_log_level("off")

@@ -27,6 +27,8 @@ ZSH_THEME="robbyrussell"
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
 
 # Uncomment the following line to change how often to auto-update (in days).
 # zstyle ':omz:update' frequency 13
@@ -116,7 +118,7 @@ source $HOME/.cargo/env
 eval "$(zoxide init --cmd j zsh)"
 
 # jj
-autoload -U compinit
+autoload -Uz compinit
 compinit
 source <(jj util completion --zsh)
 

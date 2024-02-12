@@ -5,7 +5,7 @@
 local cmp = require("cmp")
 local ls = require("luasnip")
 
-local select_next = function(fallback)
+local select_next_then_jump = function(fallback)
     if cmp.visible() then
         cmp.select_next_item()
     elseif ls and ls.expand_or_jumpable() then
@@ -15,31 +15,11 @@ local select_next = function(fallback)
     end
 end
 
-local jump_first_then_select_next = function(fallback)
-    if ls and ls.expand_or_jumpable() then
-        ls.expand_or_jump()
-    elseif cmp.visible() then
-        cmp.select_next_item()
-    else
-        fallback()
-    end
-end
-
-local select_prev = function(fallback)
+local select_prev_then_jump = function(fallback)
     if cmp.visible() then
         cmp.select_prev_item()
     elseif ls.jumpable(-1) then
         ls.jump(-1)
-    else
-        fallback()
-    end
-end
-
-local jump_first_then_select_prev = function(fallback)
-    if ls.jumpable(-1) then
-        ls.jump(-1)
-    elseif cmp.visible() then
-        cmp.select_prev_item()
     else
         fallback()
     end
@@ -52,12 +32,11 @@ cmp.setup({
         end,
     },
     mapping = {
-        -- select_pref
-        ["<c-p>"] = cmp.mapping(jump_first_then_select_prev, { "i", "s" }),
-        ["<c-k>"] = cmp.mapping(select_prev, { "i", "s" }),
+        -- select_prev
+        ["<c-p>"] = cmp.mapping(select_prev_then_jump, { "i", "s" }),
         -- select_next
-        ["<c-n>"] = cmp.mapping(jump_first_then_select_next, { "i", "s" }),
-        ["<c-j>"] = cmp.mapping(select_next, { "i", "s" }),
+        ["<tab>"] = cmp.mapping(select_next_then_jump, { "i", "s" }),
+        ["<c-n>"] = cmp.mapping(select_next_then_jump, { "i", "s" }),
         -- scroll docs
         ["<c-u>"] = cmp.mapping.scroll_docs(-4),
         ["<c-d>"] = cmp.mapping.scroll_docs(4),

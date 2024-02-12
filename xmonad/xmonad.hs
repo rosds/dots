@@ -7,6 +7,7 @@ import           XMonad
 import           XMonad.Actions.CycleWS
 import           XMonad.Hooks.DynamicLog      hiding (pad)
 import           XMonad.Hooks.DynamicProperty
+import           XMonad.Hooks.EwmhDesktops
 import           XMonad.Hooks.ManageDocks     (ToggleStruts (ToggleStruts),
                                                avoidStruts, docks, manageDocks)
 import           XMonad.Layout
@@ -92,40 +93,42 @@ main :: IO ()
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-workspace-log"] -- log workspace string for polybar
   xmonad $
-    docks
-      def
-        { workspaces = myWorkspaces,
-          terminal = "alacritty",
-          manageHook = myManageHook,
-          layoutHook = avoidStruts myLayoutHook,
-          handleEventHook = myHandleEventHook <> handleEventHook def,
-          logHook = dynamicLogWithPP myLogHook,
-          modMask = mod4Mask,
-          -- focusedBorderColor = "#a7c080"
-          focusedBorderColor = "#98971a"
-        }
-      `additionalKeysP`
-      -- keybinings
-      [ ("M-p", spawn "rofi -show run"),
-        ("M-<Right>", nextWS),
-        ("M-<Left>", prevWS),
-        ("M-<Tab>", toggleWS),
-        ("M-b", sendMessage ToggleStruts),
-        ("M-S-l", spawn "i3lock-fancy --pixelate"),
-        ( "<Print>",
-          spawn
-            "sleep 0.5; scrot -s 'shot_%Y-%m-%d.png' -e 'mv $f ~/shots/; eog ~/shots/$f'"
-        ),
-        -- switch focus between monitors
-        ("M-e", nextScreen),
-        ("M-w", prevScreen),
-        -- media keys
-        ("<XF86AudioPlay>", spawn "playerctl play-pause"),
-        ("<XF86AudioNext>", spawn "playerctl next"),
-        ("<XF86AudioPrev>", spawn "playerctl previous"),
-        -- scratchpads
-        ("M-S-m", namedScratchpadAction myScratchpads "spotify"),
-        ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
-        ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
-        ("M-S-o", namedScratchpadAction myScratchpads "calendar")
-      ]
+    ewmh $
+      docks
+        def
+          { workspaces = myWorkspaces,
+            terminal = "alacritty",
+            manageHook = myManageHook,
+            layoutHook = avoidStruts myLayoutHook,
+            handleEventHook = myHandleEventHook <> handleEventHook def,
+            logHook = dynamicLogWithPP myLogHook,
+            modMask = mod4Mask,
+            -- focusedBorderColor = "#a7c080"
+            focusedBorderColor = "#98971a"
+          }
+        `additionalKeysP`
+        -- keybinings
+        [ ("M-p", spawn "rofi -show run"),
+          ("M-S-p", spawn "rofi -show window"),
+          ("M-<Right>", nextWS),
+          ("M-<Left>", prevWS),
+          ("M-<Tab>", toggleWS),
+          ("M-b", sendMessage ToggleStruts),
+          ("M-S-l", spawn "i3lock-fancy --pixelate"),
+          ( "<Print>",
+            spawn
+              "sleep 0.5; scrot -s 'shot_%Y-%m-%d.png' -e 'mv $f ~/shots/; eog ~/shots/$f'"
+          ),
+          -- switch focus between monitors
+          ("M-e", nextScreen),
+          ("M-w", prevScreen),
+          -- media keys
+          ("<XF86AudioPlay>", spawn "playerctl play-pause"),
+          ("<XF86AudioNext>", spawn "playerctl next"),
+          ("<XF86AudioPrev>", spawn "playerctl previous"),
+          -- scratchpads
+          ("M-S-m", namedScratchpadAction myScratchpads "spotify"),
+          ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
+          ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
+          ("M-S-o", namedScratchpadAction myScratchpads "calendar")
+        ]

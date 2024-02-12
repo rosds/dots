@@ -29,7 +29,7 @@ end
 
 local function copy_right()
     return t({
-        "/// \\copyright Copyright 2023 Apex.AI, Inc.",
+        "/// \\copyright Copyright 2024 Apex.AI, Inc.",
         "/// All rights reserved.",
         "",
     })
@@ -141,7 +141,7 @@ return {
             }}  // namespace {}
         ]],
             {
-                i(1, "foo"),
+                i(1),
                 i(2),
                 extras.rep(1),
             }

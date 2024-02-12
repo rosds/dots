@@ -96,7 +96,7 @@ local config = function()
         ["<leader>o"] = function()
             builtin_ivy.buffers({
                 sort_mru = true,
-                ignore_current_buffer = true,
+                ignore_current_buffer = false,
                 attach_mappings = function(_, map)
                     map({ "i", "n" }, "<c-x>", actions.delete_buffer)
                     return true
