@@ -112,6 +112,7 @@ local config = function()
                 show_line = false,
             })
         end,
+        ["<leader>sd"] = builtin.lsp_definitions,
         ["<leader>ss"] = builtin_ivy.lsp_dynamic_workspace_symbols,
         ["<leader>s."] = builtin_ivy.lsp_document_symbols,
         ["<leader>vh"] = builtin.help_tags,
@@ -158,7 +159,6 @@ return {
     { "nvim-telescope/telescope.nvim", dependencies = "nvim-lua/plenary.nvim", config = config },
     {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build =
-        "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
     },
 }

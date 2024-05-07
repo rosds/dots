@@ -176,3 +176,4 @@ alias identify_test_uid='bazel run --noshow_progress --ui_event_filters=-info  -
 alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //apex_internal/tools/apex_doc_tools:apex_doc --'
 
 alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'
+alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener"

@@ -117,7 +117,9 @@ null_ls.setup({
         null_ls.builtins.formatting.buildifier,
 
         --lua
-        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.stylua.with({
+            extra_args = { "--indent-type", "Spaces" },
+        }),
     },
     -- formatting on save
     on_attach = function(client, bufnr)

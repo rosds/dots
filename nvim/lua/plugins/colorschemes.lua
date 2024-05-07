@@ -1,14 +1,18 @@
 return {
     { "EdenEast/nightfox.nvim", lazy = true },
-    { "catppuccin/nvim",        lazy = true },
-    { "folke/tokyonight.nvim",  lazy = true },
-    { "rebelot/kanagawa.nvim",  lazy = true },
+    { "catppuccin/nvim", lazy = true },
+    { "folke/tokyonight.nvim", lazy = true },
+    { "rebelot/kanagawa.nvim", lazy = true },
     {
         "sainnhe/gruvbox-material",
         lazy = true,
         init = function()
             vim.g.gruvbox_material_background = "soft"
             vim.g.gruvbox_material_foreground = "mix"
+
+            if not vim.g.neovide then
+                vim.g.gruvbox_material_transparent_background = 1
+            end
         end,
     },
     {

@@ -4,6 +4,9 @@ import = [
 
 shell = "/bin/zsh"
 
+[window]
+opacity = 0.95
+
 [env]
 TERM = "xterm-256color"
 

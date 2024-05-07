@@ -15,7 +15,27 @@ local select_next_then_jump = function(fallback)
     end
 end
 
+local jump_then_select_next = function(fallback)
+    if ls and ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    elseif cmp.visible() then
+        cmp.select_next_item()
+    else
+        fallback()
+    end
+end
+
 local select_prev_then_jump = function(fallback)
+    if cmp.visible() then
+        cmp.select_prev_item()
+    elseif ls.jumpable(-1) then
+        ls.jump(-1)
+    else
+        fallback()
+    end
+end
+
+local jump_then_select_prev = function(fallback)
     if cmp.visible() then
         cmp.select_prev_item()
     elseif ls.jumpable(-1) then
@@ -33,10 +53,12 @@ cmp.setup({
     },
     mapping = {
         -- select_prev
-        ["<c-p>"] = cmp.mapping(select_prev_then_jump, { "i", "s" }),
+        ["<c-p>"] = cmp.mapping(jump_then_select_prev, { "i", "s" }),
+        ["<c-k>"] = cmp.mapping(select_prev_then_jump, { "i", "s" }),
         -- select_next
         ["<tab>"] = cmp.mapping(select_next_then_jump, { "i", "s" }),
-        ["<c-n>"] = cmp.mapping(select_next_then_jump, { "i", "s" }),
+        ["<c-n>"] = cmp.mapping(jump_then_select_next, { "i", "s" }),
+        ["<c-j>"] = cmp.mapping(select_next_then_jump, { "i", "s" }),
         -- scroll docs
         ["<c-u>"] = cmp.mapping.scroll_docs(-4),
         ["<c-d>"] = cmp.mapping.scroll_docs(4),

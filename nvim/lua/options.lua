@@ -1,5 +1,12 @@
 -- neovide font
-vim.opt.guifont = { "FiraCode Nerd Font", ":h9" }
+if vim.g.neovide then
+    vim.opt.guifont = "FiraMono Nerd Font:h10"
+    vim.g.neovide_transparency = 0.95
+end
+
+-- disable netrw, somehow messes with nvim-tree
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 -- spaces instead of tabs
 vim.opt.tabstop = 4
@@ -79,4 +86,4 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- Re-enable for debugging
--- vim.lsp.set_log_level("off")
+vim.lsp.set_log_level("off")

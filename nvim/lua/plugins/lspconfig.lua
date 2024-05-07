@@ -9,12 +9,33 @@ ag("LspAttach")({
     {
         "LspAttach",
         desc = "LSP actions",
-        callback = function()
+        callback = function(args)
+            local bufnr = args.buf
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+            --- toggle inlay hints
+            vim.g.inlay_hints_visible = false
+            local function toggle_inlay_hints()
+                if vim.g.inlay_hints_visible then
+                    vim.g.inlay_hints_visible = false
+                    vim.lsp.inlay_hint.enable(bufnr, false)
+                else
+                    if client.server_capabilities.inlayHintProvider then
+                        vim.g.inlay_hints_visible = true
+                        vim.lsp.inlay_hint.enable(bufnr, true)
+                    else
+                        print("no inlay hints available")
+                    end
+                end
+            end
+
             n({
-                ["<leader>sd"] = vim.lsp.buf.definition,
+                -- replaced with the telescope one
+                -- ["<leader>sd"] = vim.lsp.buf.definition,
                 ["<leader>sD"] = vim.lsp.buf.declaration,
                 ["<leader>si"] = vim.lsp.buf.implementation,
                 ["<leader>st"] = vim.lsp.buf.type_definition,
+                ["<leader>sh"] = toggle_inlay_hints,
                 ["<c-w>]"] = function()
                     vim.cmd.vsplit()
                     vim.lsp.buf.definition()

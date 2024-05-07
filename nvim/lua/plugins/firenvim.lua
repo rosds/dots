@@ -33,7 +33,8 @@ return {
                     callback = function()
                         vim.opt.filetype = "markdown"
                         vim.opt.laststatus = 0
-
+                        vim.g.gruvbox_material_transparent_background = 0
+                        vim.cmd.colorscheme("gruvbox-material")
                         local n = require("keymaps").normal
                         n({
                             ["<esc><esc>"] = function()

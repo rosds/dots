@@ -42,7 +42,8 @@ myScratchpads =
   [ NS "spotify" "spotify" (className =? "Spotify") myFloating,
     NS
       "neovide"
-      "neovide --x11-wm-class org -- -c ':Org'"
+      "neovide --x11-wm-class org -- -c ':Neorg workspace notes'"
+      -- "neovide --x11-wm-class org -- -c ':Org'"
       (className =? "org")
       -- "kitty --name=org vi -c ':Org'"
       -- (appName =? "org")
@@ -114,7 +115,8 @@ main = do
           ("M-<Left>", prevWS),
           ("M-<Tab>", toggleWS),
           ("M-b", sendMessage ToggleStruts),
-          ("M-S-l", spawn "i3lock-fancy --pixelate"),
+          -- ("M-S-l", spawn "i3lockfancy --pixelate"),
+          ("M-S-l", spawn "i3lock -t -i ~/Pictures/bg"),
           ( "<Print>",
             spawn
               "sleep 0.5; scrot -s 'shot_%Y-%m-%d.png' -e 'mv $f ~/shots/; eog ~/shots/$f'"

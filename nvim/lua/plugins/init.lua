@@ -18,22 +18,14 @@ return {
     {
         "rcarriga/nvim-notify",
         config = function()
+            require("notify").setup({
+                background_colour = "#000000",
+            })
             vim.notify = require("notify")
         end,
     },
 
-    -- snippets
-    "L3MON4D3/LuaSnip",
-    { "saadparwaiz1/cmp_luasnip", dependencies = "L3MON4D3/LuaSnip" },
-
-    -- life quality
-    {
-        "inkarkat/vim-mark",
-        dependencies = "inkarkat/vim-ingo-library",
-        init = function()
-            vim.g.mw_no_mappings = 1
-        end,
-    },
+    -- QoL
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
@@ -50,6 +42,30 @@ return {
     -- git
     "tpope/vim-rhubarb",
     "tpope/vim-unimpaired",
+    {
+        "sindrets/diffview.nvim",
+        opts = {
+            keymaps = {
+                file_history_panel = {
+                    {
+                        "n",
+                        "<c-n>",
+                        function()
+                            require("diffview.actions").select_next_entry()
+                        end,
+                    },
+                    {
+                        "n",
+                        "<c-p>",
+                        function()
+                            require("diffview.actions").select_prev_entry()
+                        end,
+                    },
+                },
+            },
+        },
+        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+    },
 
     -- lua
     { "rafcamlet/nvim-luapad", cmd = "Luapad" },
@@ -125,30 +141,31 @@ return {
         },
         config = function()
             local bazel = require("bazel")
-            local themes = require("telescope.themes")
-            bazel.setup()
+            bazel.setup({})
+
+            local bazel_telescope = require("bazel.telescope")
             local n = require("keymaps").normal
+
+            local themes = require("telescope.themes")
             n({
                 ["<leader>ba"] = {
                     function()
-                        bazel.build(themes.get_ivy())
+                        bazel_telescope.build(themes.get_ivy())
                     end,
-                    desc = "BazelBuild",
+                    desc = "bazel build any target",
                 },
                 ["<leader>bb"] = {
                     function()
-                        bazel.build_package(themes.get_ivy())
+                        bazel_telescope.build_package(themes.get_ivy())
                     end,
-                    desc = "BazelBuild",
+                    desc = "bazel build package target",
                 },
                 ["<leader>bt"] = {
                     function()
-                        bazel.test_package(themes.get_ivy())
+                        bazel_telescope.test(themes.get_ivy())
                     end,
-                    desc = "BazelTest",
+                    desc = "bazel test any target",
                 },
-                -- ["<leader>bb"] = { "<cmd>BazelBuild<cr>", desc = "BazelBuild" },
-                ["<leader>br"] = { "<cmd>BazelRun<cr>", desc = "BazelRun" },
             })
         end,
     },
