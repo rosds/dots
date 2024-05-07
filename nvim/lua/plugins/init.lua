@@ -171,6 +171,5 @@ return {
     },
 
     -- misc
-    "jbyuki/venn.nvim",
     { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
 }
