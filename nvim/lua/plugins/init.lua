@@ -42,34 +42,10 @@ return {
     -- git
     "tpope/vim-rhubarb",
     "tpope/vim-unimpaired",
-    {
-        "sindrets/diffview.nvim",
-        opts = {
-            keymaps = {
-                file_history_panel = {
-                    {
-                        "n",
-                        "<c-n>",
-                        function()
-                            require("diffview.actions").select_next_entry()
-                        end,
-                    },
-                    {
-                        "n",
-                        "<c-p>",
-                        function()
-                            require("diffview.actions").select_prev_entry()
-                        end,
-                    },
-                },
-            },
-        },
-        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-    },
 
     -- lua
     { "rafcamlet/nvim-luapad", cmd = "Luapad" },
-    { "folke/neodev.nvim", opts = {} },
+    { "folke/neodev.nvim",     opts = {} },
 
     -- tmux
     {
@@ -114,7 +90,7 @@ return {
     },
 
     -- fennel
-    { "rktjmp/hotpot.nvim", ft = "fennel" },
+    { "rktjmp/hotpot.nvim",          ft = "fennel" },
 
     -- rust
     {
@@ -126,12 +102,12 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim", ft = "zig" },
+    { "ziglang/zig.vim",             ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim", config = true },
+    { dir = "~/apex/gitlab.nvim",    config = true },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {

@@ -1,6 +1,6 @@
 -- neovide font
 if vim.g.neovide then
-    vim.opt.guifont = "FiraMono Nerd Font:h10"
+    vim.opt.guifont = "FiraMono Nerd Font:h8"
     vim.g.neovide_transparency = 0.95
 end
 
@@ -84,6 +84,8 @@ vim.diagnostic.config({
 vim.opt.foldlevel = 8
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+vim.opt.conceallevel = 2
 
 -- Re-enable for debugging
 vim.lsp.set_log_level("off")

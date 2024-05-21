@@ -182,7 +182,7 @@ return {
             ["<leader>nf"] = ":NvimTreeFindFile<cr>",
             ["<leader>nq"] = ":NvimTreeClose<cr>",
             ["<leader>nn"] = vinegar,
-            ["<leader>."] = vinegar,
+            -- ["<leader>."] = vinegar,
             ["<leader><c-v>"] = function()
                 vim.cmd.vsplit()
                 vinegar()

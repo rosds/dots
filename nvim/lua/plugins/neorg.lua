@@ -36,6 +36,12 @@ return {
                                 "<C-Enter>",
                                 "<cmd>Neorg keybind norg core.itero.next-iteration<CR>"
                             )
+                            keybinds.remap(
+                                "norg",
+                                { "n", "i" },
+                                "<leader><enter>",
+                                "<cmd>Neorg keybind norg core.itero.next-iteration<CR>"
+                            )
                         end,
                     },
                 },

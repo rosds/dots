@@ -21,7 +21,14 @@ lspconfig.pyright.setup({
 
 -- cpp
 lspconfig.clangd.setup({
-    cmd = { "clangd", "--background-index", "--clang-tidy" },
+    cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=never",
+        "--fallback-style=LLVM",
+        "--inlay-hints=true",
+    },
     capabilities = vim.tbl_extend("force", capabilities, { offsetEncoding = "utf-8" }),
 })
 
