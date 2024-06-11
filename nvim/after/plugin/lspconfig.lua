@@ -76,28 +76,12 @@ end
 -- local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 --
 
-if vim.fn.executable("rust-analyzer") then
-    lspconfig.rust_analyzer.setup({
-        capabilities = capabilities,
-    })
-end
-
--- grammarly
-lspconfig.grammarly.setup({
-    init_options = {
-        clientId = "client_REwND5XbXKmu1qCq6fsGms",
-    },
-    filetypes = { "markdown", "text" },
-    handlers = {
-        ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-            virtual_text = true,
-            signs = true,
-            underline = true,
-            update_in_insert = false,
-        }),
-    },
-    capabilities = capabilities,
-})
+-- lspconfig.rust_analyzer.setup({
+--     capabilities = capabilities,
+--     on_attach = function(client, bufnr)
+--         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+--     end,
+-- })
 
 require("lspconfig").ruff_lsp.setup({
     init_options = {

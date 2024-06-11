@@ -3,12 +3,6 @@ if not status then
     return
 end
 
-local function is_executable_available(exec)
-    return function()
-        return vim.fn.executable(exec) == 1
-    end
-end
-
 --- Selects the first existing configuration from the input table
 --- the first existing file path is returned
 local function select_configuration(configurations)
@@ -92,6 +86,7 @@ local uncrustify = {
 -- Null-ls setup
 --------------------------------------------------------------------------------
 
+local cspell = require("cspell")
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 null_ls.setup({
     debug = false,
@@ -108,7 +103,16 @@ null_ls.setup({
         -- null_ls.builtins.formatting.autopep8,
         -- null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.black,
-        null_ls.builtins.diagnostics.mypy,
+        null_ls.builtins.diagnostics.mypy.with({
+            env = function(params)
+                local maybe_ws = vim.fn.findfile("WORKSPACE", path .. ";")
+                if maybe_ws == "" then
+                    return {}
+                else
+                    return { MYPYPATH = vim.fn.fnamemodify(maybe_ws, ":p:h") }
+                end
+            end,
+        }),
 
         -- fennel
         null_ls.builtins.formatting.fnlfmt,
@@ -120,6 +124,11 @@ null_ls.setup({
         null_ls.builtins.formatting.stylua.with({
             extra_args = { "--indent-type", "Spaces" },
         }),
+
+        -- grammar & spell
+        null_ls.builtins.diagnostics.write_good,
+        cspell.diagnostics,
+        cspell.code_actions,
     },
     -- formatting on save
     on_attach = function(client, bufnr)

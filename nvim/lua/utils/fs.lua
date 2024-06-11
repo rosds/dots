@@ -1,9 +1,3 @@
--- use pattern to find file
-local function fd(pattern)
-    local fd_command = string.format('fd -1 -H -a -p -g "%s"', pattern)
-    return vim.trim(vim.fn.system(fd_command))
-end
-
 ---Return a plenary Path of the current buffer
 ---@return string|nil path of the current buffer
 local function buffer_path()
@@ -14,6 +8,30 @@ local function buffer_path()
     else
         return name
     end
+end
+
+--- Search for a file upwards using the current buffer path as the starting
+--- point.
+--- @return string|nil path of the current buffer
+local function find_upwards(pattern)
+    local path = buffer_path()
+    if path == nil then
+        return nil
+    end
+
+    local dir = vim.fn.fnamemodify(path, ":p:h")
+    local result = vim.fn.findfile(pattern, dir .. ";")
+    if result == "" then
+        return nil
+    else
+        return result
+    end
+end
+
+-- use pattern to find file
+local function fd(pattern)
+    local fd_command = string.format('fd -1 -H -a -p -g "%s"', pattern)
+    return vim.trim(vim.fn.system(fd_command))
 end
 
 ---Return the directory of the given path.
@@ -45,4 +63,5 @@ return {
     file_dir = file_dir,
     follow_symlink = follow_symlink,
     buffer_path = buffer_path,
+    find_upwards = find_upwards,
 }

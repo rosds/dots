@@ -5,10 +5,20 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-nvim-lua",
     "hrsh7th/cmp-path",
-    "hrsh7th/nvim-cmp",
+    {
+        "hrsh7th/nvim-cmp",
+        dependencies = {
+            "onsails/lspkind.nvim",
+        },
+    },
 
     -- linting & formatting
-    "nvimtools/none-ls.nvim",
+    {
+        "nvimtools/none-ls.nvim",
+        dependencies = {
+            "davidmh/cspell.nvim",
+        },
+    },
 
     -- better ui
     {
@@ -45,7 +55,7 @@ return {
 
     -- lua
     { "rafcamlet/nvim-luapad", cmd = "Luapad" },
-    { "folke/neodev.nvim",     opts = {} },
+    { "folke/neodev.nvim", opts = {} },
 
     -- tmux
     {
@@ -90,7 +100,7 @@ return {
     },
 
     -- fennel
-    { "rktjmp/hotpot.nvim",          ft = "fennel" },
+    { "rktjmp/hotpot.nvim", ft = "fennel" },
 
     -- rust
     {
@@ -100,14 +110,19 @@ return {
             vim.g.rustfmt_autosave = 1
         end,
     },
+    {
+        "mrcjkb/rustaceanvim",
+        version = "^4", -- Recommended
+        lazy = false, -- This plugin is already lazy
+    },
 
     -- zig
-    { "ziglang/zig.vim",             ft = "zig" },
+    { "ziglang/zig.vim", ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim",    config = true },
+    { dir = "~/apex/gitlab.nvim", config = true },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {

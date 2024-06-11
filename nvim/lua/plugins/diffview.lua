@@ -3,6 +3,13 @@ return {
         "sindrets/diffview.nvim",
         opts = {
             keymaps = {
+                view = {
+                    {
+                        "n",
+                        "gq",
+                        "<Cmd>DiffviewClose<cr>",
+                    },
+                },
                 file_history_panel = {
                     {
                         "n",
@@ -18,11 +25,17 @@ return {
                             require("diffview.actions").select_prev_entry()
                         end,
                     },
+                    {
+                        "n",
+                        "gq",
+                        "<Cmd>DiffviewClose<cr>",
+                    },
                 },
             },
         },
         cmd = { "DiffviewOpen", "DiffviewFileHistory" },
         keys = {
+            { "<leader>gd", ":DiffviewFileHistory %<cr>" },
             { "<leader>gd", ":DiffviewFileHistory %<cr>" },
         },
     },

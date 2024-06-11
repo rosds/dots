@@ -7,7 +7,6 @@ vim.g.firenvim_config = {
             takeover = "nonempty",
             priority = 1,
             content = "text",
-            renderer = "html",
             selector = "textarea[id=issue-description]",
         },
         [".*"] = {

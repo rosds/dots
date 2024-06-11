@@ -6,3 +6,7 @@ vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.smarttab = true
+
+vim.g.mkdp_preview_options = {
+    uml = { server = "http://localhost:8080" },
+}

@@ -46,6 +46,8 @@
 [rebase]
     autosquash = true
 	autoStash = true
+	updateRefs = true
+	updateRefs = true
 
 [gpg]
     program = gpg

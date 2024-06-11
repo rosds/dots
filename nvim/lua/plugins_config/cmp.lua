@@ -1,9 +1,6 @@
---------------------------------------------------------------------------------
--- nvim-cmp
---------------------------------------------------------------------------------
-
 local cmp = require("cmp")
 local ls = require("luasnip")
+local lspkind = require("lspkind")
 
 local select_next_then_jump = function(fallback)
     if cmp.visible() then
@@ -48,7 +45,7 @@ end
 cmp.setup({
     snippet = {
         expand = function(args)
-            require("luasnip").lsp_expand(args.body)
+            ls.lsp_expand(args.body)
         end,
     },
     mapping = {
@@ -64,7 +61,7 @@ cmp.setup({
         ["<c-d>"] = cmp.mapping.scroll_docs(4),
         -- abort completion
         ["<c-e>"] = cmp.mapping.close(),
-        -- take suggestion or exmand snippet
+        -- take suggestion or expand snippet
         ["<c-y>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.confirm({
@@ -117,7 +114,7 @@ cmp.setup({
         { name = "nvim_lua" },
         { name = "luasnip" },
         { name = "path" },
-        { name = "buffer",  keyword_length = 5 },
+        { name = "buffer", keyword_length = 5 },
         { name = "orgmode" },
         { name = "emoji" },
     },
@@ -125,7 +122,6 @@ cmp.setup({
         disallow_prefix_unmatching = false,
     },
     sorting = {
-        -- TODO: Would be cool to add stuff like "See variable names before method names" in rust, or something like that.
         comparators = {
             cmp.config.compare.offset,
             cmp.config.compare.exact,
@@ -139,6 +135,21 @@ cmp.setup({
     window = {
         -- documentation = cmp.config.window.bordered(),
         -- completion = cmp.config.window.bordered(),
+        completion = {
+            winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+            col_offset = -3,
+            side_padding = 0,
+        },
     },
     experimental = { native_menu = false, ghost_text = false },
+    formatting = {
+        fields = { "kind", "abbr", "menu" },
+        format = function(entry, vim_item)
+            local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+            local strings = vim.split(kind.kind, "%s", { trimempty = true })
+            kind.kind = " " .. (strings[1] or "") .. " "
+            kind.menu = "    (" .. (strings[2] or "") .. ")"
+            return kind
+        end,
+    },
 })

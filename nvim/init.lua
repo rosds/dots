@@ -20,6 +20,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {})
 
+vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
+
 local v = require("keymaps").visual
 local n = require("keymaps").normal
 
@@ -57,12 +59,7 @@ n({
     ["<esc><esc>"] = ":noh<cr>",
     -- toggle diagnostics
     ["<leader>td"] = function()
-        if not vim.b.diagnostic_disabled then
-            vim.diagnostic.disable()
-        else
-            vim.diagnostic.enable()
-        end
-        vim.b.diagnostic_disabled = not vim.b.diagnostic_disabled
+        vim.diagnostic.enable(not vim.diagnostic.is_enabled())
     end,
     -- zoom in/out
     Zi = "<c-w>_|<c-w>|",

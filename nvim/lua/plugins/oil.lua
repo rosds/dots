@@ -14,7 +14,7 @@ local function live_grep_bellow_entry()
     local current_dir = oil.get_current_dir()
     local entry_path = current_dir .. entry.name
 
-    ts.live_grep({ cwd = to_dir(entry.absolute_path) })
+    ts.live_grep({ cwd = to_dir(entry_path) })
 end
 
 return {
@@ -28,6 +28,7 @@ return {
                     ["<C-l>"] = false,
                     ["<C-c>"] = false,
                     ["gq"] = "actions.close",
+                    ["gt"] = "actions.open_terminal",
                     ["<C-f>"] = live_grep_bellow_entry,
                 },
             })
