@@ -1,21 +1,31 @@
-import           Control.Monad                (forM_)
-import           Data.Char                    (toLower)
-import           Data.List                    (isInfixOf, isPrefixOf)
-import           Polybar                      (Color (..), bg, fg, pad,
-                                               underline)
-import           XMonad
-import           XMonad.Actions.CycleWS
-import           XMonad.Hooks.DynamicLog      hiding (pad)
-import           XMonad.Hooks.DynamicProperty
-import           XMonad.Hooks.EwmhDesktops
-import           XMonad.Hooks.ManageDocks     (ToggleStruts (ToggleStruts),
-                                               avoidStruts, docks, manageDocks)
-import           XMonad.Layout
-import           XMonad.Layout.Spacing
-import           XMonad.StackSet              (RationalRect (..))
-import           XMonad.Util.EZConfig         (additionalKeysP)
-import           XMonad.Util.NamedScratchpad
-import           XMonad.Util.Run              (safeSpawn)
+import Control.Monad (forM_)
+import Data.Char (toLower)
+import Data.List (isInfixOf, isPrefixOf)
+import Polybar
+  ( Color (..),
+    bg,
+    fg,
+    pad,
+    underline,
+  )
+import XMonad
+import XMonad.Actions.CycleWS
+import XMonad.Hooks.DynamicLog hiding (pad)
+import XMonad.Hooks.DynamicProperty
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageDocks
+  ( ToggleStruts (ToggleStruts),
+    avoidStruts,
+    docks,
+    manageDocks,
+  )
+import XMonad.Layout
+import XMonad.Layout.Spacing
+import XMonad.StackSet (RationalRect (..))
+import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run (safeSpawn)
+import XMonad (XConfig(normalBorderColor))
 
 -- workspaces
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "NSP"]
@@ -25,12 +35,13 @@ myLogHook :: PP
 myLogHook =
   def
     { ppOutput = \s -> appendFile "/tmp/.xmonad-workspace-log" (s ++ "\n"),
-      ppCurrent = underline Yellow . pad 1,
-      ppVisible = underline Green . pad 1,
+      ppCurrent = bg Yellow . pad 1,
+      ppVisible = bg Purple . pad 1,
       ppTitle = const "",
       ppLayout = const "",
-      ppHidden = underline LightGray . pad 1,
-      ppHiddenNoWindows = id
+      ppWsSep = "",
+      ppHidden = bg Gray . pad 1,
+      ppHiddenNoWindows = pad 1
     }
 
 myLayoutHook =
@@ -105,7 +116,10 @@ main = do
             logHook = dynamicLogWithPP myLogHook,
             modMask = mod4Mask,
             -- focusedBorderColor = "#a7c080"
-            focusedBorderColor = "#98971a"
+            -- focusedBorderColor = "#98971a"
+            focusedBorderColor = "#957FB8",
+            normalBorderColor = "#16161D"
+
           }
         `additionalKeysP`
         -- keybinings
@@ -117,10 +131,11 @@ main = do
           ("M-b", sendMessage ToggleStruts),
           -- ("M-S-l", spawn "i3lockfancy --pixelate"),
           ("M-S-l", spawn "i3lock -t -i ~/Pictures/bg"),
-          ( "<Print>",
-            spawn
-              "sleep 0.5; scrot -s 'shot_%Y-%m-%d.png' -e 'mv $f ~/shots/; eog ~/shots/$f'"
-          ),
+          -- ( "<Print>",
+          --   spawn
+          --     "sleep 0.5; scrot -s 'shot_%Y-%m-%d.png' -e 'mv $f ~/shots/; eog ~/shots/$f'"
+          -- ),
+          ("<Print>", spawn "flameshot gui"),
           -- switch focus between monitors
           ("M-e", nextScreen),
           ("M-w", prevScreen),

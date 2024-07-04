@@ -86,6 +86,14 @@ local uncrustify = {
 -- Null-ls setup
 --------------------------------------------------------------------------------
 
+local cspell_config = {
+    find_json = function()
+        local init = vim.fn.expand("$MYVIMRC")
+        local init_dir = vim.fn.fnamemodify(init, ":p:h")
+        return init_dir .. "/cspell.json"
+    end,
+}
+
 local cspell = require("cspell")
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 null_ls.setup({
@@ -127,9 +135,14 @@ null_ls.setup({
 
         -- grammar & spell
         null_ls.builtins.diagnostics.write_good,
-        cspell.diagnostics,
-        cspell.code_actions,
+        cspell.diagnostics.with({
+            config = cspell_config,
+        }),
+        cspell.code_actions.with({
+            config = cspell_config,
+        }),
     },
+
     -- formatting on save
     on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then

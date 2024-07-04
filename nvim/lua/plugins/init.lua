@@ -55,7 +55,7 @@ return {
 
     -- lua
     { "rafcamlet/nvim-luapad", cmd = "Luapad" },
-    { "folke/neodev.nvim", opts = {} },
+    { "folke/neodev.nvim",     opts = {} },
 
     -- tmux
     {
@@ -76,6 +76,7 @@ return {
             vim.g.copilot_filetypes = {
                 ["*"] = false,
                 lua = true,
+                rust = true,
             }
         end,
     },
@@ -100,7 +101,7 @@ return {
     },
 
     -- fennel
-    { "rktjmp/hotpot.nvim", ft = "fennel" },
+    { "rktjmp/hotpot.nvim",          ft = "fennel" },
 
     -- rust
     {
@@ -113,16 +114,16 @@ return {
     {
         "mrcjkb/rustaceanvim",
         version = "^4", -- Recommended
-        lazy = false, -- This plugin is already lazy
+        lazy = false,   -- This plugin is already lazy
     },
 
     -- zig
-    { "ziglang/zig.vim", ft = "zig" },
+    { "ziglang/zig.vim",             ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim", config = true },
+    { dir = "~/apex/gitlab.nvim",    config = true },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {

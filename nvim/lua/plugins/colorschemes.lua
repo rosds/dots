@@ -2,7 +2,13 @@ return {
     { "EdenEast/nightfox.nvim", lazy = true },
     { "catppuccin/nvim", lazy = true },
     { "folke/tokyonight.nvim", lazy = true },
-    { "rebelot/kanagawa.nvim", lazy = true },
+    {
+        "rebelot/kanagawa.nvim",
+        lazy = false,
+        config = function()
+            require("kanagawa").setup({ transparent = true })
+        end,
+    },
     {
         "sainnhe/gruvbox-material",
         lazy = true,

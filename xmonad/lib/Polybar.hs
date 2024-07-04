@@ -19,13 +19,26 @@ class ColorScheme a where
 data Gruvbox = Gruvbox
 
 data EverForest = EverForest
+data Kanagawa = Kanagawa
+
+instance ColorScheme Kanagawa where
+  code _ Aqua       = "#689d6a"
+  code _ Black      = "#282828"
+  code _ Blue       = "#7E9CD8"
+  code _ Gray       = "#363646"
+  code _ Green      = "#98BB6C"
+  code _ LightGray  = "#a89984"
+  code _ Orange     = "#fe8019"
+  code _ Purple     = "#54546D"
+  code _ Yellow     = "#FF9E3B"
+  code _ (Custom s) = s
 
 instance ColorScheme Gruvbox where
   code _ Aqua       = "#689d6a"
   code _ Black      = "#282828"
   code _ Blue       = "#458588"
   code _ Gray       = "#3c3836"
-  code _ Green      = "#98971a"
+  code _ Green      = "${colors.green}"
   code _ LightGray  = "#a89984"
   code _ Orange     = "#fe8019"
   code _ Purple     = "#d3869b"
@@ -44,8 +57,8 @@ instance ColorScheme EverForest where
   code _ Yellow     = "#dbbc7f"
   code _ (Custom s) = s
 
-defaultColorScheme :: Gruvbox
-defaultColorScheme = Gruvbox
+defaultColorScheme :: Kanagawa
+defaultColorScheme = Kanagawa
 
 fg :: Color -> String -> String
 fg color str =

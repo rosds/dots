@@ -10,6 +10,8 @@ end
 local function file_git_root(path)
     local path = path_or_default(path)
     local git_cmd = "git -C " .. fs.file_dir(path)
+    local cmd = git_cmd .. " rev-parse --show-toplevel"
+    P(cmd)
     local output = vim.fn.system(git_cmd .. " rev-parse --show-toplevel")
     if vim.v.shell_error ~= 0 then
         return nil
@@ -35,11 +37,13 @@ end
 local function file_last_commit(path)
     local path = path_or_default(path)
     local git_root = file_git_root(path)
+    P(git_root)
     if git_root == nil then
         return nil
     end
     local git_cmd = "git -C " .. git_root
     local output = vim.fn.system(git_cmd .. ' log -1 --format=%H --invert-grep --grep="^fixup! " ' .. path)
+    P(output)
     if vim.v.shell_error ~= 0 then
         return nil
     end

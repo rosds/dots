@@ -6,6 +6,7 @@ return {
     },
     {
         "nvim-neorg/neorg",
+        enabled = true,
         dependencies = { "luarocks.nvim" },
         lazy = false,
         version = "*", -- Pin Neorg to the latest stable release

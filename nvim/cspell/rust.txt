@@ -1,0 +1,5 @@
+ratatui
+crossterm
+deque
+sparkline
+

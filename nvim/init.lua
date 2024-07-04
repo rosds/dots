@@ -1,24 +1,30 @@
+-- lazy bootstrap
+local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazy_path) then
+    local lazy_repo = "https://github.com/folke/lazy.nvim.git"
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "--branch=stable",
+        lazy_repo,
+        lazy_path,
+    })
+end
+vim.opt.rtp:prepend(lazy_path)
+
 vim.g.mapleader = " "
 
 require("options")
 require("globals")
 require("terminal")
 
--- lazy bootstrap
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
-end
-vim.opt.rtp:prepend(lazypath)
-
-require("lazy").setup("plugins", {})
+require("lazy").setup("plugins", {
+    install = {
+        colorscheme = { "kanagawa-wave" },
+    },
+    checker = { enabled = true },
+})
 
 vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
 
@@ -79,4 +85,4 @@ ag("AllFiles")({
     },
 })
 
-vim.cmd.colorscheme("gruvbox-material")
+vim.cmd.colorscheme("kanagawa-wave")
