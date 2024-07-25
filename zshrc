@@ -177,3 +177,6 @@ alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under
 
 alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'
 alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener"
+
+export GITLAB_TOKEN="glpat-bdms9mFxTQemtyt_A2kZ"
+export GITLAB_VIM_URL="https://gitlab.apex.ai/"

@@ -75,6 +75,7 @@ n({
 v({
     ["<leader>rr"] = { 'y:%s/<c-r>"//g<left><left>', silent = false },
     ["<leader>go"] = 'y:silent execute "!xdg-open <c-r>""<cr>',
+    ["<LeftRelease>"] = { '"*ygv', desc = "yank on mouse selection" },
 })
 
 local ag = require("augroup").augroup

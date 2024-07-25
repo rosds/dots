@@ -28,6 +28,14 @@ local function find_upwards(pattern)
     end
 end
 
+--- Search for a file downwards using the current buffer path as the starting
+--- point.
+--- @return bool If file is found in under pattern
+local function is_under_directory(file, dir)
+    local result = vim.fn.findfile(file, dir)
+    return result == "" and result:sub(1, 1) ~= "/"
+end
+
 -- use pattern to find file
 local function fd(pattern)
     local fd_command = string.format('fd -1 -H -a -p -g "%s"', pattern)
@@ -64,4 +72,5 @@ return {
     follow_symlink = follow_symlink,
     buffer_path = buffer_path,
     find_upwards = find_upwards,
+    is_under_directory = is_under_directory,
 }

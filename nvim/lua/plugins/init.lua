@@ -1,17 +1,4 @@
 return {
-    -- autocomplete
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-emoji",
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-nvim-lua",
-    "hrsh7th/cmp-path",
-    {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            "onsails/lspkind.nvim",
-        },
-    },
-
     -- linting & formatting
     {
         "nvimtools/none-ls.nvim",
@@ -39,7 +26,7 @@ return {
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
-        opts = {},
+        config = true,
     },
     {
         "machakann/vim-sandwich",
@@ -55,7 +42,18 @@ return {
 
     -- lua
     { "rafcamlet/nvim-luapad", cmd = "Luapad" },
-    { "folke/neodev.nvim",     opts = {} },
+    {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- See the configuration section for more details
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "luvit-meta/library", words = { "vim%.uv" } },
+            },
+        },
+    },
+    { "Bilal2453/luvit-meta",  lazy = true }, -- optional `vim.uv` typings
 
     -- tmux
     {
@@ -66,28 +64,34 @@ return {
         end,
     },
 
-    -- copilot
+    -- Gitlab duo
     {
-        "github/copilot.vim",
-        init = function()
-            vim.g.copilot_no_tab_map = true
-            vim.g.copilot_assume_mapped = true
-            vim.g.copilot_tab_fallback = ""
-            vim.g.copilot_filetypes = {
-                ["*"] = false,
-                lua = true,
-                rust = true,
-            }
+        "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim.git",
+        -- Activate when a file is created/opened
+        event = { "BufReadPre", "BufNewFile" },
+        -- Activate when a supported filetype is open
+        ft = { "sh", "cpp", "bzl", "python" },
+        cond = function()
+            -- Only activate if token is present in environment variable.
+            -- Remove this line to use the interactive workflow.
+            return vim.env.GITLAB_TOKEN ~= nil and vim.env.GITLAB_TOKEN ~= ""
         end,
+        opts = {
+            statusline = {
+                -- Hook into the built-in statusline to indicate the status
+                -- of the GitLab Duo Code Suggestions integration
+                enabled = true,
+            },
+        },
     },
 
     -- markdown
     {
         "iamcco/markdown-preview.nvim",
-        ft = "markdown",
-        build = "cd app && npm install",
-        config = function()
-            vim.g.mkdp_filetypes = { "markdown" }
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function()
+            vim.fn["mkdp#util#install"]()
         end,
     },
     {
@@ -101,7 +105,7 @@ return {
     },
 
     -- fennel
-    { "rktjmp/hotpot.nvim",          ft = "fennel" },
+    { "rktjmp/hotpot.nvim",            ft = "fennel" },
 
     -- rust
     {
@@ -118,12 +122,12 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",             ft = "zig" },
+    { "ziglang/zig.vim",               ft = "zig" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { dir = "~/apex/gitlab.nvim",    config = true },
+    { dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
     {
         dir = "~/apex/bazel.nvim",
         dependencies = {

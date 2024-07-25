@@ -26,14 +26,15 @@ lspconfig.clangd.setup({
         "--background-index",
         "--clang-tidy",
         "--header-insertion=never",
-        "--fallback-style=LLVM",
+        "--fallback-style={IndentWidth: 4, TabWidth: 4}",
+        "--fallback-style=Google",
+        -- "--fallback-style=LLVM",
         "--inlay-hints=true",
     },
     capabilities = vim.tbl_extend("force", capabilities, { offsetEncoding = "utf-8" }),
 })
 
 -- lua
-require("neodev").setup({})
 require("lspconfig").lua_ls.setup({
     settings = {
         Lua = {
@@ -53,10 +54,6 @@ require("lspconfig").lua_ls.setup({
             -- Do not send telemetry data containing a randomized but unique identifier
             telemetry = {
                 enable = false,
-            },
-            -- neodev
-            completion = {
-                callSnippet = "Replace",
             },
         },
     },

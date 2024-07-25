@@ -103,7 +103,7 @@ null_ls.setup({
         null_ls.builtins.formatting.clang_format.with({
             extra_args = { "--style", "file" },
         }),
-        uncrustify,
+        -- uncrustify,
 
         -- python
         -- flake8,
@@ -133,14 +133,14 @@ null_ls.setup({
             extra_args = { "--indent-type", "Spaces" },
         }),
 
-        -- grammar & spell
-        null_ls.builtins.diagnostics.write_good,
-        cspell.diagnostics.with({
-            config = cspell_config,
-        }),
-        cspell.code_actions.with({
-            config = cspell_config,
-        }),
+        -- -- grammar & spell
+        -- null_ls.builtins.diagnostics.write_good,
+        -- cspell.diagnostics.with({
+        --     config = cspell_config,
+        -- }),
+        -- cspell.code_actions.with({
+        --     config = cspell_config,
+        -- }),
     },
 
     -- formatting on save
@@ -151,6 +151,10 @@ null_ls.setup({
                 group = augroup,
                 buffer = bufnr,
                 callback = function()
+                    if not not vim.g.null_ls_disable_auto_format then
+                        return
+                    end
+
                     vim.lsp.buf.format({
                         -- filter = function(cli)
                         --     -- use only null-ls for formatting
@@ -163,6 +167,10 @@ null_ls.setup({
         end
     end,
 })
+
+vim.api.nvim_create_user_command("ToggleAutoFormatting", function()
+    vim.g.null_ls_disable_auto_format = not vim.g.null_ls_disable_auto_format
+end, {})
 
 --------------------------------------------------------------------------------
 -- Null-ls commands
@@ -183,9 +191,9 @@ local function load_sources(bufnr, filter_ft)
             end
         end
     end
-    vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
+    vim.api.nvim_buf_set_option_value("modifiable", true, { buf = bufnr })
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, source_names)
-    vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+    vim.api.nvim_buf_set_option_value("modifiable", false, { buf = bufnr })
     return #source_names
 end
 
@@ -230,8 +238,8 @@ local function sources_prompt()
         border = "single",
     }
     local win = vim.api.nvim_open_win(buf, true, opts)
-    vim.api.nvim_win_set_option(win, "winhl", "FloatBorder:Pmenu")
-    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+    vim.api.nvim_win_set_option_value("winhl", "FloatBorder:Pmenu", { win = win })
+    vim.api.nvim_buf_set_option_value("modifiable", false, { buf = buf })
 end
 
 vim.api.nvim_create_user_command("NullLsSources", sources_prompt, {})

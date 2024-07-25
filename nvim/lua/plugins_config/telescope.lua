@@ -111,6 +111,7 @@ n({
             show_line = false,
         })
     end,
+    ["<leader>/"] = builtin.current_buffer_fuzzy_find,
     ["<leader>sd"] = builtin.lsp_definitions,
     ["<leader>ss"] = builtin_ivy.lsp_dynamic_workspace_symbols,
     ["<leader>s."] = builtin_ivy.lsp_document_symbols,

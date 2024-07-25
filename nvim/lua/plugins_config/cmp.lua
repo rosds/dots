@@ -71,10 +71,26 @@ cmp.setup({
             elseif ls and ls.expand_or_jumpable() then
                 ls.expand_or_jump()
             else
-                fallback()
+                local copilot_keys = vim.fn["copilot#Accept"]()
+                if copilot_keys ~= "" then
+                    vim.api.nvim_feedkeys(copilot_keys, "i", true)
+                else
+                    fallback()
+                end
             end
         end, { "i", "s" }),
         -- Take copilot completion
+        -- ["<c-g>"] = cmp.mapping(function(fallback)
+        --     if cmp.visible() then
+        --         cmp.confirm({
+        --             behavior = cmp.ConfirmBehavior.Insert,
+        --             select = true,
+        --         })
+        --     else
+        --         cmp.mapping.complete()
+        --     end
+        -- end),
+        ["<c-g>"] = cmp.mapping.complete(),
         ["<c-f>"] = function(fallback)
             cmp.mapping.abort()
             local copilot_keys = vim.fn["copilot#Accept"]()
@@ -110,6 +126,7 @@ cmp.setup({
         end, { "i", "s" }),
     },
     sources = {
+        { name = "lazydev", group_index = 0 },
         { name = "nvim_lsp" },
         { name = "nvim_lua" },
         { name = "luasnip" },
@@ -153,3 +170,6 @@ cmp.setup({
         end,
     },
 })
+
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())

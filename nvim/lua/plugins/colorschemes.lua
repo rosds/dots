@@ -6,7 +6,8 @@ return {
         "rebelot/kanagawa.nvim",
         lazy = false,
         config = function()
-            require("kanagawa").setup({ transparent = true })
+            local transparent = not (vim.g.neovide or vim.g.started_by_firenvim)
+            require("kanagawa").setup({ transparent = transparent })
         end,
     },
     {
