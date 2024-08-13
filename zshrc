@@ -142,6 +142,10 @@ export NVM_DIR="$HOME/.nvm"
 
 export CXXFLAGS="-B/usr/local/libexec/mold"
 
+# python
+alias python='/usr/bin/python3.11'
+alias python3='/usr/bin/python3.11'
+
 # Go
 export PATH="$PATH:/usr/local/go/bin"
 export GOPATH="$HOME/go"

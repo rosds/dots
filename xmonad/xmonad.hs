@@ -10,6 +10,7 @@ import Polybar
   )
 import XMonad
 import XMonad.Actions.CycleWS
+import XMonad.Actions.Search hiding (Query)
 import XMonad.Hooks.DynamicLog hiding (pad)
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.EwmhDesktops
@@ -20,15 +21,27 @@ import XMonad.Hooks.ManageDocks
     manageDocks,
   )
 import XMonad.Layout
+import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
+import XMonad.Prompt
 import XMonad.StackSet (RationalRect (..))
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (safeSpawn)
-import XMonad (XConfig(normalBorderColor))
 
 -- workspaces
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "NSP"]
+
+-- XPConfig
+myPromptConfig :: XPConfig
+myPromptConfig =
+  def
+    { font = "FiraMono Nerd Font:size=10",
+      bgColor = "#1F1F28",
+      fgColor = "#DCD7BA",
+      borderColor = "#938AA9",
+      position = Top
+    }
 
 -- Log workspace state for polybar
 myLogHook :: PP
@@ -45,8 +58,12 @@ myLogHook =
     }
 
 myLayoutHook =
-  spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $
+  spacing 10 $
     layoutHook def
+
+-- myLayoutHook =
+--   spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $
+--     layoutHook def
 
 -- Scratch pads
 myScratchpads =
@@ -119,7 +136,6 @@ main = do
             -- focusedBorderColor = "#98971a"
             focusedBorderColor = "#957FB8",
             normalBorderColor = "#16161D"
-
           }
         `additionalKeysP`
         -- keybinings
@@ -147,5 +163,6 @@ main = do
           ("M-S-m", namedScratchpadAction myScratchpads "spotify"),
           ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
           ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
-          ("M-S-o", namedScratchpadAction myScratchpads "calendar")
+          ("M-S-o", namedScratchpadAction myScratchpads "calendar"),
+          ("M-s", promptSearchBrowser myPromptConfig "google-chrome" google)
         ]

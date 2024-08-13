@@ -14,9 +14,6 @@ dunst &
 # background
 feh --image-bg black --bg-fill ~/Pictures/bg
 
-# screen annotations
-gromit-mpx &
-
 # compositor
 compton &
 
