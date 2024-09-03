@@ -20,9 +20,16 @@ import XMonad.Hooks.ManageDocks
     docks,
     manageDocks,
   )
+-- layout
 import XMonad.Layout
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Renamed (Rename (Replace), renamed)
+import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
+import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Spacing
+-- prompt
+import XMonad.Layout.Spacing (Spacing (smartBorder))
+import XMonad.Layout.ToggleLayouts
 import XMonad.Prompt
 import XMonad.StackSet (RationalRect (..))
 import XMonad.Util.EZConfig (additionalKeysP)
@@ -57,13 +64,14 @@ myLogHook =
       ppHiddenNoWindows = pad 1
     }
 
-myLayoutHook =
-  spacing 10 $
-    layoutHook def
+tiled =
+  renamed [Replace "Tiled"] $
+    avoidStruts $
+      smartBorders $
+        spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $
+          ResizableTall 1 (3 / 100) (1 / 2) []
 
--- myLayoutHook =
---   spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $
---     layoutHook def
+myLayoutHook = tiled ||| Full
 
 -- Scratch pads
 myScratchpads =
@@ -122,21 +130,20 @@ main :: IO ()
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-workspace-log"] -- log workspace string for polybar
   xmonad $
-    ewmh $
-      docks
-        def
-          { workspaces = myWorkspaces,
-            terminal = "alacritty",
-            manageHook = myManageHook,
-            layoutHook = avoidStruts myLayoutHook,
-            handleEventHook = myHandleEventHook <> handleEventHook def,
-            logHook = dynamicLogWithPP myLogHook,
-            modMask = mod4Mask,
-            -- focusedBorderColor = "#a7c080"
-            -- focusedBorderColor = "#98971a"
-            focusedBorderColor = "#957FB8",
-            normalBorderColor = "#16161D"
-          }
+    ewmh . docks $
+      def
+        { workspaces = myWorkspaces,
+          terminal = "alacritty",
+          manageHook = myManageHook,
+          layoutHook = myLayoutHook,
+          handleEventHook = myHandleEventHook <> handleEventHook def,
+          logHook = dynamicLogWithPP myLogHook,
+          modMask = mod4Mask,
+          -- focusedBorderColor = "#a7c080"
+          -- focusedBorderColor = "#98971a"
+          focusedBorderColor = "#957FB8",
+          normalBorderColor = "#16161D"
+        }
         `additionalKeysP`
         -- keybinings
         [ ("M-p", spawn "rofi -show run"),

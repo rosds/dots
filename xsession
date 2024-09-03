@@ -15,7 +15,7 @@ dunst &
 feh --image-bg black --bg-fill ~/Pictures/bg
 
 # compositor
-compton &
+picom &
 
 # polybar
 polybar -r &
