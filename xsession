@@ -8,17 +8,8 @@ autorandr -c
 # lock
 xautolock -time 3 -detectsleep -corners +00- -locker "i3lock -i ~/Pictures/bg -t" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'locking in 30 seconds'" &
 
-# notifications
-dunst &
-
 # background
 feh --image-bg black --bg-fill ~/Pictures/bg
-
-# compositor
-picom &
-
-# polybar
-polybar -r &
 
 # chrome & google chat
 google-chrome --restore-last-session &

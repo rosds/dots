@@ -1,7 +1,7 @@
 -- neovide font
 if vim.g.neovide then
-    vim.opt.guifont = "FiraMono Nerd Font:h8"
-    vim.g.neovide_transparency = 0.95
+  vim.opt.guifont = "FiraMono Nerd Font:h8"
+  vim.g.neovide_transparency = 0.95
 end
 
 -- disable netrw, somehow messes with nvim-tree
@@ -29,7 +29,7 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 
 -- max column width
-vim.opt.textwidth = 80
+vim.opt.textwidth = 128
 vim.opt.formatoptions:remove("t")
 vim.opt.formatoptions:append("t")
 vim.opt.formatoptions:remove("o") -- no wrap comments on 'o' or 'O'
@@ -75,9 +75,9 @@ vim.opt.laststatus = 2
 vim.opt.cmdheight = 1
 
 vim.diagnostic.config({
-    float = {
-        source = "if_many",
-    },
+  float = {
+    source = "if_many",
+  },
 })
 
 -- folding

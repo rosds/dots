@@ -35,6 +35,7 @@ import XMonad.StackSet (RationalRect (..))
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.SpawnOnce
 
 -- workspaces
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "NSP"]
@@ -71,7 +72,14 @@ tiled =
         spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $
           ResizableTall 1 (3 / 100) (1 / 2) []
 
-myLayoutHook = tiled ||| Full
+tiledSpacing =
+  renamed [Replace "TiledSpacing"] $
+    avoidStruts $
+      smartBorders $
+        spacing 20 $
+          ResizableTall 1 (3 / 100) (1 / 2) []
+
+myLayoutHook = tiled ||| tiledSpacing ||| Full
 
 -- Scratch pads
 myScratchpads =
@@ -126,6 +134,13 @@ myHandleEventHook =
         ]
     )
 
+myStartupHook :: X ()
+myStartupHook = do
+  spawnOnce "picom &"
+  spawnOnce "dunst &"
+  spawnOnce "nm-applet &"
+  spawnOnce "polybar &"
+
 main :: IO ()
 main = do
   safeSpawn "mkfifo" ["/tmp/.xmonad-workspace-log"] -- log workspace string for polybar
@@ -142,7 +157,8 @@ main = do
           -- focusedBorderColor = "#a7c080"
           -- focusedBorderColor = "#98971a"
           focusedBorderColor = "#957FB8",
-          normalBorderColor = "#16161D"
+          normalBorderColor = "#16161D",
+          startupHook = myStartupHook
         }
         `additionalKeysP`
         -- keybinings
