@@ -51,8 +51,8 @@ return {
 
     -- Gitlab duo
     {
-        enabled = false,
         "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim.git",
+        enabled = false,
         -- Activate when a file is created/opened
         event = { "BufReadPre", "BufNewFile" },
         -- Activate when a supported filetype is open

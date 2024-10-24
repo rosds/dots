@@ -1,22 +1,22 @@
-define hookpost-up
-  dashboard
-end
-
-define hookpost-down
-  dashboard
-end
-
-define hookpost-frame
-  dashboard
-end
-
-define hook-stop
-  dashboard
-end
-
-define hook-thread
-  dashboard
-end
+# define hookpost-up
+#   dashboard
+# end
+#
+# define hookpost-down
+#   dashboard
+# end
+#
+# define hookpost-frame
+#   dashboard
+# end
+#
+# define hook-stop
+#   dashboard
+# end
+#
+# define hook-thread
+#   dashboard
+# end
 
 dashboard -layout source stack variables
 dashboard source -style height 30
