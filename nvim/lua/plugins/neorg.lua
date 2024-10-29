@@ -10,7 +10,7 @@ return {
         lazy = false,
         version = "*", -- Pin Neorg to the latest stable release
         config = function()
-            require("plugins_config.neorg")
+            require("plugins.config.neorg")
         end,
     },
 }

@@ -12,7 +12,7 @@ return {
             "L3MON4D3/LuaSnip",
         },
         config = function()
-            require("plugins_config.cmp")
+            require("plugins.config.cmp")
         end,
     },
 }

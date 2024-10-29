@@ -1,6 +1,6 @@
 return {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
-        require("plugins_config.indent-blankline")
+        require("plugins.config.indent-blankline")
     end,
 }

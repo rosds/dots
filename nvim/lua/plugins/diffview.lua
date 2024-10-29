@@ -2,7 +2,7 @@ return {
     {
         "sindrets/diffview.nvim",
         config = function()
-            require("plugins_config.diffview")
+            require("plugins.config.diffview")
         end,
         cmd = { "DiffviewOpen", "DiffviewFileHistory" },
         keys = {
