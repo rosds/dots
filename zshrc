@@ -105,6 +105,8 @@ source $ZSH/oh-my-zsh.sh
 # fzf
 export FZF_DEFAULT_SORT=1000000
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 alias ls=eza
 alias ps=procs
@@ -131,6 +133,8 @@ export NVM_DIR="$HOME/.nvm"
 # export PATH="$PATH:/usr/lib/ccache"
 
 export CXXFLAGS="-B/usr/local/libexec/mold"
+
+export PATH="$PATH:$HOME/.local/bin"
 
 # clang-format
 alias clang-format='/usr/bin/clang-format-18'
@@ -178,3 +182,6 @@ alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under
 
 alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'
 alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener"
+
+# haskell
+[ -f "/home/alfonso.ros/.ghcup/env" ] && . "/home/alfonso.ros/.ghcup/env" # ghcup-env

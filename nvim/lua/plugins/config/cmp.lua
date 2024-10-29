@@ -164,6 +164,7 @@ cmp.setup({
     },
     experimental = { native_menu = false, ghost_text = false },
     formatting = {
+        expandable_indicator = true,
         fields = { "kind", "abbr", "menu" },
         format = function(entry, vim_item)
             local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)

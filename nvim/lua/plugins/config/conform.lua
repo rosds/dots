@@ -2,6 +2,12 @@ local conform = require("conform")
 
 conform.setup({
     log_level = vim.log.levels.DEBUG,
+    default_format_opts = {
+        lsp_format = "fallback",
+    },
+    format_on_save = {
+        lsp_format = "fallback",
+    },
     formatters_by_ft = {
         lua = { "stylua" },
         bzl = { "buildifier" },
@@ -22,7 +28,9 @@ conform.setup({
     },
     formatters = {
         clang_format = {
-            args = { "--assume-filename", "$FILENAME", "--fallback-style=LLVM" },
+            prepend_args = {
+                "--style=file:/home/alfonso.ros/ade-home/gc/master/.clang-format",
+            },
         },
         buildifier = {
             args = { "-path", "$FILENAME" },
@@ -30,15 +38,6 @@ conform.setup({
     },
 })
 
-local group = vim.api.nvim_create_augroup("conform_augroup", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    group = group,
-    callback = function(args)
-        conform.format({ bufnr = args.buf })
-    end,
-})
-
 vim.keymap.set({ "v", "n" }, "<leader>sf", function()
     conform.format()
-end, { silent = true })
+end)

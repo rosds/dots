@@ -2,9 +2,6 @@
 
 autorandr -c
 
-/usr/bin/setxkbmap -option 'caps:ctrl_modifier'
-/usr/bin/xcape -e 'Caps_Lock=Escape' -t 100
-
 # lock
 xautolock -time 3 -detectsleep -corners +00- -locker "i3lock -i ~/Pictures/bg -t" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'locking in 30 seconds'" &
 

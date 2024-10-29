@@ -136,7 +136,7 @@ myHandleEventHook =
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "picom &"
+  spawnOnce "picom --backend glx &"
   spawnOnce "dunst &"
   spawnOnce "nm-applet &"
   spawnOnce "polybar &"
