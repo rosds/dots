@@ -1,5 +1,6 @@
 - link:
     ~/.config/alacritty: alacritty
+    ~/.config/autorandr: autorandr
     ~/.config/bat: bat
     ~/.config/dunst: dunst
     ~/.config/gdb-dashboard: gdb-dashboard
@@ -14,6 +15,7 @@
     ~/.fonts: fonts
     ~/.gitconfig: gitconfig
     ~/.tmux.conf: tmux/tmux.conf
+    ~/.tmux: tmux
     ~/.zshrc: zshrc
     ~/.xsession:
       mode: 0777

@@ -139,7 +139,7 @@ myStartupHook = do
   spawnOnce "picom --backend glx &"
   spawnOnce "dunst &"
   spawnOnce "nm-applet &"
-  spawnOnce "polybar &"
+  spawnOnce "polybar --reload -c $HOME/.config/polybar/config.ini main &"
 
 main :: IO ()
 main = do

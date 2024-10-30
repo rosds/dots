@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+feh --image-bg black --bg-fill ~/Pictures/bg

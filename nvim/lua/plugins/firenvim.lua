@@ -20,9 +20,7 @@ return {
     {
         "glacambre/firenvim",
         cond = not not vim.g.started_by_firenvim,
-        build = function()
-            vim.fn["firenvim#install"](0)
-        end,
+        build = ":call firenvim#install(0)",
         config = function()
             local ag = require("augroup").augroup
             ag("Firenvim")({
