@@ -6,6 +6,6 @@ return {
         { "<leader>so", "<cmd>SymbolsOutline<cr>" },
     },
     config = function()
-        require("symbols-outline").setup()
+        require("plugins.config.symbols-outline").setup()
     end,
 }

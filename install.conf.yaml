@@ -4,6 +4,7 @@
     ~/.config/bat: bat
     ~/.config/dunst: dunst
     ~/.config/gdb-dashboard: gdb-dashboard
+    ~/.config/git: git
     ~/.config/kitty: kitty
     ~/.config/nvim: nvim
     ~/.config/picom.conf: picom.conf
@@ -11,6 +12,7 @@
     ~/.config/rofi: rofi
     ~/.config/starship.toml: starship.toml
     ~/.config/stylua: stylua
+    ~/.config/systemd/user/kanata.service: systemd/user/kanata.service
     ~/.config/xmonad: xmonad
     ~/.fonts: fonts
     ~/.gitconfig: gitconfig

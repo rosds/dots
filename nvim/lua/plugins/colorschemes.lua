@@ -1,14 +1,13 @@
 return {
     { "EdenEast/nightfox.nvim", lazy = true },
-    { "catppuccin/nvim", lazy = true },
-    { "folke/tokyonight.nvim", lazy = true },
+    { "catppuccin/nvim",        lazy = true },
+    { "folke/tokyonight.nvim",  lazy = true },
     {
         "rebelot/kanagawa.nvim",
         lazy = false,
         config = function()
             local transparent = not (vim.g.neovide or vim.g.started_by_firenvim)
             -- disable transparent for a change
-            transparent = true
             require("kanagawa").setup({ transparent = transparent })
         end,
     },

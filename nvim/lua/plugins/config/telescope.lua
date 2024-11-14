@@ -134,10 +134,23 @@ v({
 
 -- :Rg Search for a string in the current directory using rg.
 vim.api.nvim_create_user_command("Rg", function(args)
-    builtin.grep_string({
-        search = args["args"],
-    })
-end, { nargs = 1 })
+    local opts = {
+        additional_args = {},
+        search = ""
+    }
+
+    for index, value in ipairs(args["fargs"]) do
+        -- if starts with "-" then it's a flag
+        if string.sub(value, 1, 1) == "-" then
+            table.insert(opts.additional_args, value)
+            table.insert(opts.additional_args, args["fargs"][index + 1])
+        else
+            opts.search = value
+        end
+    end
+
+    builtin.grep_string(opts)
+end, { nargs = '+' })
 
 -- :Rd Live grep in given directories
 vim.api.nvim_create_user_command("Rd", function(args)

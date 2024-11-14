@@ -77,6 +77,20 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel poetry)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+#
+# history setup
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+HISTFILE=$HOME/.zhistory
+SAVEHIST=50000
+HISTSIZE=50000
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt EXTENDED_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+
+# 10ms for key sequences
+KEYTIMEOUT=1
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -84,11 +98,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -139,18 +153,16 @@ export PATH="$PATH:$HOME/.local/bin"
 # clang-format
 alias clang-format='/usr/bin/clang-format-18'
 
-# # Go
-# export PATH="$PATH:/usr/local/go/bin"
-# export GOPATH="$HOME/go"
-# export PATH="$PATH:$(go env GOPATH)/bin"
-#
+# Go
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 # node
 export PATH="$PATH:$HOME/.deno/bin"
 
 # git hook
 export ENABLE_GIT_COMMIT_MSG_HOOK_INTERACTIVE=auto
 
-alias grbi="git rebase -i --autosquash --update-refs"
+alias grbi="git rebase -i --autosquash"
 alias gwl="git worktree list"
 alias gwrm="git worktree remove "
 

@@ -30,10 +30,15 @@ vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
 
 local v = require("keymaps").visual
 local n = require("keymaps").normal
+local i = require("keymaps").insert
 
 local follow_symlink = require("utils.fs").follow_symlink
 
 vim.api.nvim_create_user_command("FollowSymlink", follow_symlink, { nargs = 0 })
+
+i({
+    ["<S-tab>"] = { "<c-q><tab>" }
+})
 
 n({
     -- find and replace
@@ -98,6 +103,7 @@ ag("AllFiles")({
 local group = vim.api.nvim_create_augroup("qf_group", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "qf",
+    group = group,
     callback = function(event)
         local opts = { buffer = event.buf, silent = true }
         vim.keymap.set("n", "<C-n>", "<cmd>cn<CR>zz<cmd>wincmd p<CR>", opts)
@@ -106,3 +112,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.cmd.colorscheme("kanagawa-wave")
+
+-- Lua Rocks
+require("luarocks")

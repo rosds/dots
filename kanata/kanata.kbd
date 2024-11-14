@@ -1,5 +1,9 @@
+(defcfg
+    linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
+)
+
 (defsrc)
 
 (deflayermap (base-layer)
-  caps (tap-hold-press 80 80 esc lctl)
+  caps (tap-hold-press 200 200 esc lctl)
 )

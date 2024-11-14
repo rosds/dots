@@ -101,6 +101,11 @@ myScratchpads =
       "calendar"
       "google-chrome --app=https://calendar.google.com"
       (resource =? "calendar.google.com")
+      myFloating,
+    NS
+      "chat"
+      "google-chrome --app=https://chat.google.com"
+      (resource =? "chat.google.com")
       myFloating
   ]
   where
@@ -129,8 +134,7 @@ myHandleEventHook =
     ( composeAll
         [ title =? "Spotify" --> doFloat,
           className =? "zoom" --> doFloat,
-          className =? "1password" --> doFloat,
-          resource =? "chat.google.com" --> doShift (myWorkspaces !! 2)
+          className =? "1password" --> doFloat
         ]
     )
 
@@ -140,6 +144,7 @@ myStartupHook = do
   spawnOnce "dunst &"
   spawnOnce "nm-applet &"
   spawnOnce "polybar --reload -c $HOME/.config/polybar/config.ini main &"
+  spawnOnce "feh --image-bg black --bg-fill ~/Pictures/bg"
 
 main :: IO ()
 main = do
@@ -187,5 +192,6 @@ main = do
           ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
           ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
           ("M-S-o", namedScratchpadAction myScratchpads "calendar"),
+          ("M-S-i", namedScratchpadAction myScratchpads "chat"),
           ("M-s", promptSearchBrowser myPromptConfig "google-chrome" google)
         ]

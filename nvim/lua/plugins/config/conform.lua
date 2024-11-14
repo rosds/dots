@@ -5,13 +5,17 @@ conform.setup({
     default_format_opts = {
         lsp_format = "fallback",
     },
-    format_on_save = {
-        lsp_format = "fallback",
-    },
+    format_on_save = function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+        end
+        return { lsp_format = "fallback" }
+    end,
     formatters_by_ft = {
         lua = { "stylua" },
         bzl = { "buildifier" },
         cpp = { "clang_format" },
+        json = { "jq" },
         python = function(bufnr)
             if conform.get_formatter_info("ruff_format", bufnr).available then
                 return {
@@ -33,6 +37,7 @@ conform.setup({
             },
         },
         buildifier = {
+            prepend_args = { "-warnings=-out-of-order-load" },
             args = { "-path", "$FILENAME" },
         },
     },
@@ -41,3 +46,22 @@ conform.setup({
 vim.keymap.set({ "v", "n" }, "<leader>sf", function()
     conform.format()
 end)
+
+vim.api.nvim_create_user_command("AutoFormatDisable", function(args)
+    if args.bang then
+        -- FormatDisable! will disable formatting just for this buffer
+        vim.b.disable_autoformat = true
+    else
+        vim.g.disable_autoformat = true
+    end
+end, {
+    desc = "Disable autoformat-on-save",
+    bang = true,
+})
+
+vim.api.nvim_create_user_command("AutoFormatEnable", function()
+    vim.b.disable_autoformat = false
+    vim.g.disable_autoformat = false
+end, {
+    desc = "Re-enable autoformat-on-save",
+})

@@ -3,39 +3,39 @@ local mode = require("keymaps").mode
 
 local ag = require("augroup").augroup
 ag("LspAttach")({
-    {
-        "LspAttach",
-        desc = "LSP actions",
-        callback = function(args)
-            local bufnr = args.buf
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
+  {
+    "LspAttach",
+    desc = "LSP actions",
+    callback = function(args)
+      local bufnr = args.buf
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-            n({
-                -- replaced with the telescope one
-                -- ["<leader>sd"] = vim.lsp.buf.definition,
-                ["<leader>sD"] = vim.lsp.buf.declaration,
-                ["<leader>si"] = vim.lsp.buf.implementation,
-                ["<leader>st"] = vim.lsp.buf.type_definition,
-                ["<leader>sh"] = function()
-                    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-                end,
-                ["<c-w>]"] = function()
-                    vim.cmd.vsplit()
-                    vim.lsp.buf.definition()
-                end,
-                -- Rename
-                ["<leader>sr"] = vim.lsp.buf.rename,
-                -- Code action
-                ["<leader>sa"] = vim.lsp.buf.code_action,
-                -- Doc
-                K = vim.lsp.buf.hover,
-                -- Diagnostics
-                ["<leader>se"] = vim.diagnostic.open_float,
-                ["]e"] = vim.diagnostic.goto_next,
-                ["[e"] = vim.diagnostic.goto_prev,
-            })
+      n({
+        -- replaced with the telescope one
+        -- ["<leader>sd"] = vim.lsp.buf.definition,
+        ["<leader>sD"] = vim.lsp.buf.declaration,
+        ["<leader>si"] = vim.lsp.buf.implementation,
+        ["<leader>st"] = vim.lsp.buf.type_definition,
+        ["<leader>sh"] = function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
         end,
-    },
+        ["<c-w>]"] = function()
+          vim.cmd.vsplit()
+          vim.lsp.buf.definition()
+        end,
+        -- Rename
+        ["<leader>sr"] = vim.lsp.buf.rename,
+        -- Code action
+        ["<leader>sa"] = vim.lsp.buf.code_action,
+        -- Doc
+        K = vim.lsp.buf.hover,
+        -- Diagnostics
+        ["<leader>se"] = vim.diagnostic.open_float,
+        ["]e"] = vim.diagnostic.goto_next,
+        ["[e"] = vim.diagnostic.goto_prev,
+      })
+    end,
+  },
 })
 
 require("mason").setup({})
@@ -58,61 +58,64 @@ lspconfig.ruff.setup({})
 
 vim.env.PYENV_VERSION = vim.fn.system("pyenv version"):match("(%S+)%s+%(.-%)")
 lspconfig.pyright.setup({
-    capabilities = capabilities,
-    settings = {
-        pyright = {
-            -- ruff does this
-            disableOrganizeImports = true,
-        },
+  capabilities = capabilities,
+  settings = {
+    pyright = {
+      -- ruff does this
+      disableOrganizeImports = true,
     },
+  },
 })
 
 -- cpp
 lspconfig.clangd.setup({
-    cmd = {
-        "clangd",
-        "--background-index",
-        "--clang-tidy",
-        "--header-insertion=never",
-        "--fallback-style={IndentWidth: 4, TabWidth: 4}",
-        "--fallback-style=Google",
-        -- "--fallback-style=LLVM",
-        "--inlay-hints=true",
-    },
-    capabilities = vim.tbl_extend("force", capabilities, { offsetEncoding = "utf-8" }),
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=never",
+    "--fallback-style=Google",
+    "--inlay-hints=true",
+  },
+  capabilities = vim.tbl_extend("force", capabilities, { offsetEncoding = "utf-8" }),
 })
 
 -- lua
-require("lspconfig").lua_ls.setup({
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = "LuaJIT",
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { "vim" },
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
-                checkThirdParty = false,
-            },
-            -- Do not send telemetry data containing a randomized but unique identifier
-            telemetry = {
-                enable = false,
-            },
-        },
+lspconfig.lua_ls.setup({
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = "LuaJIT",
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { "vim" },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
     },
+  },
 })
 
 -- go
 if vim.fn.executable("gopls") then
-    lspconfig.gopls.setup({
-        capabilities = capabilities,
-    })
+  lspconfig.gopls.setup({
+    capabilities = capabilities,
+  })
 end
+
+-- jinja lsp
+lspconfig.jinja_lsp.setup {
+  capabilities = capabilities
+}
 
 -- rust
 -- vscode lldb extension

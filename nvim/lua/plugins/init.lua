@@ -38,7 +38,7 @@ return {
             },
         },
     },
-    { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+    { "Bilal2453/luvit-meta",  lazy = true }, -- optional `vim.uv` typings
 
     -- tmux
     {
@@ -83,67 +83,71 @@ return {
     },
 
     -- fennel
-    { "rktjmp/hotpot.nvim", ft = "fennel" },
+    { "rktjmp/hotpot.nvim",                                   ft = "fennel" },
 
     -- rust
     {
-        "rust-lang/rust.vim",
-        ft = "rust",
-        init = function()
-            vim.g.rustfmt_autosave = 1
-        end,
-    },
-    {
         "mrcjkb/rustaceanvim",
-        version = "^4", -- Recommended
+        version = "^5",
         lazy = false, -- This plugin is already lazy
     },
 
     -- zig
-    { "ziglang/zig.vim", ft = "zig" },
+    { "ziglang/zig.vim",                                      ft = "zig" },
+
+    -- jinja
+    { "HiPhish/jinja.vim",                                    ft = "jinja" },
 
     -- my plugins
     { dir = "~/apex/apex.nvim" },
     { dir = "~/apex/apexcolors.nvim" },
-    { enabled = false, dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
+    -- { enabled = false,               dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
+    { url = "git@gitlab.apex.ai:alfonso.ros/gitlab.nvim.git", config = true },
     {
-        enabled = false,
-        dir = "~/apex/bazel.nvim",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "stevearc/overseer.nvim",
-            "nvim-telescope/telescope.nvim",
-        },
+        'alexander-born/bazel.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
         config = function()
-            local bazel = require("bazel")
-            bazel.setup({})
-
-            local bazel_telescope = require("bazel.telescope")
-            local n = require("keymaps").normal
-
-            local themes = require("telescope.themes")
-            n({
-                ["<leader>ba"] = {
-                    function()
-                        bazel_telescope.build(themes.get_ivy())
-                    end,
-                    desc = "bazel build any target",
-                },
-                ["<leader>bb"] = {
-                    function()
-                        bazel_telescope.build_package(themes.get_ivy())
-                    end,
-                    desc = "bazel build package target",
-                },
-                ["<leader>bt"] = {
-                    function()
-                        bazel_telescope.test(themes.get_ivy())
-                    end,
-                    desc = "bazel test any target",
-                },
-            })
-        end,
+            vim.g.bazel_cmd = "bazel"
+        end
     },
+    -- {
+    --     enabled = false,
+    --     dir = "~/apex/bazel.nvim",
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --         "stevearc/overseer.nvim",
+    --         "nvim-telescope/telescope.nvim",
+    --     },
+    --     config = function()
+    --         local bazel = require("bazel")
+    --         bazel.setup({})
+    --
+    --         local bazel_telescope = require("bazel.telescope")
+    --         local n = require("keymaps").normal
+    --
+    --         local themes = require("telescope.themes")
+    --         n({
+    --             ["<leader>ba"] = {
+    --                 function()
+    --                     bazel_telescope.build(themes.get_ivy())
+    --                 end,
+    --                 desc = "bazel build any target",
+    --             },
+    --             ["<leader>bb"] = {
+    --                 function()
+    --                     bazel_telescope.build_package(themes.get_ivy())
+    --                 end,
+    --                 desc = "bazel build package target",
+    --             },
+    --             ["<leader>bt"] = {
+    --                 function()
+    --                     bazel_telescope.test(themes.get_ivy())
+    --                 end,
+    --                 desc = "bazel test any target",
+    --             },
+    --         })
+    --     end,
+    -- },
 
     -- misc
     { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
