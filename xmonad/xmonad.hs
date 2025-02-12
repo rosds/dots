@@ -12,7 +12,10 @@ import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Search hiding (Query)
 import XMonad.Hooks.DynamicLog hiding (pad)
-import XMonad.Hooks.DynamicProperty
+-- layout
+
+-- prompt
+
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
   ( ToggleStruts (ToggleStruts),
@@ -20,15 +23,13 @@ import XMonad.Hooks.ManageDocks
     docks,
     manageDocks,
   )
--- layout
+import XMonad.Hooks.OnPropertyChange
 import XMonad.Layout
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (Rename (Replace), renamed)
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Spacing
--- prompt
-import XMonad.Layout.Spacing (Spacing (smartBorder))
 import XMonad.Layout.ToggleLayouts
 import XMonad.Prompt
 import XMonad.StackSet (RationalRect (..))
@@ -111,6 +112,14 @@ myScratchpads =
   where
     myFloating = customFloating $ RationalRect (1 / 9) (1 / 8) (7 / 9) (6 / 8)
 
+myExclusive =
+  addExclusives
+    [ ["spotify", "neovide", "scratchterm", "calendar", "chat"],
+      ["neovide", "scratchterm", "calendar", "chat"],
+      ["scratchterm", "calendar", "chat"],
+      ["calendar", "chat"]
+    ]
+
 (^=) :: Query String -> String -> Query Bool
 (^=) q s = fmap (s `isPrefixOf`) q
 
@@ -129,7 +138,7 @@ myManageHook =
 
 -- Issue with the spotify window changing titles
 myHandleEventHook =
-  dynamicPropertyChange
+  onXPropertyChange
     "WM_NAME"
     ( composeAll
         [ title =? "Spotify" --> doFloat,
@@ -163,7 +172,7 @@ main = do
           -- focusedBorderColor = "#98971a"
           focusedBorderColor = "#957FB8",
           normalBorderColor = "#16161D",
-          startupHook = myStartupHook
+          startupHook = myStartupHook >> myExclusive
         }
         `additionalKeysP`
         -- keybinings
