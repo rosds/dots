@@ -4,6 +4,8 @@ if vim.g.neovide then
     vim.g.neovide_transparency = 0.95
 end
 
+vim.g.python3_host_prog = "/home/alfonso.ros/.pyenv/versions/neovim-env/bin/python"
+
 -- spaces instead of tabs
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -84,4 +86,4 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.conceallevel = 2
 
 -- Re-enable for debugging
--- vim.lsp.set_log_level("off")
+vim.lsp.set_log_level("off")

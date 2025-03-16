@@ -49,28 +49,6 @@ return {
         end,
     },
 
-    -- Gitlab duo
-    {
-        "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim.git",
-        enabled = false,
-        -- Activate when a file is created/opened
-        event = { "BufReadPre", "BufNewFile" },
-        -- Activate when a supported filetype is open
-        ft = { "sh", "cpp", "python" },
-        cond = function()
-            -- Only activate if token is present in environment variable.
-            -- Remove this line to use the interactive workflow.
-            return vim.env.GITLAB_TOKEN ~= nil and vim.env.GITLAB_TOKEN ~= ""
-        end,
-        opts = {
-            statusline = {
-                -- Hook into the built-in statusline to indicate the status
-                -- of the GitLab Duo Code Suggestions integration
-                enabled = false,
-            },
-        },
-    },
-
     -- markdown
     {
         "dhruvasagar/vim-table-mode",
@@ -81,9 +59,14 @@ return {
             "TableModeEnable",
         },
     },
+    -- For `plugins/markview.lua` users.
+    {
+        "OXY2DEV/markview.nvim",
+        lazy = false,
+    },
 
     -- fennel
-    { "rktjmp/hotpot.nvim",                                   ft = "fennel" },
+    { "rktjmp/hotpot.nvim", ft = "fennel" },
 
     -- rust
     {
@@ -93,14 +76,38 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",                                      ft = "zig" },
+    { "ziglang/zig.vim",    ft = "zig" },
 
     -- jinja
-    { "HiPhish/jinja.vim",                                    ft = "jinja" },
+    {
+        "HiPhish/jinja.vim",
+        build = "git submodule update --init --recursive",
+        config = function()
+            -- Set autogroup using neovim lua api for jinja file type
+            local group = vim.api.nvim_create_augroup("jinja_group", { clear = true })
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "jinja",
+                group = group,
+                callback = function(event)
+                    vim.cmd([[
+
+                        if !get(b:, 'jinja_syntax_autocmd_loaded', v:false)
+                                if luaeval("vim.treesitter.language.get_lang('jinja')") == v:null
+                                        autocmd FileType <buffer> if !empty(&ft) | setlocal syntax=on | endif
+                                endif
+                                let b:jinja_syntax_autocmd_loaded = v:true
+                        endif
+                    ]])
+                end,
+            })
+        end
+
+    },
 
     -- my plugins
-    { dir = "~/apex/apex.nvim" },
-    { dir = "~/apex/apexcolors.nvim" },
+    { enabled = false,                                        dir = "~/apex/apex.nvim" },
+    { enabled = false,                                        dir = "~/apex/apexcolors.nvim" },
+
     -- { enabled = false,               dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
     { url = "git@gitlab.apex.ai:alfonso.ros/gitlab.nvim.git", config = true },
     {

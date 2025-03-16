@@ -15,13 +15,16 @@ conform.setup({
         lua = { "stylua" },
         bzl = { "buildifier" },
         cpp = { "clang_format" },
+        zsh = { "beautysh" },
         json = { "jq" },
+        elixir = { "mix" },
+        haskell = { "ormolu" },
         python = function(bufnr)
             if conform.get_formatter_info("ruff_format", bufnr).available then
                 return {
                     "ruff_fix",
-                    "ruff_format",
                     "ruff_organize_imports",
+                    "ruff_format",
                     "black",
                 }
             else

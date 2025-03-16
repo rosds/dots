@@ -40,12 +40,37 @@ i({
     ["<S-tab>"] = { "<c-q><tab>" }
 })
 
+local function edit_config_float()
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local row = math.floor((vim.o.lines - height) / 2)
+    local col = math.floor((vim.o.columns - width) / 2)
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    local win = vim.api.nvim_open_win(buf, true, {
+        relative = "editor",
+        width = width,
+        height = height,
+        row = row,
+        col = col,
+        style = "minimal",
+        border = "single",
+    })
+    vim.wo[win].relativenumber = true
+    vim.wo[win].number = true
+
+    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+    vim.api.nvim_command('silent! edit $MYVIMRC')
+    vim.cmd.lcd("%:p:h")
+    vim.cmd.setlocal("path=.,**,,")
+end
+
 n({
     -- find and replace
     ["<leader>rr"] = { 'yiw:%s/<c-r>"//g<left><left>', silent = false },
     -- edit nvim config
     ["<leader>vc"] = function()
-        vim.cmd.vsplit("$MYVIMRC")
+        vim.cmd.tabnew("$MYVIMRC")
         vim.cmd.lcd("%:p:h")
         vim.cmd.setlocal("path=.,**,,")
     end,
@@ -65,7 +90,7 @@ n({
     -- yank path w/o line number
     ["<leader>yf"] = ":let @+ = expand('%:p')<cr>",
     -- yank path with line number
-    ["<leader>yF"] = ":let @+ = join([expand('%:p'), line('.')],':')<cr>",
+    ["<leader>yF"] = ":let @\" = join([expand('%:p'), line('.')],':')<cr>",
     -- disable ighlight
     ["<esc><esc>"] = ":noh<cr>",
     -- toggle diagnostics

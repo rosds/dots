@@ -9,7 +9,7 @@ local function uuidgen()
 end
 
 return {
-    s("cr", t({ "# Copyright 2024 Apex.AI, Inc.", "# All rights reserved." })),
+    s("cr", t({ "# Copyright 2025 Apex.AI, Inc.", "# All rights reserved." })),
     s(
         "test",
         fmt(

@@ -51,6 +51,7 @@ telescope.setup({
 })
 
 telescope.load_extension("fzf")
+telescope.load_extension("frecency")
 
 -------------------------------------------------------------------------------
 -- Mappings
@@ -59,30 +60,34 @@ local t = require("telescope.builtin")
 local n = require("keymaps").normal
 local v = require("keymaps").visual
 
-local function super_rg(opts)
-    local opts = opts or {}
-    opts.attach_mappings = function(_, map)
-        map({ "i", "n" }, "<c-t>", function(prompt_bufnr)
-            local ft = vim.fn.input("Filetype: ")
-            local action_state = require("telescope.actions.state")
-            local picker = action_state.get_current_picker(prompt_bufnr)
-            local current_input = picker:_get_prompt()
-            actions.close(prompt_bufnr)
+local function super_rg(telescope_fn)
+    return function(input_opts)
+        local opts = input_opts or {}
+        opts.attach_mappings = function(_, map)
+            map({ "i", "n" }, "<c-t>", function(prompt_bufnr)
+                local ft = vim.fn.input("Filetype: ")
+                local action_state = require("telescope.actions.state")
+                local picker = action_state.get_current_picker(prompt_bufnr)
+                local current_input = picker:_get_prompt()
+                actions.close(prompt_bufnr)
 
-            super_rg({
-                type_filter = ft,
-                default_text = current_input,
-            })
-        end)
-        -- use default mappings as well
-        return true
+                local args = {
+                    default_text = current_input,
+                    additional_args = { "-t", ft }
+                }
+
+                super_rg(telescope_fn)(args)
+            end)
+            -- use default mappings as well
+            return true
+        end
+
+        telescope_fn(opts)
     end
-
-    builtin.live_grep(opts)
 end
 
 n({
-    ["<leader>f"] = function()
+    ["<leader>P"] = function()
         builtin.fd({ follow = true })
     end,
     ["<leader>p"] = function()
@@ -92,6 +97,7 @@ n({
             builtin_ivy.fd()
         end
     end,
+    ["<leader>R"] = builtin.resume,
     ["<leader>o"] = function()
         builtin_ivy.buffers({
             sort_mru = true,
@@ -104,8 +110,8 @@ n({
     end,
     ["<leader><c-f>"] = builtin.current_buffer_fuzzy_find,
     ["<leader><c-r>"] = builtin_ivy.command_history,
-    ["<leader>rg"] = builtin.grep_string,
-    ["<leader>rl"] = super_rg,
+    ["<leader>rg"] = super_rg(builtin.grep_string),
+    ["<leader>rl"] = super_rg(builtin.live_grep),
     ["<leader>sc"] = function()
         return builtin.lsp_references({
             show_line = false,
@@ -125,7 +131,7 @@ n({
 })
 
 v({
-    ["<leader>rg"] = builtin.grep_string,
+    ["<leader>rg"] = super_rg(builtin.grep_string),
 })
 
 -------------------------------------------------------------------------------
@@ -134,22 +140,7 @@ v({
 
 -- :Rg Search for a string in the current directory using rg.
 vim.api.nvim_create_user_command("Rg", function(args)
-    local opts = {
-        additional_args = {},
-        search = ""
-    }
-
-    for index, value in ipairs(args["fargs"]) do
-        -- if starts with "-" then it's a flag
-        if string.sub(value, 1, 1) == "-" then
-            table.insert(opts.additional_args, value)
-            table.insert(opts.additional_args, args["fargs"][index + 1])
-        else
-            opts.search = value
-        end
-    end
-
-    builtin.grep_string(opts)
+    super_rg(builtin.grep_string)({ search = args.args })
 end, { nargs = '+' })
 
 -- :Rd Live grep in given directories

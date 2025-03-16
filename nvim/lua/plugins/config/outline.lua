@@ -1,4 +1,4 @@
-require("symbols-outline").setup({
+require("outline").setup({
     keymaps = {
         fold = { "h", "zc" },
         unfold = { "l", "zo" },

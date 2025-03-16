@@ -50,22 +50,4 @@ return {
     },
     { "nvim-treesitter/playground" },
     { "nvim-treesitter/nvim-treesitter-context", opts = {} },
-    {
-        "danymat/neogen",
-        config = function()
-            require("neogen").setup({
-                snippet_engine = "luasnip",
-            })
-        end,
-        keys = {
-            {
-                "<leader>hh",
-                function()
-                    require("neogen").generate({})
-                end,
-            },
-        },
-        dependencies = "nvim-treesitter/nvim-treesitter",
-        lazy = true,
-    },
 }

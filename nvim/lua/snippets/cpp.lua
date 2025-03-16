@@ -30,7 +30,7 @@ end
 local function copy_right()
     return fmt(
         [[
-        /// @copyright Copyright 2024 Apex.AI, Inc.
+        /// @copyright Copyright 2025 Apex.AI, Inc.
         /// All rights reserved.
         /// @file
         {}

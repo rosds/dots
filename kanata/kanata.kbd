@@ -5,5 +5,5 @@
 (defsrc)
 
 (deflayermap (base-layer)
-  caps (tap-hold-press 200 200 esc lctl)
+  caps (tap-hold-press 128 128 esc lctl)
 )

@@ -20,11 +20,13 @@ return {
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_assume_mapped = true
             vim.g.copilot_tab_fallback = ""
-            vim.g.copilot_filetypes = {
-                ["*"] = false,
-                lua = true,
-                rust = true,
-            }
+            -- vim.g.copilot_filetypes = {
+            --     ["*"] = false,
+            --     python = true,
+            --     cpp = true,
+            --     lua = true,
+            --     rust = true,
+            -- }
         end,
         config = function()
             local group = vim.api.nvim_create_augroup("copilot_enable_cond", { clear = true })

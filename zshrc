@@ -72,7 +72,11 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel poetry)
+
+# Do the initialization when the script is sourced (i.e. Initialize instantly)
+ZVM_INIT_MODE=sourcing
+
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel poetry zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -82,8 +86,8 @@ source $ZSH/oh-my-zsh.sh
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 HISTFILE=$HOME/.zhistory
-SAVEHIST=50000
-HISTSIZE=50000
+SAVEHIST=100000
+HISTSIZE=100000
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 setopt INC_APPEND_HISTORY
@@ -99,9 +103,9 @@ KEYTIMEOUT=1
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+    export EDITOR='vim'
 else
-  export EDITOR='nvim'
+    export EDITOR='nvim'
 fi
 
 # Compilation flags
@@ -115,12 +119,6 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# fzf
-export FZF_DEFAULT_SORT=1000000
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 alias ls=eza
 alias ps=procs
@@ -154,6 +152,7 @@ export PATH="$PATH:$HOME/.local/bin"
 alias clang-format='/usr/bin/clang-format-18'
 
 # Go
+export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 # node
@@ -185,6 +184,10 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PIPX_DEFAULT_PYTHON="$HOME/.pyenv/versions/3.11.10/bin/python"
 
+# 1password
+eval "$(op completion zsh)"; compdef _op op
+source /home/alfonso.ros/.config/op/plugins.sh
+
 # apex repo
 alias repo.check='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.check --'
 alias repo.fix='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //tools/repo:repo.fix --'
@@ -193,7 +196,19 @@ alias identify_test_uid='bazel run --noshow_progress --ui_event_filters=-info  -
 alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under="cd $(pwd) &&" //apex_internal/tools/apex_doc_tools:apex_doc --'
 
 alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'
-alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener"
+alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener; rm /tmp/apex_ida_resource_creator_uds"
 
 # haskell
 [ -f "/home/alfonso.ros/.ghcup/env" ] && . "/home/alfonso.ros/.ghcup/env" # ghcup-env
+
+# elixir
+export PATH=$HOME/.elixir-install/installs/otp/27.1.2/bin:$PATH
+export PATH=$HOME/.elixir-install/installs/elixir/1.17.3-otp-27/bin:$PATH
+
+# fzf
+export FZF_DEFAULT_SORT=1000000
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

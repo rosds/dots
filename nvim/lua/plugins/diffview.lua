@@ -6,8 +6,8 @@ return {
         end,
         cmd = { "DiffviewOpen", "DiffviewFileHistory" },
         keys = {
-            { "<leader>gd", ":DiffviewFileHistory %<cr>" },
-            { "<leader>gd", ":DiffviewFileHistory %<cr>" },
+            { "<leader>gdd", ":DiffviewFileHistory %<cr>" },
+            { "<leader>gdh", ":DiffviewFileHistory<cr>" },
         },
     },
 }

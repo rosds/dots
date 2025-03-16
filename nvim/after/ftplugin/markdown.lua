@@ -1,12 +1,13 @@
-vim.api.nvim_set_option_value("colorcolumn", "80", { scope = "local", win = 0 })
+vim.api.nvim_set_option_value("colorcolumn", "100", { scope = "local", win = 0 })
 
-vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
-vim.opt.expandtab = true
-vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.smarttab = true
+vim.opt_local.shiftwidth = 2
+vim.opt_local.tabstop = 2
+vim.opt_local.expandtab = true
+vim.opt_local.autoindent = true
+vim.opt_local.smartindent = true
+vim.opt_local.smarttab = true
+vim.opt_local.textwidth = 100
 
 vim.g.mkdp_preview_options = {
-    uml = { server = "http://localhost:8080" },
+  uml = { server = "http://localhost:8080" },
 }

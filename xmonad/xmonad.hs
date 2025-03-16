@@ -82,6 +82,9 @@ tiledSpacing =
 
 myLayoutHook = tiled ||| tiledSpacing ||| Full
 
+-- myTerm = "alacritty"
+myTerm = "kitty"
+
 -- Scratch pads
 myScratchpads =
   [ NS "spotify" "spotify" (className =? "Spotify") myFloating,
@@ -95,7 +98,7 @@ myScratchpads =
       myFloating,
     NS
       "scratchterm"
-      "alacritty --class=scratchterm"
+      (myTerm <> " --class=scratchterm")
       (className =? "scratchterm")
       myFloating,
     NS
@@ -162,7 +165,7 @@ main = do
     ewmh . docks $
       def
         { workspaces = myWorkspaces,
-          terminal = "alacritty",
+          terminal = myTerm,
           manageHook = myManageHook,
           layoutHook = myLayoutHook,
           handleEventHook = myHandleEventHook <> handleEventHook def,
