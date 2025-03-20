@@ -28,42 +28,15 @@ require("lazy").setup("plugins", {
 
 vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
 
-local v = require("keymaps").visual
+-- Inserts a real tab with shift-tab
+vim.keymap.set("i", "<s-tab>", "<c-q><tab>", { silent = false })
+
 local n = require("keymaps").normal
-local i = require("keymaps").insert
 
 local follow_symlink = require("utils.fs").follow_symlink
 
 vim.api.nvim_create_user_command("FollowSymlink", follow_symlink, { nargs = 0 })
 
-i({
-    ["<S-tab>"] = { "<c-q><tab>" }
-})
-
-local function edit_config_float()
-    local width = math.floor(vim.o.columns * 0.8)
-    local height = math.floor(vim.o.lines * 0.8)
-    local row = math.floor((vim.o.lines - height) / 2)
-    local col = math.floor((vim.o.columns - width) / 2)
-
-    local buf = vim.api.nvim_create_buf(false, true)
-    local win = vim.api.nvim_open_win(buf, true, {
-        relative = "editor",
-        width = width,
-        height = height,
-        row = row,
-        col = col,
-        style = "minimal",
-        border = "single",
-    })
-    vim.wo[win].relativenumber = true
-    vim.wo[win].number = true
-
-    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
-    vim.api.nvim_command('silent! edit $MYVIMRC')
-    vim.cmd.lcd("%:p:h")
-    vim.cmd.setlocal("path=.,**,,")
-end
 
 n({
     -- find and replace
@@ -111,11 +84,14 @@ n({
     Zo = "<c-w>=",
 })
 
-v({
-    ["<leader>rr"] = { 'y:%s/<c-r>"//g<left><left>', silent = false },
-    ["<leader>go"] = 'y:silent execute "!xdg-open <c-r>""<cr>',
-    ["<LeftRelease>"] = { '"*ygv', desc = "yank on mouse selection" },
-})
+-- Search and replace old fashion way
+vim.keymap.set("v", "<leader>rr", 'y:%s/<c-r>"//g<left><left>', { silent = false })
+
+-- Open file with system's default
+vim.keymap.set("v", "<leader>go", 'y:silent execute "!xdg-open <c-r>""<cr>')
+
+-- Yank path w/o line number
+vim.keymap.set("v", "<LeftRelease>", '"+ygv', { desc = "yank on mouse selection" })
 
 local ag = require("augroup").augroup
 ag("AllFiles")({

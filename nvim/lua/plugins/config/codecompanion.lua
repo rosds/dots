@@ -9,13 +9,13 @@ require('codecompanion').setup({
     },
     adapters   = {
         openai = function()
-            require('codecompanion.adapters').extend('openai', {
+            return require("codecompanion.adapters").extend("openai", {
                 env = {
-                    api_key = "cmd:op read 'op://Private/openai/api_key' --no-newline"
-                }
+                    api_key = "cmd:op read 'op://Private/openai/api_key' --no-newline",
+                },
             })
-        end
-    }
+        end,
+    },
 })
 
 vim.keymap.set(

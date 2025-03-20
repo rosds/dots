@@ -1,4 +1,9 @@
-local function show_and_focus_undotree()
+local function toggle()
+    if vim.bo.filetype == "undotree" then
+        vim.cmd.UndotreeToggle()
+        return
+    end
+
     vim.cmd.UndotreeShow()
     vim.cmd.UndotreeFocus()
 end
@@ -6,6 +11,7 @@ end
 return {
     "mbbill/undotree",
     keys = {
-        { "<leader>uu", show_and_focus_undotree, desc = "UndotreeToggle" },
+        { "<leader>uu", toggle,              desc = "Undotree Toggle" },
+        { "<leader>uo", ":UndotreeShow<cr>", desc = "Undotree Open" },
     },
 }

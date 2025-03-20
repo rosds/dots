@@ -23,10 +23,8 @@ local function toggle_venn()
 end
 
 return {
-    {
-        "jbyuki/venn.nvim",
-        keys = {
-            { "<leader>ve", toggle_venn },
-        },
+    "jbyuki/venn.nvim",
+    keys = {
+        { "<leader>ve", toggle_venn },
     },
 }

@@ -1,8 +1,6 @@
 return {
-    {
-        "stevearc/conform.nvim",
-        config = function()
-            require("plugins.config.conform")
-        end,
-    },
+    "stevearc/conform.nvim",
+    config = function()
+        require("plugins.config.conform")
+    end,
 }

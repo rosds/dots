@@ -30,6 +30,7 @@ resolver: lts-21.25
 #   - auto-update
 #   - wai
 packages:
+- .
 - xmonad
 - xmonad-contrib
 # Dependency packages to be pulled from upstream that are not in the resolver.

@@ -10,7 +10,7 @@ import Polybar
   )
 import XMonad
 import XMonad.Actions.CycleWS
-import XMonad.Actions.Search hiding (Query)
+import qualified XMonad.Actions.Search as S
 import XMonad.Hooks.DynamicLog hiding (pad)
 -- layout
 
@@ -24,6 +24,7 @@ import XMonad.Hooks.ManageDocks
     manageDocks,
   )
 import XMonad.Hooks.OnPropertyChange
+import XMonad.Hooks.RefocusLast (refocusLastLogHook)
 import XMonad.Layout
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (Rename (Replace), renamed)
@@ -52,19 +53,35 @@ myPromptConfig =
       position = Top
     }
 
+-- Search engines
+gitlabSearch :: String -> String
+gitlabSearch s
+  | "#" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/issues/" ++ drop 2 s
+  | "!" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/merge_requests/" ++ drop 2 s
+  | "&" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/epics/" ++ drop 2 s
+  | otherwise = "https://gitlab.apex.ai/search?nav_source=navbar&scope=merge_requests&search=" ++ S.escape s
+
+searchEngineMap :: [(String, S.SearchEngine)]
+searchEngineMap =
+  [ ("g", S.google),
+    ("d", S.searchEngine "grace" "https://apexai.pages.apex.ai/grand_central/master/grace/doc/?q="),
+    ("s", S.searchEngineF "gitlab" gitlabSearch)
+  ]
+
 -- Log workspace state for polybar
-myLogHook :: PP
+myLogHook :: X ()
 myLogHook =
-  def
-    { ppOutput = \s -> appendFile "/tmp/.xmonad-workspace-log" (s ++ "\n"),
-      ppCurrent = bg Yellow . pad 1,
-      ppVisible = bg Purple . pad 1,
-      ppTitle = const "",
-      ppLayout = const "",
-      ppWsSep = "",
-      ppHidden = bg Gray . pad 1,
-      ppHiddenNoWindows = pad 1
-    }
+  dynamicLogWithPP
+    def
+      { ppOutput = \s -> appendFile "/tmp/.xmonad-workspace-log" (s ++ "\n"),
+        ppCurrent = bg Yellow . pad 1,
+        ppVisible = bg Purple . pad 1,
+        ppTitle = const "",
+        ppLayout = const "",
+        ppWsSep = "",
+        ppHidden = bg Gray . pad 1,
+        ppHiddenNoWindows = pad 1
+      }
 
 tiled =
   renamed [Replace "Tiled"] $
@@ -169,7 +186,7 @@ main = do
           manageHook = myManageHook,
           layoutHook = myLayoutHook,
           handleEventHook = myHandleEventHook <> handleEventHook def,
-          logHook = dynamicLogWithPP myLogHook,
+          logHook = myLogHook,
           modMask = mod4Mask,
           -- focusedBorderColor = "#a7c080"
           -- focusedBorderColor = "#98971a"
@@ -178,7 +195,7 @@ main = do
           startupHook = myStartupHook >> myExclusive
         }
         `additionalKeysP`
-        -- keybinings
+        -- keybindings
         [ ("M-p", spawn "rofi -show run"),
           ("M-S-p", spawn "rofi -show window"),
           ("M-<Right>", nextWS),
@@ -204,6 +221,8 @@ main = do
           ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
           ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
           ("M-S-o", namedScratchpadAction myScratchpads "calendar"),
-          ("M-S-i", namedScratchpadAction myScratchpads "chat"),
-          ("M-s", promptSearchBrowser myPromptConfig "google-chrome" google)
+          ("M-S-i", namedScratchpadAction myScratchpads "chat")
         ]
+        -- search engines
+        ++ [("M-s " <> key, S.promptSearchBrowser myPromptConfig "google-chrome" engine) | (key, engine) <- searchEngineMap]
+        ++ [("M-S-s " <> key, S.selectSearchBrowser "google-chrome" engine) | (key, engine) <- searchEngineMap]

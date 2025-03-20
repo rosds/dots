@@ -26,7 +26,6 @@ return {
     "tpope/vim-unimpaired",
 
     -- lua
-    { "rafcamlet/nvim-luapad", cmd = "Luapad" },
     {
         "folke/lazydev.nvim",
         ft = "lua", -- only load on lua files
@@ -38,7 +37,6 @@ return {
             },
         },
     },
-    { "Bilal2453/luvit-meta",  lazy = true }, -- optional `vim.uv` typings
 
     -- tmux
     {
@@ -59,10 +57,13 @@ return {
             "TableModeEnable",
         },
     },
-    -- For `plugins/markview.lua` users.
     {
         "OXY2DEV/markview.nvim",
         lazy = false,
+        preview = {
+            filetypes = { "markdown", "codecompanion" },
+            ignore_buftypes = {},
+        },
     },
 
     -- fennel
@@ -112,49 +113,49 @@ return {
     { url = "git@gitlab.apex.ai:alfonso.ros/gitlab.nvim.git", config = true },
     {
         'alexander-born/bazel.nvim',
+        name = "gh_bazel",
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
         config = function()
             vim.g.bazel_cmd = "bazel"
         end
     },
-    -- {
-    --     enabled = false,
-    --     dir = "~/apex/bazel.nvim",
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --         "stevearc/overseer.nvim",
-    --         "nvim-telescope/telescope.nvim",
-    --     },
-    --     config = function()
-    --         local bazel = require("bazel")
-    --         bazel.setup({})
-    --
-    --         local bazel_telescope = require("bazel.telescope")
-    --         local n = require("keymaps").normal
-    --
-    --         local themes = require("telescope.themes")
-    --         n({
-    --             ["<leader>ba"] = {
-    --                 function()
-    --                     bazel_telescope.build(themes.get_ivy())
-    --                 end,
-    --                 desc = "bazel build any target",
-    --             },
-    --             ["<leader>bb"] = {
-    --                 function()
-    --                     bazel_telescope.build_package(themes.get_ivy())
-    --                 end,
-    --                 desc = "bazel build package target",
-    --             },
-    --             ["<leader>bt"] = {
-    --                 function()
-    --                     bazel_telescope.test(themes.get_ivy())
-    --                 end,
-    --                 desc = "bazel test any target",
-    --             },
-    --         })
-    --     end,
-    -- },
+    {
+        dir = "~/bazel.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "stevearc/overseer.nvim",
+            "nvim-telescope/telescope.nvim",
+        },
+        config = function()
+            local bazel = require("bazel")
+            bazel.setup({})
+
+            local bazel_telescope = require("bazel.telescope")
+            local n = require("keymaps").normal
+
+            local themes = require("telescope.themes")
+            n({
+                ["<leader>ba"] = {
+                    function()
+                        bazel_telescope.build(themes.get_ivy())
+                    end,
+                    desc = "bazel build any target",
+                },
+                ["<leader>bb"] = {
+                    function()
+                        bazel_telescope.build_package(themes.get_ivy())
+                    end,
+                    desc = "bazel build package target",
+                },
+                ["<leader>bt"] = {
+                    function()
+                        bazel_telescope.test(themes.get_ivy())
+                    end,
+                    desc = "bazel test any target",
+                },
+            })
+        end,
+    },
 
     -- misc
     { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },

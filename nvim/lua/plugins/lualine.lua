@@ -8,46 +8,44 @@ local function is_fugitive_buffer()
 end
 
 return {
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = "nvim-tree/nvim-web-devicons",
-        opts = {
-            options = {
-                section_separators = "",
-                component_separators = "",
-            },
-            sections = {
-                lualine_a = {
-                    {
-                        fugitive_buffer,
-                        cond = is_fugitive_buffer,
-                        color = { fg = "White", bg = "Red" },
-                    },
-                    {
-                        "filename",
-                        path = 1,
-                        symbols = { modified = "●", readonly = "" },
-                    },
+    "nvim-lualine/lualine.nvim",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    opts = {
+        options = {
+            section_separators = "",
+            component_separators = "",
+        },
+        sections = {
+            lualine_a = {
+                {
+                    fugitive_buffer,
+                    cond = is_fugitive_buffer,
+                    color = { fg = "White", bg = "Red" },
                 },
-                lualine_b = { "branch", "diff", "diagnostics" },
-                lualine_c = {},
-                lualine_x = { "encoding", "fileformat", "filetype" },
-                lualine_y = { "progress" },
-                lualine_z = { "location" },
-            },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = {
-                    {
-                        "filename",
-                        path = 1,
-                    },
+                {
+                    "filename",
+                    path = 1,
+                    symbols = { modified = "●", readonly = "" },
                 },
-                lualine_x = { "location" },
-                lualine_y = {},
-                lualine_z = {},
             },
+            lualine_b = { "branch", "diff", "diagnostics" },
+            lualine_c = {},
+            lualine_x = { "encoding", "fileformat", "filetype" },
+            lualine_y = { "progress" },
+            lualine_z = { "location" },
+        },
+        inactive_sections = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = {
+                {
+                    "filename",
+                    path = 1,
+                },
+            },
+            lualine_x = { "location" },
+            lualine_y = {},
+            lualine_z = {},
         },
     },
 }
