@@ -1,21 +1,13 @@
-import Control.Monad (forM_)
-import Data.Char (toLower)
-import Data.List (isInfixOf, isPrefixOf)
+import Data.List (isPrefixOf)
 import Polybar
   ( Color (..),
     bg,
-    fg,
     pad,
-    underline,
   )
 import XMonad
 import XMonad.Actions.CycleWS
 import qualified XMonad.Actions.Search as S
 import XMonad.Hooks.DynamicLog hiding (pad)
--- layout
-
--- prompt
-
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
   ( ToggleStruts (ToggleStruts),
@@ -24,33 +16,30 @@ import XMonad.Hooks.ManageDocks
     manageDocks,
   )
 import XMonad.Hooks.OnPropertyChange
-import XMonad.Hooks.RefocusLast (refocusLastLogHook)
-import XMonad.Layout
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (Rename (Replace), renamed)
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
-import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Spacing
-import XMonad.Layout.ToggleLayouts
-import XMonad.Prompt
+import qualified XMonad.Prompt as P
 import XMonad.StackSet (RationalRect (..))
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.SpawnOnce
 
--- workspaces
+-- Workspaces
+myWorkspaces :: [String]
 myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "NSP"]
 
 -- XPConfig
-myPromptConfig :: XPConfig
+myPromptConfig :: P.XPConfig
 myPromptConfig =
   def
-    { font = "FiraCode Nerd Font:size=10",
-      bgColor = "#1F1F28",
-      fgColor = "#DCD7BA",
-      borderColor = "#938AA9",
-      position = Top
+    { P.font = "FiraCode Nerd Font:size=10",
+      P.bgColor = "#1F1F28",
+      P.fgColor = "#DCD7BA",
+      P.borderColor = "#938AA9",
+      P.position = P.Top
     }
 
 -- Search engines
