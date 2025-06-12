@@ -148,9 +148,6 @@ export CXXFLAGS="-B/usr/local/libexec/mold"
 
 export PATH="$PATH:$HOME/.local/bin"
 
-# clang-format
-alias clang-format='/usr/bin/clang-format-18'
-
 # Go
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
@@ -210,5 +207,8 @@ export FZF_DEFAULT_SORT=1000000
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# copilot
+eval "$(gh copilot alias -- zsh)"
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

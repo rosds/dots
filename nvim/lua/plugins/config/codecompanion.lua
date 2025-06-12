@@ -5,6 +5,9 @@ require('codecompanion').setup({
         },
         inline = {
             adapter = "copilot"
+        },
+        agent = {
+            adapter = "copilot"
         }
     },
     adapters   = {
@@ -15,7 +18,21 @@ require('codecompanion').setup({
                 },
             })
         end,
+        claude = function()
+            return require("codecompanion.adapters").extend("copilot", {
+                schema = {
+                    model = {
+                        default = "claude-3.7-sonnet"
+                    }
+                }
+            })
+        end,
     },
+    display    = {
+        chat = {
+            show_settings = true
+        }
+    }
 })
 
 vim.keymap.set(
@@ -32,9 +49,10 @@ vim.keymap.set(
 )
 vim.keymap.set(
     { "v" },
-    "<leader>cc",
+    "<leader>ca",
     "<cmd>CodeCompanionChat Add<cr>",
     { noremap = true, silent = true }
 )
 
 vim.cmd([[cab cc CodeCompanion]])
+vim.cmd([[cab ccc CodeCompanionChat]])

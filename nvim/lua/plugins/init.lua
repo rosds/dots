@@ -23,7 +23,6 @@ return {
 
     -- git
     "tpope/vim-rhubarb",
-    "tpope/vim-unimpaired",
 
     -- lua
     {
@@ -58,16 +57,9 @@ return {
         },
     },
     {
-        "OXY2DEV/markview.nvim",
-        lazy = false,
-        preview = {
-            filetypes = { "markdown", "codecompanion" },
-            ignore_buftypes = {},
-        },
+        "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown", "codecompanion" }
     },
-
-    -- fennel
-    { "rktjmp/hotpot.nvim", ft = "fennel" },
 
     -- rust
     {
@@ -77,7 +69,7 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",    ft = "zig" },
+    { "ziglang/zig.vim",                                      ft = "zig" },
 
     -- jinja
     {
@@ -104,6 +96,9 @@ return {
         end
 
     },
+
+    -- misc
+    { "norcalli/nvim-colorizer.lua",                          cmd = "ColorizerToggle" },
 
     -- my plugins
     { enabled = false,                                        dir = "~/apex/apex.nvim" },
@@ -156,7 +151,4 @@ return {
             })
         end,
     },
-
-    -- misc
-    { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
 }

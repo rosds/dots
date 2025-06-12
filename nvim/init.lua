@@ -49,11 +49,6 @@ n({
     end,
     -- reload nvim config
     ["<leader>vv"] = ":luafile $MYVIMRC<cr>",
-    -- quickfix list
-    ["]q"] = ":cnext<cr>",
-    ["[q"] = ":cprev<cr>",
-    ["]Q"] = ":cfirst<cr>",
-    ["[Q"] = ":clast<cr>",
     -- follow symlink
     ["<leader>ff"] = follow_symlink,
     -- open file with the system's default

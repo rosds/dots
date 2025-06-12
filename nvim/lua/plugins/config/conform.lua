@@ -36,7 +36,7 @@ conform.setup({
     formatters = {
         clang_format = {
             prepend_args = {
-                "--style=file:/home/alfonso.ros/ade-home/gc/master/.clang-format",
+                "-style=file",
             },
         },
         buildifier = {
@@ -53,9 +53,9 @@ end)
 vim.api.nvim_create_user_command("AutoFormatDisable", function(args)
     if args.bang then
         -- FormatDisable! will disable formatting just for this buffer
-        vim.b.disable_autoformat = true
-    else
         vim.g.disable_autoformat = true
+    else
+        vim.b.disable_autoformat = true
     end
 end, {
     desc = "Disable autoformat-on-save",

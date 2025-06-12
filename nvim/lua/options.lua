@@ -73,9 +73,12 @@ vim.opt.laststatus = 2
 vim.opt.cmdheight = 1
 
 vim.diagnostic.config({
-    float = {
-        source = "if_many",
+    virtual_lines = {
+        current_line = true,
     },
+    -- float = {
+    --     source = "if_many",
+    -- },
 })
 
 -- folding

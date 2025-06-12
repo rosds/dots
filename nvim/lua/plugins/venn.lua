@@ -12,7 +12,7 @@ local function toggle_venn()
         -- draw a box by pressing "f" with visual selection
         vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<CR>", { noremap = true })
     else
-        vim.cmd([[setlocal ve=]])
+        vim.cmd([[setlocal ve=none]])
         vim.api.nvim_buf_del_keymap(0, "n", "J")
         vim.api.nvim_buf_del_keymap(0, "n", "K")
         vim.api.nvim_buf_del_keymap(0, "n", "L")
