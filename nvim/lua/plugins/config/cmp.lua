@@ -79,27 +79,7 @@ cmp.setup({
                 end
             end
         end, { "i", "s" }),
-        -- Take copilot completion
-        -- ["<c-g>"] = cmp.mapping(function(fallback)
-        --     if cmp.visible() then
-        --         cmp.confirm({
-        --             behavior = cmp.ConfirmBehavior.Insert,
-        --             select = true,
-        --         })
-        --     else
-        --         cmp.mapping.complete()
-        --     end
-        -- end),
         ["<c-g>"] = cmp.mapping.complete(),
-        ["<c-f>"] = function(fallback)
-            cmp.mapping.abort()
-            local copilot_keys = vim.fn["copilot#Accept"]()
-            if copilot_keys ~= "" then
-                vim.api.nvim_feedkeys(copilot_keys, "i", true)
-            else
-                fallback()
-            end
-        end,
         -- luasnip choices
         ["<c-h>"] = cmp.mapping(function(fallback)
             if ls.choice_active() then
@@ -131,7 +111,7 @@ cmp.setup({
         { name = "nvim_lua" },
         { name = "luasnip" },
         { name = "path" },
-        { name = "buffer", keyword_length = 5 },
+        { name = "buffer",  keyword_length = 5 },
         { name = "orgmode" },
         { name = "emoji" },
     },

@@ -11,9 +11,6 @@ local sn = ls.snippet_node
 local fmt = require("luasnip.extras.fmt").fmt
 local camel2snake = require("utils.string").camel2snake
 
-local utils = require('snip_util')
-local node_msg = utils.node_msg
-
 local function query_structs()
     local parser = vim.treesitter.get_parser()
     local tstree = parser and parser:parse()[1]
@@ -50,27 +47,6 @@ return {
     s(
         "res",
         fmt("Result<{}>", i(1))
-    ),
-    s(
-        "st",
-        fmt(
-            [[
-                {}struct {} {{
-                    {}
-                }}
-            ]],
-            {
-                c(1,
-                    {
-                        t "",
-                        fmt("#[derive({})]\n\n", i(1, "Debug"))
-                    },
-                    node_msg(" <- #[derive(...)]")
-                ),
-                i(2, "NewType"),
-                i(0),
-            }
-        )
     ),
     s(
         "imp",

@@ -1,0 +1,16 @@
+# custom-shader = ./more-shaders/amber-crt.glsl
+custom-shader-animation = always
+
+font-family = FiraCode Nerd Font Mono
+font-feature = +calt, +liga
+font-size = 10
+
+window-decoration = none
+window-inherit-font-size = true
+
+keybind = ctrl+shift+R=reload_config
+keybind = ctrl+shift+plus=increase_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1
+keybind = ctrl+shift+equal=reset_font_size
+
+theme = kanagawabones

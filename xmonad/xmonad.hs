@@ -1,9 +1,11 @@
 import Data.List (isPrefixOf)
+import Data.Maybe (catMaybes, listToMaybe)
 import Polybar
   ( Color (..),
     bg,
     pad,
   )
+import System.Directory (findExecutable)
 import XMonad
 import XMonad.Actions.CycleWS
 import qualified XMonad.Actions.Search as S
@@ -45,9 +47,9 @@ myPromptConfig =
 -- Search engines
 gitlabSearch :: String -> String
 gitlabSearch s
-  | "#" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/issues/" ++ drop 2 s
-  | "!" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/merge_requests/" ++ drop 2 s
-  | "&" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/epics/" ++ drop 2 s
+  | "#" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/issues/" ++ drop 1 s
+  | "!" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/merge_requests/" ++ drop 1 s
+  | "&" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/epics/" ++ drop 1 s
   | otherwise = "https://gitlab.apex.ai/search?nav_source=navbar&scope=merge_requests&search=" ++ S.escape s
 
 searchEngineMap :: [(String, S.SearchEngine)]
@@ -57,7 +59,7 @@ searchEngineMap =
     ("s", S.searchEngineF "gitlab" gitlabSearch)
   ]
 
--- Log workspace state for polybar
+-- Log workspace state for Polybar
 myLogHook :: X ()
 myLogHook =
   dynamicLogWithPP
@@ -89,9 +91,11 @@ tiledSpacing =
 myLayoutHook = tiled ||| tiledSpacing ||| Full
 
 -- myTerm = "alacritty"
+myTerm :: String
 myTerm = "kitty"
 
 -- Scratch pads
+myScratchpads :: [NamedScratchpad]
 myScratchpads =
   [ NS "spotify" "spotify" (className =? "Spotify") myFloating,
     NS
@@ -121,6 +125,7 @@ myScratchpads =
   where
     myFloating = customFloating $ RationalRect (1 / 9) (1 / 8) (7 / 9) (6 / 8)
 
+myExclusive :: X ()
 myExclusive =
   addExclusives
     [ ["spotify", "neovide", "scratchterm", "calendar", "chat"],
@@ -132,6 +137,7 @@ myExclusive =
 (^=) :: Query String -> String -> Query Bool
 (^=) q s = fmap (s `isPrefixOf`) q
 
+myManageHook :: ManageHook
 myManageHook =
   manageHook def
     <+> manageDocks
@@ -139,6 +145,7 @@ myManageHook =
     <+> composeAll
       [ className =? "Spotify" --> doFloat,
         className =? "zoom" --> doFloat,
+        className =? "copyq" --> doFloat,
         className =? "1password" --> doFloat,
         title =? "Zoom Cloud Meetings" --> doFloat,
         className =? "Google-chrome" --> doShift (myWorkspaces !! 1),
@@ -161,8 +168,12 @@ myStartupHook = do
   spawnOnce "picom --backend glx &"
   spawnOnce "dunst &"
   spawnOnce "nm-applet &"
+  spawnOnce "copyq &"
   spawnOnce "polybar --reload -c $HOME/.config/polybar/config.ini main &"
   spawnOnce "feh --image-bg black --bg-fill ~/Pictures/bg"
+
+rofi :: String
+rofi = "~/.config/rofi/launchers/type-4/launcher.sh"
 
 main :: IO ()
 main = do
@@ -185,8 +196,9 @@ main = do
         }
         `additionalKeysP`
         -- keybindings
-        [ ("M-p", spawn "rofi -show run"),
-          ("M-S-p", spawn "rofi -show window"),
+        [ ("M-v", spawn "copyq toggle"),
+          ("M-p", spawn (rofi <> " -show run")),
+          ("M-S-p", spawn (rofi <> " -show window")),
           ("M-<Right>", nextWS),
           ("M-<Left>", prevWS),
           ("M-<Tab>", toggleWS),

@@ -1,17 +1,20 @@
--- lazy bootstrap
-local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazy_path) then
-    local lazy_repo = "https://github.com/folke/lazy.nvim.git"
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "--branch=stable",
-        lazy_repo,
-        lazy_path,
-    })
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+    if vim.v.shell_error ~= 0 then
+        vim.api.nvim_echo({
+            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+            { out,                            "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        vim.fn.getchar()
+        os.exit(1)
+    end
 end
-vim.opt.rtp:prepend(lazy_path)
+vim.opt.rtp:prepend(lazypath)
+
 
 vim.g.mapleader = " "
 
@@ -49,11 +52,6 @@ n({
     end,
     -- reload nvim config
     ["<leader>vv"] = ":luafile $MYVIMRC<cr>",
-    -- quickfix list
-    ["]q"] = ":cnext<cr>",
-    ["[q"] = ":cprev<cr>",
-    ["]Q"] = ":cfirst<cr>",
-    ["[Q"] = ":clast<cr>",
     -- follow symlink
     ["<leader>ff"] = follow_symlink,
     -- open file with the system's default
@@ -88,7 +86,7 @@ n({
 vim.keymap.set("v", "<leader>rr", 'y:%s/<c-r>"//g<left><left>', { silent = false })
 
 -- Open file with system's default
-vim.keymap.set("v", "<leader>go", 'y:silent execute "!xdg-open <c-r>""<cr>')
+vim.keymap.set("v", "<leader>gx", 'y:silent execute "!xdg-open <c-r>""<cr>')
 
 -- Yank path w/o line number
 vim.keymap.set("v", "<LeftRelease>", '"+ygv', { desc = "yank on mouse selection" })

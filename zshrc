@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# zmodload zsh/zprof
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -76,7 +78,7 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 # Do the initialization when the script is sourced (i.e. Initialize instantly)
 ZVM_INIT_MODE=sourcing
 
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel poetry zsh-vi-mode)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel zsh-vi-mode nvm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -120,6 +122,11 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+fpath+=$HOME/.zfunc
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+autoload -U compinit && compinit
+source "$ZSH/oh-my-zsh.sh"
+
 alias ls=eza
 alias ps=procs
 
@@ -134,11 +141,6 @@ eval "$(zoxide init --cmd j zsh)"
 # starship prompt
 eval "$(starship init zsh)"
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # ccache
 # export CC=/usr/lib/ccache/gcc
 # export CXX=/usr/lib/ccache/g++
@@ -147,9 +149,6 @@ export NVM_DIR="$HOME/.nvm"
 export CXXFLAGS="-B/usr/local/libexec/mold"
 
 export PATH="$PATH:$HOME/.local/bin"
-
-# clang-format
-alias clang-format='/usr/bin/clang-format-18'
 
 # Go
 export PATH=$PATH:/usr/local/go/bin
@@ -198,6 +197,8 @@ alias apex_doc='bazel run --noshow_progress --ui_event_filters=-info --run_under
 alias cleancache='find "$HOME/.cache/bazel" -type f -atime "+100" -delete >/dev/null 2>/dev/null'
 alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm -rf /tmp/*.listener; rm /tmp/apex_ida_resource_creator_uds"
 
+alias ghgit="GIT_SSH_COMMAND='ssh -i /home/alfonso.ros/.ssh/rosds_id_ed25519' git"
+
 # haskell
 [ -f "/home/alfonso.ros/.ghcup/env" ] && . "/home/alfonso.ros/.ghcup/env" # ghcup-env
 
@@ -211,4 +212,7 @@ export FZF_DEFAULT_SORT=1000000
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# copilot
+eval "$(gh copilot alias -- zsh)"
+
+# zprof

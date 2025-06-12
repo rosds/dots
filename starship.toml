@@ -3,6 +3,9 @@ zsh_indicator = ""
 format = "[$indicator]($style)"
 disabled = false
 
+[python]
+disabled = false
+
 [container]
 symbol = "🐋"
 format = "[$symbol]($style)"

@@ -4,6 +4,7 @@
     ~/.config/bat: bat
     ~/.config/dunst: dunst
     ~/.config/gdb-dashboard: gdb-dashboard
+    ~/.config/ghostty: ghostty
     ~/.config/git: git
     ~/.config/kitty: kitty
     ~/.config/nvim: nvim

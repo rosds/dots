@@ -3,6 +3,7 @@ return {
     {
         "stevearc/dressing.nvim",
         opts = {},
+        event = "VeryLazy",
     },
     {
         "rcarriga/nvim-notify",
@@ -23,7 +24,6 @@ return {
 
     -- git
     "tpope/vim-rhubarb",
-    "tpope/vim-unimpaired",
 
     -- lua
     {
@@ -57,17 +57,6 @@ return {
             "TableModeEnable",
         },
     },
-    {
-        "OXY2DEV/markview.nvim",
-        lazy = false,
-        preview = {
-            filetypes = { "markdown", "codecompanion" },
-            ignore_buftypes = {},
-        },
-    },
-
-    -- fennel
-    { "rktjmp/hotpot.nvim", ft = "fennel" },
 
     -- rust
     {
@@ -77,7 +66,7 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",    ft = "zig" },
+    { "ziglang/zig.vim",                                      ft = "zig" },
 
     -- jinja
     {
@@ -104,6 +93,9 @@ return {
         end
 
     },
+
+    -- misc
+    { "norcalli/nvim-colorizer.lua",                          cmd = "ColorizerToggle" },
 
     -- my plugins
     { enabled = false,                                        dir = "~/apex/apex.nvim" },
@@ -156,7 +148,4 @@ return {
             })
         end,
     },
-
-    -- misc
-    { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
 }

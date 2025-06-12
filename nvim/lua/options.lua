@@ -45,7 +45,7 @@ vim.opt.scrolloff = 8
 
 vim.opt.termguicolors = true
 
--- preview the swarch replacement result
+-- preview the search replacement result
 vim.opt.inccommand = "split"
 
 -- color scheme
@@ -73,9 +73,12 @@ vim.opt.laststatus = 2
 vim.opt.cmdheight = 1
 
 vim.diagnostic.config({
-    float = {
-        source = "if_many",
+    virtual_lines = {
+        current_line = true,
     },
+    -- float = {
+    --     source = "if_many",
+    -- },
 })
 
 -- folding

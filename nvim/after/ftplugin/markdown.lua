@@ -7,7 +7,3 @@ vim.opt_local.autoindent = true
 vim.opt_local.smartindent = true
 vim.opt_local.smarttab = true
 vim.opt_local.textwidth = 100
-
-vim.g.mkdp_preview_options = {
-  uml = { server = "http://localhost:8080" },
-}

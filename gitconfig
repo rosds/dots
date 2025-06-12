@@ -35,7 +35,7 @@
 
 [merge]
     tool = fugitive
-    conflictstyle = zdiff3
+    ; conflictstyle = zdiff3
 
 [hub]
     protocol = ssh
