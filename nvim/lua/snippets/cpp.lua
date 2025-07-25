@@ -32,10 +32,9 @@ local function copy_right()
         [[
         /// @copyright Copyright 2025 Apex.AI, Inc.
         /// All rights reserved.
-        /// @file
         {}
         ]],
-        { c(1, { { t("/// @brief "), i(1, "description") }, t("") }) }
+        { c(1, { t(""), { t({ "/// @file", "/// @brief " }), i(1, "description") } }) }
     )
 end
 
@@ -43,60 +42,70 @@ local function uuidgen()
     return vim.fn.trim(vim.fn.system("uuidgen"))
 end
 
-local function include_guard()
+local function include_guard(content)
+    local content_node = i(0)
+    if content ~= nil then
+        content_node = content
+    end
     return fmt(
         [[
         #ifndef {}
         #define {}
+
         {}
+
         #endif  // {}
     ]],
         {
             d(1, function()
-                return sn(nil, i(1, inc_guard_name()))
+                return sn(nil, t(inc_guard_name()))
             end),
             extras.rep(1),
-            i(2),
+            content_node,
             extras.rep(1),
         }
     )
 end
 
-local function new_file()
+local function namespace()
     return fmt(
         [[
-    {}
-    {}
+        namespace {} {{
+          {}
+        }}  // namespace {}
     ]],
-        { c(1, { copy_right(), t("") }), sn(2, include_guard()) }
+        {
+            i(1, "my_namespace"),
+            i(0),
+            extras.rep(1),
+        }
     )
 end
 
-local function ctor(jump_idx)
-    return sn(
-        jump_idx,
-        fmt(
-            [[
-            {}() = default;
-            {}(const {}&) = delete;
-            {}& operator=(const {}&) = delete;
-            {}({}&&) noexcept = default;
-            {}& operator=({}&&) noexcept = default;
-            virtual ~{}() = default;
-            ]],
-            {
-                i(1, "Foo"),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-                extras.rep(1),
-            }
-        )
+local function new_header()
+    return fmt(
+        [[
+    {}
+    #ifndef {}
+    #define {}
+
+    namespace {} {{
+      {}
+    }}  // namespace {}
+
+    #endif  // {}
+    ]],
+        {
+            sn(1, copy_right()),
+            d(2, function()
+                return sn(nil, t(inc_guard_name()))
+            end),
+            extras.rep(2),
+            i(3, "my_namespace"),
+            i(0),
+            extras.rep(3),
+            extras.rep(2),
+        }
     )
 end
 
@@ -136,28 +145,14 @@ return {
     }),
     s("up", fmt("std::unique_ptr<{}>", { i(1, "Foo") })),
     s("sp", fmt("std::shared_ptr<{}>", { i(1, "Foo") })),
-    s(
-        "ns",
-        fmt(
-            [[
-            namespace {} {{
-              {}
-            }}  // namespace {}
-        ]],
-            {
-                i(1),
-                i(2),
-                extras.rep(1),
-            }
-        )
-    ),
+    s("ns", namespace()),
     s("once", include_guard()),
 
     -- apex snippets
     s("cr", copy_right()),
 
     -- empty file
-    s("newfile", new_file()),
+    s("hdr", new_header()),
 
     s(
         "anode",

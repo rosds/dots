@@ -40,13 +40,14 @@ telescope.setup({
                 override_file_sorter = true,
                 case_mode = "smart_case",
             },
+            frecency = {
+                db_safe_mode = false,
+                matcher = "fuzzy"
+            }
         },
         path_display = {
             truncate = 3,
         },
-        -- preview = {
-        --     hide_on_startup = true,
-        -- }
     },
 })
 
@@ -56,7 +57,6 @@ telescope.load_extension("frecency")
 -------------------------------------------------------------------------------
 -- Mappings
 -------------------------------------------------------------------------------
-local t = require("telescope.builtin")
 local n = require("keymaps").normal
 local v = require("keymaps").visual
 
@@ -91,6 +91,11 @@ n({
         builtin.fd({ follow = true })
     end,
     ["<leader>p"] = function()
+        telescope.extensions.frecency.frecency(themes.get_ivy({
+            show_scores = true,
+        }))
+    end,
+    ["<leader><c-p>"] = function()
         if git.is_inside_git_worktree() then
             builtin_ivy.git_files({ use_git_root = true })
         else
