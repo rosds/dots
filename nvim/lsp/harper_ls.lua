@@ -1,0 +1,20 @@
+return {
+    cmd = { "harper-ls", "--stdio" },
+    filetypes = {
+        'markdown',
+        'rust',
+        'typescript',
+        'typescriptreact',
+        'javascript',
+        'python',
+        'go',
+        'c',
+        'cpp',
+        'ruby',
+        'swift',
+        'csharp',
+        'toml',
+        'lua',
+    },
+    root_markers = { ".git" },
+}

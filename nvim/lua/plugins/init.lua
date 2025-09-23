@@ -1,19 +1,5 @@
 return {
-    -- better ui
-    {
-        "stevearc/dressing.nvim",
-        opts = {},
-        event = "VeryLazy",
-    },
-    {
-        "rcarriga/nvim-notify",
-        config = function()
-            require("notify").setup({
-                background_colour = "#000000",
-            })
-            vim.notify = require("notify")
-        end,
-    },
+    { "nvim-lua/plenary.nvim", lazy = true },
 
     -- QoL
     {
@@ -66,7 +52,7 @@ return {
     },
 
     -- zig
-    { "ziglang/zig.vim",                                      ft = "zig" },
+    { "ziglang/zig.vim",       ft = "zig" },
 
     -- jinja
     {
@@ -97,12 +83,7 @@ return {
     -- misc
     { "norcalli/nvim-colorizer.lua",                          cmd = "ColorizerToggle" },
 
-    -- my plugins
-    { enabled = false,                                        dir = "~/apex/apex.nvim" },
-    { enabled = false,                                        dir = "~/apex/apexcolors.nvim" },
-
-    -- { enabled = false,               dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
-    { url = "git@gitlab.apex.ai:alfonso.ros/gitlab.nvim.git", config = true },
+    -- bazel
     {
         'alexander-born/bazel.nvim',
         name = "gh_bazel",
@@ -111,6 +92,10 @@ return {
             vim.g.bazel_cmd = "bazel"
         end
     },
+
+    -- my plugins
+    -- { enabled = false,               dir = "~/apex/apex_gitlab.nvim", config = true, name = "apex_gitlab", main = "apex_gitlab" },
+    { url = "git@gitlab.apex.ai:alfonso.ros/gitlab.nvim.git", config = true },
     {
         dir = "~/bazel.nvim",
         dependencies = {
@@ -127,13 +112,13 @@ return {
 
             local themes = require("telescope.themes")
             n({
-                ["<leader>ba"] = {
+                ["<leader>bb"] = {
                     function()
                         bazel_telescope.build(themes.get_ivy())
                     end,
                     desc = "bazel build any target",
                 },
-                ["<leader>bb"] = {
+                ["<leader>bp"] = {
                     function()
                         bazel_telescope.build_package(themes.get_ivy())
                     end,

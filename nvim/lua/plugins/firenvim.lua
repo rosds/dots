@@ -19,6 +19,7 @@ vim.g.firenvim_config = {
 return {
     {
         "glacambre/firenvim",
+        tag = "v0.2.16",
         cond = not not vim.g.started_by_firenvim,
         build = ":call firenvim#install(0)",
         config = function()

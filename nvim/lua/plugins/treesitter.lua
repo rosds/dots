@@ -5,7 +5,7 @@ local opts = {
         use_virtual_text = true,
         lint_events = { "BufWrite", "CursorHold" },
     },
-    ensure_installed = { "lua", "rust", "cpp", "python", "markdown", "fennel", "json", "yaml" },
+    ensure_installed = { "lua", "rust", "c", "cpp", "python", "markdown", "fennel", "json", "yaml" },
     ignore_install = { "javascript" }, -- List of parsers to ignore installing
     highlight = {
         enable = true,
@@ -36,6 +36,7 @@ local opts = {
             },
         },
     },
+    fold = { enable = true },
 }
 
 return {

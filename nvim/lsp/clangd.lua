@@ -1,7 +1,6 @@
 return {
     cmd = { "clangd",
-        "--background-index",
-        "--clang-tidy",
+        "--background-index=false",
         "--header-insertion=never",
         "--fallback-style=Google",
         "--inlay-hints=true",

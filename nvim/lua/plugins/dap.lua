@@ -1,40 +1,10 @@
-local config = function()
-    local dap = require("dap")
-
-    dap.adapters.gdb = {
-        type = "executable",
-        command = "gdb",
-        args = { "-i", "dap" },
-    }
-
-    dap.defaults.fallback.force_external_terminal = true
-    dap.defaults.fallback.external_terminal = {
-        command = "/home/alfonso.ros/.cargo/bin/alacritty",
-        args = { "-e" },
-    }
-
-    dap.configurations.cpp = {
-        {
-            name = "Launch",
-            type = "gdb",
-            request = "launch",
-            program = function()
-                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-            end,
-            cwd = "${workspaceFolder}",
-            stopAtBeginningOfMainSubprogram = true,
-        },
-    }
-
-    vim.api.nvim_create_user_command("DapCatchThrow", function()
-        dap.set_exception_breakpoints({ "catch", "throw" })
-    end, {})
-end
-
 return {
     {
         "mfussenegger/nvim-dap",
-        config = config,
+        version = "0.10.0",
+        config = function()
+            require("plugins.config.dap")
+        end,
         keys = {
             {
                 "<leader>db",
@@ -45,7 +15,13 @@ return {
             {
                 "<leader>dc",
                 function()
-                    require("dap").continue()
+                    require("plugins.config.dap").continue()
+                end,
+            },
+            {
+                "<F5>",
+                function()
+                    require("plugins.config.dap").continue()
                 end,
             },
             {
@@ -129,8 +105,20 @@ return {
                 end,
             },
         },
-        cmd = {
-            "DapCatchThrow",
-        },
     },
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+        config = function()
+            require("plugins.config.dapui")
+        end,
+        keys = {
+            {
+                "<leader>dt",
+                function()
+                    require("dapui").toggle()
+                end,
+            },
+        }
+    }
 }

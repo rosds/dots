@@ -1,6 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # zmodload zsh/zprof
 
 # Path to your oh-my-zsh installation.
@@ -80,6 +77,10 @@ ZVM_INIT_MODE=sourcing
 
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting bazel zsh-vi-mode nvm)
 
+fpath+=$HOME/.zfunc
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+autoload -U compinit && compinit
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -122,11 +123,6 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-fpath+=$HOME/.zfunc
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-autoload -U compinit && compinit
-source "$ZSH/oh-my-zsh.sh"
-
 alias ls=eza
 alias ps=procs
 
@@ -153,9 +149,6 @@ export PATH="$PATH:$HOME/.local/bin"
 # Go
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOPATH)/bin"
-
-# node
-export PATH="$PATH:$HOME/.deno/bin"
 
 # git hook
 export ENABLE_GIT_COMMIT_MSG_HOOK_INTERACTIVE=auto
@@ -199,8 +192,8 @@ alias cleanshm="rm -rf /dev/shm/*.data_segment; rm -rf /dev/shm/*.connection; rm
 
 alias ghgit="GIT_SSH_COMMAND='ssh -i /home/alfonso.ros/.ssh/rosds_id_ed25519' git"
 
-# haskell
-[ -f "/home/alfonso.ros/.ghcup/env" ] && . "/home/alfonso.ros/.ghcup/env" # ghcup-env
+# ghcup
+[ -f "/home/alfonso.ros/.ghcup/env" ] && . "/home/alfonso.ros/.ghcup/env"
 
 # elixir
 export PATH=$HOME/.elixir-install/installs/otp/27.1.2/bin:$PATH

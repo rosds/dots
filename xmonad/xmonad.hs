@@ -147,6 +147,7 @@ myManageHook =
         className =? "zoom" --> doFloat,
         className =? "copyq" --> doFloat,
         className =? "1password" --> doFloat,
+        stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat,
         title =? "Zoom Cloud Meetings" --> doFloat,
         className =? "Google-chrome" --> doShift (myWorkspaces !! 1),
         title ^= "join?action" --> doFloat
@@ -173,7 +174,9 @@ myStartupHook = do
   spawnOnce "feh --image-bg black --bg-fill ~/Pictures/bg"
 
 rofi :: String
-rofi = "~/.config/rofi/launchers/type-4/launcher.sh"
+rofi = "rofi"
+
+-- rofi = "~/.config/rofi/launchers/type-4/launcher.sh"
 
 main :: IO ()
 main = do

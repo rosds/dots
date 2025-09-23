@@ -92,6 +92,7 @@ n({
     end,
     ["<leader>p"] = function()
         telescope.extensions.frecency.frecency(themes.get_ivy({
+            workspace = "CWD",
             show_scores = true,
         }))
     end,

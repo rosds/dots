@@ -292,9 +292,11 @@ return {
     s("unimpl", t('return base::err(base::error("unimplemented"));')),
     s(
         "axivion",
-        fmt("// AXIVION Next Construct {}: {}", {
-            i(1, "AutosarC++19_03-M5.0.2"),
-            i(2, "TODO reason"),
-        })
+        fmt([[
+            /*
+             AXIVION Next Codeline {} : Reason: Code Quality (Functional  suitability),
+             justification: {}
+            */
+        ]], { i(1, "MisraC++2023-4.1.3"), i(0, "Safe type conversion is working since") })
     ),
 }

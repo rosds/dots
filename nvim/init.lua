@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out,                            "WarningMsg" },
+            { out, "WarningMsg" },
             { "\nPress any key to exit..." },
         }, true, {})
         vim.fn.getchar()
@@ -15,11 +15,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
 vim.g.mapleader = " "
 
 require("options")
-require("globals")
 require("terminal")
 
 require("lazy").setup("plugins", {
@@ -29,6 +27,15 @@ require("lazy").setup("plugins", {
     checker = { enabled = true },
 })
 
+-- Add health check command for easy debugging
+vim.api.nvim_create_user_command("CheckHealth", function()
+    require("lazy").health()
+    require("telescope").health()
+    require("nvim-treesitter").health()
+end, { desc = "Check health of all major plugins" })
+
+require("globals")
+
 vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
 
 -- Inserts a real tab with shift-tab
@@ -36,10 +43,11 @@ vim.keymap.set("i", "<s-tab>", "<c-q><tab>", { silent = false })
 
 local n = require("keymaps").normal
 
-local follow_symlink = require("utils.fs").follow_symlink
-
-vim.api.nvim_create_user_command("FollowSymlink", follow_symlink, { nargs = 0 })
-
+local fs = R("utils.fs")
+vim.api.nvim_create_user_command("FollowSymlink", fs.follow_symlink, { nargs = 0 })
+vim.api.nvim_create_user_command("Fd", function(opts)
+    fs.find_files(opts.args)
+end, { nargs = 1 })
 
 n({
     -- find and replace
@@ -53,13 +61,13 @@ n({
     -- reload nvim config
     ["<leader>vv"] = ":luafile $MYVIMRC<cr>",
     -- follow symlink
-    ["<leader>ff"] = follow_symlink,
+    ["<leader>ff"] = fs.follow_symlink,
     -- open file with the system's default
     ["<leader>go"] = ':silent execute "!xdg-open " . shellescape("<cWORD>")<cr>',
     -- set current buffer file directory as local working directory
     ["<leader>lcd"] = ":lcd %:p:h<cr>",
     -- yank path w/o line number
-    ["<leader>yf"] = ":let @+ = expand('%:p')<cr>",
+    ["<leader>yf"] = ":let @+ = expand('%:.')<cr>",
     -- yank path with line number
     ["<leader>yF"] = ":let @\" = join([expand('%:p'), line('.')],':')<cr>",
     -- disable ighlight
@@ -110,7 +118,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-vim.cmd.colorscheme("kanagawa-wave")
+require("lsp")
 
 -- Lua Rocks
 require("luarocks")

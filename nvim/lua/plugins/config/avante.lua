@@ -11,7 +11,7 @@ avante.setup({
         provider = "telescope",
     },
     input = {
-        provider = "dressing"
+        provider = "snacks"
     }
 })
 

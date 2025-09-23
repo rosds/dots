@@ -73,18 +73,22 @@ vim.opt.laststatus = 2
 vim.opt.cmdheight = 1
 
 vim.diagnostic.config({
-    virtual_lines = {
-        current_line = true,
-    },
+    -- virtual_lines = {
+    --     current_line = true,
+    -- },
+    virtual_text = true
     -- float = {
     --     source = "if_many",
     -- },
 })
 
 -- folding
-vim.opt.foldlevel = 8
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
 
 vim.opt.conceallevel = 2
 
