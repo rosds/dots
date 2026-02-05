@@ -11,7 +11,7 @@ obsidian.setup({
     follow_url_func = function(url)
         vim.fn.jobstart({ "xdg-open", url })
     end,
-    ui = { enable = false }
+    ui = { enable = false },
 })
 
 local function take_note()
@@ -27,6 +27,9 @@ local function take_note()
     end)
 end
 
+vim.keymap.set("n", "<leader>nn", take_note, { desc = "Obsidian: Take a new note" })
+vim.keymap.set("n", "<leader>ns", ":ObsidianSearch<cr>", { desc = "Obsidian: Search notes" })
+
 return {
-    take_note = take_note
+    take_note = take_note,
 }

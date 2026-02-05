@@ -13,7 +13,12 @@ local fmt = require("luasnip.extras.fmt").fmt
 local Path = require("plenary.path")
 
 local function buf_path()
-    return Path:new(vim.api.nvim_buf_get_name(0))
+    local bufnr = 0
+    if vim.api.nvim_buf_is_valid(bufnr) then
+        return Path:new(vim.api.nvim_buf_get_name(bufnr))
+    else
+        return nil
+    end
 end
 
 local function get_dirname()

@@ -30,7 +30,7 @@ end
 local function copy_right()
     return fmt(
         [[
-        /// @copyright Copyright 2025 Apex.AI, Inc.
+        /// @copyright Copyright 2026 Apex.AI, Inc.
         /// All rights reserved.
         {}
         ]],
@@ -292,11 +292,14 @@ return {
     s("unimpl", t('return base::err(base::error("unimplemented"));')),
     s(
         "axivion",
-        fmt([[
+        fmt(
+            [[
             /*
              AXIVION Next Codeline {} : Reason: Code Quality (Functional  suitability),
              justification: {}
             */
-        ]], { i(1, "MisraC++2023-4.1.3"), i(0, "Safe type conversion is working since") })
+        ]],
+            { i(1, "MisraC++2023-4.1.3"), i(0, "Safe type conversion is working since") }
+        )
     ),
 }

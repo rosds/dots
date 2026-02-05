@@ -2,17 +2,13 @@ local avante = require("avante")
 
 avante.setup({
     provider = "copilot",
-    providers = {
-        copilot = {
-            model = "claude-3.7-sonnet",
-        },
-    },
+    -- provider = "codex",
     selector = {
         provider = "telescope",
     },
     input = {
-        provider = "snacks"
-    }
+        provider = "snacks",
+    },
 })
 
-vim.keymap.set({ "n" }, "<leader>cc", ":AvanteChat<cr>", { desc = "Open Avante Chat" })
+vim.keymap.set({ "n" }, "<leader>cc", ":AvanteToggle<cr>", { desc = "Open Avante Chat" })

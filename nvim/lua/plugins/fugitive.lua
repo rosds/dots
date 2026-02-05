@@ -4,4 +4,7 @@ return {
     config = function()
         require("plugins.config.fugitive")
     end,
+    dependencies = {
+        "shumphrey/fugitive-gitlab.vim",
+    },
 }

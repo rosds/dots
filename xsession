@@ -10,4 +10,6 @@ xautolock -time 3 -detectsleep -corners +00- -locker "i3lock -i ~/Pictures/bg -t
 # chrome & google chat
 google-chrome --restore-last-session &
 
+1password --silent &
+
 exec $HOME/.local/bin/xmonad

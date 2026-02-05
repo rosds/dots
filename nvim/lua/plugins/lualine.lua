@@ -3,8 +3,13 @@ local function fugitive_buffer()
 end
 
 local function is_fugitive_buffer()
-    local buf_name = vim.api.nvim_buf_get_name(0)
-    return vim.startswith(buf_name, "fugitive://")
+    local bufnr = 0
+    if vim.api.nvim_buf_is_valid(bufnr) then
+        local buf_name = vim.api.nvim_buf_get_name(bufnr)
+        return vim.startswith(buf_name, "fugitive://")
+    else
+        return false
+    end
 end
 
 return {

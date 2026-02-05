@@ -41,18 +41,19 @@ return {
         end,
         cmd = {
             "TableModeEnable",
+            "TableModeRealign",
         },
     },
 
     -- rust
     {
         "mrcjkb/rustaceanvim",
-        version = "^5",
+        version = "^8", -- Recommended
         lazy = false, -- This plugin is already lazy
     },
 
     -- zig
-    { "ziglang/zig.vim",       ft = "zig" },
+    { "ziglang/zig.vim", ft = "zig" },
 
     -- jinja
     {
@@ -76,21 +77,20 @@ return {
                     ]])
                 end,
             })
-        end
-
+        end,
     },
 
     -- misc
-    { "norcalli/nvim-colorizer.lua",                          cmd = "ColorizerToggle" },
+    { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" },
 
     -- bazel
     {
-        'alexander-born/bazel.nvim',
+        "alexander-born/bazel.nvim",
         name = "gh_bazel",
-        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
+        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-lua/plenary.nvim" },
         config = function()
             vim.g.bazel_cmd = "bazel"
-        end
+        end,
     },
 
     -- my plugins
@@ -105,30 +105,30 @@ return {
         },
         config = function()
             local bazel = require("bazel")
-            bazel.setup({})
+            bazel.setup({
+                open_task_on_split = true,
+            })
 
-            local bazel_telescope = require("bazel.telescope")
             local n = require("keymaps").normal
-
             local themes = require("telescope.themes")
             n({
                 ["<leader>bb"] = {
                     function()
-                        bazel_telescope.build(themes.get_ivy())
+                        bazel.build(themes.get_ivy())
                     end,
                     desc = "bazel build any target",
                 },
-                ["<leader>bp"] = {
-                    function()
-                        bazel_telescope.build_package(themes.get_ivy())
-                    end,
-                    desc = "bazel build package target",
-                },
                 ["<leader>bt"] = {
                     function()
-                        bazel_telescope.test(themes.get_ivy())
+                        bazel.test(themes.get_ivy())
                     end,
                     desc = "bazel test any target",
+                },
+                ["<leader>b."] = {
+                    function()
+                        bazel.buf_test(themes.get_ivy())
+                    end,
+                    desc = "bazel test current buffer",
                 },
             })
         end,

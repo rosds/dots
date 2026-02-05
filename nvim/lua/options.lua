@@ -1,7 +1,7 @@
 -- neovide font
 if vim.g.neovide then
     vim.opt.guifont = "FiraCode Nerd Font:h8"
-    vim.g.neovide_transparency = 0.95
+    vim.g.neovide_oppacity = 0.95
 end
 
 vim.g.python3_host_prog = "/home/alfonso.ros/.pyenv/versions/neovim-env/bin/python"
@@ -76,7 +76,7 @@ vim.diagnostic.config({
     -- virtual_lines = {
     --     current_line = true,
     -- },
-    virtual_text = true
+    virtual_text = true,
     -- float = {
     --     source = "if_many",
     -- },
@@ -84,7 +84,7 @@ vim.diagnostic.config({
 
 -- folding
 vim.opt.foldmethod = "expr"
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
@@ -93,4 +93,7 @@ vim.opt.foldenable = true
 vim.opt.conceallevel = 2
 
 -- Re-enable for debugging
-vim.lsp.set_log_level("off")
+vim.lsp.log.set_level("off")
+
+-- disable local .nvimrc.lua files
+vim.opt.exrc = false

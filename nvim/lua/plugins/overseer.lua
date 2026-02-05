@@ -4,6 +4,7 @@ return {
         config = function()
             require("plugins.config.overseer")
         end,
+        version = "v1.6.0",
         keys = {
             { "<leader>tt", "<cmd>OverseerRun<cr>", desc = "" },
             { "<leader>to", "<cmd>OverseerToggle<cr>", desc = "" },

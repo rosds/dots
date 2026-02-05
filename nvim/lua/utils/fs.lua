@@ -1,3 +1,20 @@
+--- Check if the current buffer corresponds to a symbolic link
+--- @return boolean: true if it is a symbolic link, false otherwise
+local function is_symlink(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    if not vim.api.nvim_buf_is_valid(bufnr) then
+        return false
+    end
+
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    if bufname == "" then
+        return false -- No file name, so it cannot be a symlink
+    end
+
+    local lstat = vim.uv.fs_lstat(bufname)
+    return lstat and lstat.type == "link" or false
+end
+
 ---Return a plenary Path of the current buffer
 ---@return string|nil path of the current buffer
 local function buffer_path()
@@ -50,20 +67,19 @@ local function file_dir(path)
 end
 
 local function follow_symlink()
+    if not is_symlink() then
+        return
+    end
+
     local current_win = vim.api.nvim_get_current_win()
     local cursor = vim.api.nvim_win_get_cursor(current_win)
 
     local bufold = vim.api.nvim_get_current_buf()
     local path = vim.fn.resolve(vim.api.nvim_buf_get_name(bufold))
 
-    local bufnew = vim.api.nvim_create_buf(true, false)
-    vim.api.nvim_set_current_buf(bufnew)
-    vim.api.nvim_buf_delete(bufold, { force = true })
-
-    vim.api.nvim_buf_call(bufnew, function()
-        vim.cmd("edit! " .. path)
-    end)
+    vim.cmd.edit(vim.fn.fnameescape(path))
     vim.api.nvim_win_set_cursor(current_win, cursor)
+    vim.api.nvim_buf_set_name(bufold, path)
 end
 
 --- Search for files using `fd` and return the results as a list.
@@ -74,7 +90,7 @@ local function find_files_with_fd(glob_pattern, search_dir)
     local dir = search_dir or vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":p:h")
     dir = vim.fn.resolve(dir) -- resolve symlinks etc.
     if not dir:match("/$") then
-        dir = dir .. "/"      -- ensure trailing slash
+        dir = dir .. "/" -- ensure trailing slash
     end
 
     local escaped_pattern = vim.fn.shellescape(glob_pattern)
@@ -108,11 +124,11 @@ local function find_files_with_fd(glob_pattern, search_dir)
     end
 end
 
-
 return {
     find_file = fd,
     find_files = find_files_with_fd,
     file_dir = file_dir,
+    is_symlink = is_symlink,
     follow_symlink = follow_symlink,
     buffer_path = buffer_path,
     find_upwards = find_upwards,

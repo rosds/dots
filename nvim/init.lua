@@ -52,6 +52,29 @@ end, { nargs = 1 })
 n({
     -- find and replace
     ["<leader>rr"] = { 'yiw:%s/<c-r>"//g<left><left>', silent = false },
+    ["<leader>RR"] = function()
+        local word = vim.fn.expand("<cword>")
+        vim.ui.input({
+            prompt = "Replace " .. word .. ": ",
+            default = word,
+        }, function(replace_with)
+            if replace_with == nil then
+                return
+            end
+            local cmd = string.format("rg -l -0 %s | xargs -0 sed -i 's/%s/%s/g'", word, word, replace_with)
+            vim.system({ vim.o.shell, vim.o.shellcmdflag, cmd }, {
+                text = true,
+            }, function(res)
+                if res.code == 0 then
+                    vim.notify("Replace completed", vim.log.levels.INFO)
+                else
+                    vim.notify("Error during replace: " .. res.stderr, vim.log.levels.ERROR)
+                end
+            end):wait()
+            vim.cmd("edit!")
+        end)
+    end,
+
     -- edit nvim config
     ["<leader>vc"] = function()
         vim.cmd.tabnew("$MYVIMRC")
@@ -99,18 +122,27 @@ vim.keymap.set("v", "<leader>gx", 'y:silent execute "!xdg-open <c-r>""<cr>')
 -- Yank path w/o line number
 vim.keymap.set("v", "<LeftRelease>", '"+ygv', { desc = "yank on mouse selection" })
 
-local ag = require("augroup").augroup
-ag("AllFiles")({
-    {
-        "BufWritePre",
-        command = "silent! %s/\\s\\+$//e",
-    },
+local init_lua_augroup = vim.api.nvim_create_augroup("init.lua", { clear = true })
+
+-- remove trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = init_lua_augroup,
+    command = "silent! %s/\\s\\+$//e",
 })
 
-local group = vim.api.nvim_create_augroup("qf_group", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPost", {
+    group = init_lua_augroup,
+    callback = function()
+        fs.follow_symlink()
+    end,
+})
+
+local qf_nav_group = vim.api.nvim_create_augroup("qf_nav_group", { clear = true })
+
+-- convenient quickfix navigation
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "qf",
-    group = group,
+    group = qf_nav_group,
     callback = function(event)
         local opts = { buffer = event.buf, silent = true }
         vim.keymap.set("n", "<C-n>", "<cmd>cn<CR>zz<cmd>wincmd p<CR>", opts)

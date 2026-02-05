@@ -1,3 +1,4 @@
+import Control.Monad (filterM, forM_)
 import Data.List (isPrefixOf)
 import Data.Maybe (catMaybes, listToMaybe)
 import Polybar
@@ -24,6 +25,7 @@ import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
 import XMonad.Layout.Spacing
 import qualified XMonad.Prompt as P
 import XMonad.StackSet (RationalRect (..))
+import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (safeSpawn)
@@ -94,13 +96,23 @@ myLayoutHook = tiled ||| tiledSpacing ||| Full
 myTerm :: String
 myTerm = "kitty"
 
+-- Action to hide all scratchpads by moving them to the "NSP" workspace
+hideAllScratchpads :: [NamedScratchpad] -> X ()
+hideAllScratchpads sps = do
+  ws <- gets windowset
+  let allWindows = W.allWindows ws
+  forM_ sps $ \(NS _ _ query _) -> do
+    matching <- filterM (runQuery query) allWindows
+    forM_ matching $ \w ->
+      windows (W.shiftWin "NSP" w)
+
 -- Scratch pads
 myScratchpads :: [NamedScratchpad]
 myScratchpads =
   [ NS "spotify" "spotify" (className =? "Spotify") myFloating,
     NS
       "neovide"
-      "neovide --x11-wm-class org -- -c ':Neorg workspace notes'"
+      "neovide --x11-wm-class org -- -c ':ObsidianSearch'"
       -- "neovide --x11-wm-class org -- -c ':Org'"
       (className =? "org")
       -- "kitty --name=org vi -c ':Org'"
@@ -225,7 +237,8 @@ main = do
           ("M-S-n", namedScratchpadAction myScratchpads "neovide"),
           ("M-S-t", namedScratchpadAction myScratchpads "scratchterm"),
           ("M-S-o", namedScratchpadAction myScratchpads "calendar"),
-          ("M-S-i", namedScratchpadAction myScratchpads "chat")
+          ("M-S-i", namedScratchpadAction myScratchpads "chat"),
+          ("M-S-g", hideAllScratchpads myScratchpads)
         ]
         -- search engines
         ++ [("M-s " <> key, S.promptSearchBrowser myPromptConfig "google-chrome" engine) | (key, engine) <- searchEngineMap]

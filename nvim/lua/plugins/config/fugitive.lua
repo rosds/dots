@@ -54,3 +54,6 @@ ag("my_fugitive")({
         end,
     },
 })
+
+-- Configure fugitive-gitlab.vim
+vim.g.fugitive_gitlab_domains = { "gitlab.apex.ai" }
