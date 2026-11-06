@@ -1,6 +1,9 @@
 return {
     cmd = { "clangd",
         "--background-index=false",
+        "-j=1",
+        "--pch-storage=disk",
+        "--clang-tidy",
         "--header-insertion=never",
         "--fallback-style=Google",
         "--inlay-hints=true",

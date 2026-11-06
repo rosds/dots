@@ -33,77 +33,10 @@ ag("LspAttach")({
                 K = vim.lsp.buf.hover,
                 -- Diagnostics
                 ["<leader>se"] = vim.diagnostic.open_float,
-            })
+            }, { buffer = args.buf })
         end,
     },
 })
 
--- c/c++
-vim.lsp.config("clangd", {
-    cmd = {
-        "clangd",
-        "--background-index=false",
-        "-j=1",
-        "--pch-storage=disk",
-        "--clang-tidy",
-        "--header-insertion=never",
-        "--fallback-style=Google",
-        "--inlay-hints=true",
-    },
-    filetypes = { "c", "cpp" },
-    root_markers = { "compile_commands.json", ".clangd" },
-})
-vim.lsp.enable("clangd")
-
--- lua
-vim.lsp.enable("lua_ls")
-
--- python
-vim.env.PYENV_VERSION = vim.fn.system("pyenv version"):match("(%S+)%s+%(.-%)")
-vim.lsp.config("pyright", {
-    root_markers = { "WORKSPACE", "MODULE.bazel", "pyproject.toml", "pyrightconfig.json", ".git" },
-})
-vim.lsp.enable("pyright")
-
--- haskell
-vim.lsp.config("hls", {
-    cmd = { "stack", "exec", "--", "haskell-language-server-wrapper", "--lsp" },
-})
-vim.lsp.enable("hls")
-
--- zig
-vim.lsp.enable("zls")
-
--- Harper
-vim.lsp.config("harper_ls", {
-    settings = {
-        ["harper-ls"] = {
-            userDictPath = "",
-            fileDictPath = "",
-            linters = {
-                SpellCheck = true,
-                SpelledNumbers = false,
-                AnA = true,
-                SentenceCapitalization = true,
-                UnclosedQuotes = true,
-                WrongQuotes = false,
-                LongSentences = true,
-                RepeatedWords = true,
-                Spaces = true,
-                Matcher = true,
-                CorrectNumberSuffix = true,
-            },
-            codeActions = {
-                ForceStable = false,
-            },
-            markdown = {
-                IgnoreLinkTitle = false,
-            },
-            diagnosticSeverity = "hint",
-            isolateEnglish = false,
-            dialect = "American",
-            maxFileLength = 120000,
-        },
-    },
-})
-vim.lsp.enable("harper_ls")
+-- Server settings live in lsp/<name>.lua; this module owns attachment behavior.
+vim.lsp.enable({ "clangd", "lua_ls", "pyright", "hls", "zls", "harper_ls" })

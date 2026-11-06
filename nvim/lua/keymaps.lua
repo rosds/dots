@@ -22,18 +22,19 @@ local function mapspec(t)
     end
 
     assert(t[1] ~= nil, "Mapping has to include either a string or a function")
+    t = vim.tbl_extend("force", {}, t)
     local rhs = table.remove(t, 1)
 
     return rhs, getopts(t)
 end
 
 local function make_mode_mapper(mode)
-    return function(ls)
+    return function(ls, defaults)
         assert(type(ls) == "table", "Expects a mappings pairs")
         for lhs, value in pairs(ls) do
             assert(type(lhs) == "string", "Error on mapping without key")
             local rhs, opts = mapspec(value)
-            vim.keymap.set(mode, lhs, rhs, opts)
+            vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", defaults or {}, opts))
         end
     end
 end

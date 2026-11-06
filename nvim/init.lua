@@ -31,14 +31,13 @@ vim.cmd.packadd("nvim.undotree")
 
 -- Add health check command for easy debugging
 vim.api.nvim_create_user_command("CheckHealth", function()
-    require("lazy").health()
-    require("telescope").health()
-    require("nvim-treesitter").health()
+    vim.cmd("checkhealth")
 end, { desc = "Check health of all major plugins" })
 
 require("globals")
 
-vim.keymap.set({ "n", "i" }, "<S-Insert>", "<C-R>+", {})
+vim.keymap.set("i", "<S-Insert>", "<C-R>+")
+vim.keymap.set("n", "<S-Insert>", '+p')
 
 -- Inserts a real tab with shift-tab
 vim.keymap.set("i", "<s-tab>", "<c-q><tab>", { silent = false })
@@ -55,26 +54,12 @@ n({
     -- find and replace
     ["<leader>rr"] = { 'yiw:%s/<c-r>"//g<left><left>', silent = false },
     ["<leader>RR"] = function()
+        -- Populate the quickfix list for review before applying a project-wide edit.
         local word = vim.fn.expand("<cword>")
-        vim.ui.input({
-            prompt = "Replace " .. word .. ": ",
-            default = word,
-        }, function(replace_with)
-            if replace_with == nil then
-                return
-            end
-            local cmd = string.format("rg -l -0 %s | xargs -0 sed -i 's/%s/%s/g'", word, word, replace_with)
-            vim.system({ vim.o.shell, vim.o.shellcmdflag, cmd }, {
-                text = true,
-            }, function(res)
-                if res.code == 0 then
-                    vim.notify("Replace completed", vim.log.levels.INFO)
-                else
-                    vim.notify("Error during replace: " .. res.stderr, vim.log.levels.ERROR)
-                end
-            end):wait()
-            vim.cmd("edit!")
-        end)
+        vim.fn.setqflist({}, "r")
+        vim.cmd("silent! vimgrep /\\<" .. vim.fn.escape(word, "/\\") .. "\\>/gj **/*")
+        vim.cmd("copen")
+        vim.notify("Review matches, then use :cfdo %s/old/new/ge | update")
     end,
 
     -- edit nvim config
@@ -88,14 +73,14 @@ n({
     -- follow symlink
     ["<leader>ff"] = fs.follow_symlink,
     -- open file with the system's default
-    ["<leader>go"] = ':silent execute "!xdg-open " . shellescape("<cWORD>")<cr>',
+    ["<leader>go"] = ':silent execute "!xdg-open " . shellescape(expand("<cWORD>"))<cr>',
     -- set current buffer file directory as local working directory
     ["<leader>lcd"] = ":lcd %:p:h<cr>",
     -- yank path w/o line number
     ["<leader>yf"] = ":let @+ = expand('%:.')<cr>",
     -- yank path with line number
     ["<leader>yF"] = ":let @+ = join([expand('%:p'), line('.')],':')<cr>",
-    -- disable ighlight
+    -- disable search highlighting
     ["<esc><esc>"] = ":noh<cr>",
     -- toggle diagnostics
     ["<leader>td"] = function()

@@ -1,12 +1,14 @@
 -- UI2 experimental
-require("vim._core.ui2").enable({
-    enable = false,
-})
+-- Private experimental UI APIs may be absent in stable Neovim builds.
+local has_ui2, ui2 = pcall(require, "vim._core.ui2")
+if has_ui2 then
+    ui2.enable({ enable = false })
+end
 
 -- neovide font
 if vim.g.neovide then
     vim.opt.guifont = "FiraCode Nerd Font Mono:h8"
-    vim.g.neovide_oppacity = 0.95
+    vim.g.neovide_opacity = 0.95
 end
 
 vim.g.python3_host_prog = "/home/alfonso.ros/.pyenv/versions/neovim-env/bin/python"
@@ -71,10 +73,10 @@ vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.cursorline = true
 
--- have one global status line
+-- Show a status line in each window
 vim.opt.laststatus = 2
 
--- hide the command line
+-- Keep one command-line row visible
 vim.opt.cmdheight = 1
 
 vim.diagnostic.config({
