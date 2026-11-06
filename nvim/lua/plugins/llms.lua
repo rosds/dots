@@ -40,6 +40,8 @@ return {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
+            "ColinKennedy/mega.logging",
+            "ColinKennedy/mega.cmdparse",
             "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
             "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
             "folke/snacks.nvim",             -- for input provider snacks

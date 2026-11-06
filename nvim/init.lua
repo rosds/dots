@@ -27,6 +27,8 @@ require("lazy").setup("plugins", {
     checker = { enabled = true },
 })
 
+vim.cmd.packadd("nvim.undotree")
+
 -- Add health check command for easy debugging
 vim.api.nvim_create_user_command("CheckHealth", function()
     require("lazy").health()
@@ -92,7 +94,7 @@ n({
     -- yank path w/o line number
     ["<leader>yf"] = ":let @+ = expand('%:.')<cr>",
     -- yank path with line number
-    ["<leader>yF"] = ":let @\" = join([expand('%:p'), line('.')],':')<cr>",
+    ["<leader>yF"] = ":let @+ = join([expand('%:p'), line('.')],':')<cr>",
     -- disable ighlight
     ["<esc><esc>"] = ":noh<cr>",
     -- toggle diagnostics

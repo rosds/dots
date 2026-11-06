@@ -1,6 +1,11 @@
+-- UI2 experimental
+require("vim._core.ui2").enable({
+    enable = false,
+})
+
 -- neovide font
 if vim.g.neovide then
-    vim.opt.guifont = "FiraCode Nerd Font:h8"
+    vim.opt.guifont = "FiraCode Nerd Font Mono:h8"
     vim.g.neovide_oppacity = 0.95
 end
 

@@ -24,7 +24,7 @@ local function inc_guard_name()
         fname = path:make_relative(maybe_workspace:parent().filename)
     end
 
-    return fname:gsub("%/", "_"):gsub("%.", "_"):upper()
+    return fname:gsub("%/", "__"):gsub("%.", "_"):upper()
 end
 
 local function copy_right()

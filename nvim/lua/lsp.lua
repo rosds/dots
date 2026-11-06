@@ -60,9 +60,15 @@ vim.lsp.enable("lua_ls")
 
 -- python
 vim.env.PYENV_VERSION = vim.fn.system("pyenv version"):match("(%S+)%s+%(.-%)")
+vim.lsp.config("pyright", {
+    root_markers = { "WORKSPACE", "MODULE.bazel", "pyproject.toml", "pyrightconfig.json", ".git" },
+})
 vim.lsp.enable("pyright")
 
 -- haskell
+vim.lsp.config("hls", {
+    cmd = { "stack", "exec", "--", "haskell-language-server-wrapper", "--lsp" },
+})
 vim.lsp.enable("hls")
 
 -- zig

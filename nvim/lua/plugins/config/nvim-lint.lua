@@ -4,7 +4,7 @@ local pydocstyle = lint.linters.pydocstyle
 pydocstyle.args = { "--convention=google" }
 
 lint.linters_by_ft = {
-    python = { "ruff", "pydocstyle" },
+    python = { "ruff", "pydocstyle", "dmypy" },
 }
 
 local group = vim.api.nvim_create_augroup("nvim_lint_augroup", { clear = true })

@@ -33,20 +33,21 @@ telescope.setup({
                 ["<c-h>"] = actions_layout.toggle_preview,
             },
         },
-        extensions = {
-            fzf = {
-                fuzzy = true,
-                override_generic_sorter = true,
-                override_file_sorter = true,
-                case_mode = "smart_case",
-            },
-            frecency = {
-                db_safe_mode = false,
-                matcher = "fuzzy"
-            }
-        },
         path_display = {
             truncate = 3,
+        },
+    },
+    extensions = {
+        fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+        },
+        frecency = {
+            db_safe_mode = false,
+            matcher = "fuzzy",
+            ignore_patterns = { "*/.git", "*/.git/*", "*/.DS_Store" },
         },
     },
 })
@@ -73,7 +74,7 @@ local function super_rg(telescope_fn)
 
                 local args = {
                     default_text = current_input,
-                    additional_args = { "-t", ft }
+                    additional_args = { "-t", ft },
                 }
 
                 super_rg(telescope_fn)(args)
@@ -147,7 +148,7 @@ v({
 -- :Rg Search for a string in the current directory using rg.
 vim.api.nvim_create_user_command("Rg", function(args)
     super_rg(builtin.grep_string)({ search = args.args })
-end, { nargs = '+' })
+end, { nargs = "+" })
 
 -- :Rd Live grep in given directories
 vim.api.nvim_create_user_command("Rd", function(args)

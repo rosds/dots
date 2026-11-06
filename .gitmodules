@@ -26,3 +26,6 @@
 [submodule "ghostty/more-shaders"]
 	path = ghostty/more-shaders
 	url = git@github.com:thijskok/ghostty-shaders.git
+[submodule "ghostty/cursor_shaders"]
+	path = ghostty/cursor_shaders
+	url = git@github.com:sahaj-b/ghostty-cursor-shaders.git

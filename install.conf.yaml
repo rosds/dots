@@ -8,6 +8,7 @@
     ~/.config/git: git
     ~/.config/kitty: kitty
     ~/.config/nvim: nvim
+    ~/.config/nvim-native: nvim-native
     ~/.config/picom.conf: picom.conf
     ~/.config/polybar: polybar
     ~/.config/rofi: rofi

@@ -109,6 +109,19 @@ return {
                 open_task_on_split = true,
             })
 
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "bzl",
+                callback = function()
+                    vim.api.nvim_create_user_command("YankBazelTargetUnderCursor", function()
+                        local bazel_target = require("bazel.treesitter").bazel_target_under_cursor()
+                        if bazel_target then
+                            vim.fn.setreg("+", bazel_target)
+                            print("Yanked bazel target: " .. bazel_target)
+                        end
+                    end, { nargs = 0, desc = "yank bazel target under cursor" })
+                end,
+            })
+
             local n = require("keymaps").normal
             local themes = require("telescope.themes")
             n({

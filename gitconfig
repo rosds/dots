@@ -33,6 +33,13 @@
 [mergetool "fugitive"]
     cmd = vi -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
+[mergetool "difftool"]
+    cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
+
+[merge]
+    tool = difftool
+    ; conflictstyle = zdiff3
+
 [merge]
     tool = fugitive
     ; conflictstyle = zdiff3
@@ -78,3 +85,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[credential "https://gitlab-customer.apex.ai"]
+	helper = 
+	helper = !/usr/bin/glab auth git-credential
+[safe]
+	bareRepository = all

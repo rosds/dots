@@ -5,7 +5,7 @@ return {
         lazy = false,
         opts = {
             input = { enabled = true },
-            notifier = { enabled = true },
+            notifier = { enabled = false },
             image = { enabled = true },
         },
     },

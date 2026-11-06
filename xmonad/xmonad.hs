@@ -1,12 +1,10 @@
 import Control.Monad (filterM, forM_)
 import Data.List (isPrefixOf)
-import Data.Maybe (catMaybes, listToMaybe)
 import Polybar
   ( Color (..),
     bg,
     pad,
   )
-import System.Directory (findExecutable)
 import XMonad
 import XMonad.Actions.CycleWS
 import qualified XMonad.Actions.Search as S
@@ -30,6 +28,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.SpawnOnce
+import XMonad.Util.XSelection (getClipboard)
 
 -- Workspaces
 myWorkspaces :: [String]
@@ -51,7 +50,7 @@ gitlabSearch :: String -> String
 gitlabSearch s
   | "#" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/issues/" ++ drop 1 s
   | "!" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/merge_requests/" ++ drop 1 s
-  | "&" `isPrefixOf` s = "https://gitlab.apex.ai/ApexAI/grand_central/-/epics/" ++ drop 1 s
+  | "&" `isPrefixOf` s = "https://gitlab.apex.ai/groups/ApexAI/-/work_items/" ++ drop 1 s
   | otherwise = "https://gitlab.apex.ai/search?nav_source=navbar&scope=merge_requests&search=" ++ S.escape s
 
 searchEngineMap :: [(String, S.SearchEngine)]
@@ -60,6 +59,10 @@ searchEngineMap =
     ("d", S.searchEngine "grace" "https://apexai.pages.apex.ai/grand_central/master/grace/doc/?q="),
     ("s", S.searchEngineF "gitlab" gitlabSearch)
   ]
+
+clipboardSearchBrowser :: S.Browser -> S.SearchEngine -> X ()
+clipboardSearchBrowser browser (S.SearchEngine _ site) =
+  S.search browser site =<< getClipboard
 
 -- Log workspace state for Polybar
 myLogHook :: X ()
@@ -96,6 +99,8 @@ myLayoutHook = tiled ||| tiledSpacing ||| Full
 myTerm :: String
 myTerm = "kitty"
 
+-- myTerm = "ghostty"
+
 -- Action to hide all scratchpads by moving them to the "NSP" workspace
 hideAllScratchpads :: [NamedScratchpad] -> X ()
 hideAllScratchpads sps = do
@@ -115,13 +120,12 @@ myScratchpads =
       "neovide --x11-wm-class org -- -c ':ObsidianSearch'"
       -- "neovide --x11-wm-class org -- -c ':Org'"
       (className =? "org")
-      -- "kitty --name=org vi -c ':Org'"
       -- (appName =? "org")
       myFloating,
     NS
       "scratchterm"
-      (myTerm <> " --class=scratchterm")
-      (className =? "scratchterm")
+      (myTerm <> " --class=com.scratchterm")
+      (className =? "com.scratchterm")
       myFloating,
     NS
       "calendar"
@@ -242,4 +246,4 @@ main = do
         ]
         -- search engines
         ++ [("M-s " <> key, S.promptSearchBrowser myPromptConfig "google-chrome" engine) | (key, engine) <- searchEngineMap]
-        ++ [("M-S-s " <> key, S.selectSearchBrowser "google-chrome" engine) | (key, engine) <- searchEngineMap]
+        ++ [("M-S-s " <> key, clipboardSearchBrowser "google-chrome" engine) | (key, engine) <- searchEngineMap]
